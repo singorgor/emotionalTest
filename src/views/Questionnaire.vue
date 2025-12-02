@@ -362,76 +362,517 @@ const generateDetailedReport = async () => {
   }
 }
 
-// 根据测试结果生成报告内容
+// 根据测试结果生成深度个性化报告内容
 const generateReportContent = (testResult: any) => {
-  // 这里使用报告个性化话术库中的模板
   const fatigueLevel = testResult.fatigueLevel || 1
-
-  // 疲惫等级总评
-  const overviewTemplates: Record<number, string> = {
-    0: '你现在处于【0级 · 安全区】，整体的情绪状态相对稳定，没有明显的疲惫积累。从测评结果看，你目前没有严重的情绪消耗，恢复资源相对充足。这是一个很好的基础状态，建议你保持现有的自我觉察习惯，定期关注自己的情绪变化。',
-    1: '你目前处于【1级 · 轻度疲惫】，可能最近有一些小事让你觉得有点心累，但整体还在可控范围内。这种状态很多人都会经历，通常是因为某些场景或压力开始悄悄消耗你的心理能量。好消息是，你及时发现并关注到了这些信号，这是很好的自我觉察。',
-    2: '你目前处于【2级 · 中度疲惫】，说明你的情绪能量已经有明显的消耗，可能经常感到疲惫、提不起精神。这个程度已经不是"休息一下就能好"的程度了，而是需要主动关注和调整的状态。你的疲惫感可能来自于特定的场景压力，或者是长期的某些行为模式导致的累积。',
-    3: '你目前处于【3级 · 高度疲惫】，这表明你的情绪和心理资源已经被严重消耗，长期处于"硬撑"的状态。从测评结果看，你的疲惫已经不仅仅是累，而是深层次的心理耗竭。可能的表现包括：对很多事情失去兴趣、情绪容易波动、即使休息也感觉恢复不过来、经常感到力不从心。',
-    4: '你目前处于【4级 · 极度疲惫】，这是情绪耗竭的最高等级，说明你的心理资源已经严重透支，可能已经影响到日常生活和正常功能。在这个状态下，你可能感到：对什么都提不起兴趣、记忆力注意力下降、情绪极度不稳定、身体也出现各种不适症状。'
-  }
-
-  const primaryType = testResult.primaryType?.name || '综合压力型'
+  const primaryType = testResult.primaryType
+  const secondaryType = testResult.secondaryType
+  const sceneScores = testResult.sceneScores || {}
   const recoveryLevel = testResult.recoveryLevel || 'medium'
+  const personalTags = testResult.personalTags || []
 
-  // 专业建议内容
-  const adviceContent = `
-    <div class="space-y-6">
-      <div class="border-l-4 border-indigo-500 pl-4">
-        <h4 class="font-semibold text-lg text-gray-900 mb-2">总体分析</h4>
-        <p class="text-gray-700 leading-relaxed">${overviewTemplates[fatigueLevel] || overviewTemplates[1]}</p>
+  // ========== 1. 深度心理洞察 ==========
+  const psychologicalInsight = generatePsychologicalInsight(fatigueLevel, primaryType, sceneScores, personalTags)
+
+  // ========== 2. 行为模式深度解读 ==========
+  const behaviorAnalysis = generateBehaviorAnalysis(primaryType, sceneScores, recoveryLevel)
+
+  // ========== 3. 具体场景分析 ==========
+  const scenarioAnalysis = generateScenarioAnalysis(sceneScores, fatigueLevel)
+
+  // ========== 4. 深层原因挖掘 ==========
+  const rootCauseAnalysis = generateRootCauseAnalysis(primaryType, sceneScores, fatigueLevel)
+
+  // ========== 5. 分级干预策略 ==========
+  const interventionStrategies = generateInterventionStrategies(fatigueLevel, primaryType, sceneScores, recoveryLevel)
+
+  // ========== 6. 个性化行动方案 ==========
+  const actionPlan = generateActionPlan(fatigueLevel, primaryType, sceneScores, personalTags, recoveryLevel)
+
+  // ========== 7. 专业评估与建议 ==========
+  const professionalAssessment = generateProfessionalAssessment(fatigueLevel, recoveryLevel, sceneScores)
+
+  // 整合完整报告
+  const fullReport = `
+    <div class="comprehensive-report">
+      <!-- 报告头部 -->
+      <div class="report-header border-l-4 border-indigo-600 bg-indigo-50 mb-8 p-6 rounded-xl">
+        <h2 class="text-2xl font-bold text-indigo-900 mb-4">🧠 深度情绪疲惫度分析报告</h2>
+        <div class="text-indigo-700">
+          <p class="mb-3"><strong>测评时间：</strong>${new Date().toLocaleDateString()} | 用时：${testResult.duration ? Math.round(testResult.duration / 60) + '分钟' : '未知'}</p>
+          <p class="text-lg"><strong>核心诊断：</strong>${getFatigueLevelLabel(fatigueLevel)}</p>
+          <p class="text-sm">主要疲惫类型：${primaryType?.name || '综合压力型'}（匹配度：${primaryType?.matchScore || 0}%）</p>
+          ${secondaryType && secondaryType.code !== primaryType.code ? `<p class="text-sm">次要类型：${secondaryType.name}（匹配度：${secondaryType.matchScore}%）</p>` : ''}
+        </div>
       </div>
 
-      <div class="border-l-4 border-blue-500 pl-4">
-        <h4 class="font-semibold text-lg text-gray-900 mb-2">主要疲惫来源</h4>
-        <p class="text-gray-700 leading-relaxed">根据测评结果，您的疲惫主要来源于【${primaryType}】。这种类型的疲惫往往与您的生活和工作模式密切相关，需要从根源上进行调整。</p>
-      </div>
+      <!-- 第一部分：深度心理洞察 -->
+      ${psychologicalInsight}
 
-      <div class="border-l-4 border-green-500 pl-4">
-        <h4 class="font-semibold text-lg text-gray-900 mb-2">恢复力评估</h4>
-        <p class="text-gray-700 leading-relaxed">您的恢复力处于${recoveryLevel === 'high' ? '较好' : recoveryLevel === 'medium' ? '中等' : '偏低'}水平。${recoveryLevel === 'low' ? '建议您重点关注休息质量的提升，建立更有效的恢复习惯。' : '继续保持良好的恢复习惯，这将有助于您更好地应对生活中的压力。'}</p>
-      </div>
+      <!-- 第二部分：行为模式深度解读 -->
+      ${behaviorAnalysis}
 
-      <div class="bg-gray-50 p-4 rounded-lg">
-        <h4 class="font-semibold text-lg text-gray-900 mb-3">行动建议</h4>
-        <ul class="space-y-2 text-gray-700">
-          <li class="flex items-start">
-            <span class="text-indigo-500 mr-2">•</span>
-            <span>建立规律的作息时间，确保充足的睡眠质量</span>
-          </li>
-          <li class="flex items-start">
-            <span class="text-indigo-500 mr-2">•</span>
-            <span>学会设置健康的边界，适当拒绝额外的工作和社交活动</span>
-          </li>
-          <li class="flex items-start">
-            <span class="text-indigo-500 mr-2">•</span>
-            <span>培养1-2个能真正让您放松的兴趣爱好</span>
-          </li>
-          <li class="flex items-start">
-            <span class="text-indigo-500 mr-2">•</span>
-            <span>定期与信任的朋友或家人交流，分享自己的感受和压力</span>
-          </li>
-          <li class="flex items-start">
-            <span class="text-indigo-500 mr-2">•</span>
-            <span>如果疲惫感持续加重，建议寻求专业的心理健康支持</span>
-          </li>
-        </ul>
-      </div>
+      <!-- 第三部分：具体场景分析 -->
+      ${scenarioAnalysis}
 
-      <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-        <p class="text-blue-900 text-sm leading-relaxed">
-          <strong>温馨提示：</strong>情绪疲惫的恢复是一个渐进的过程，需要耐心和持续的关注。请记住，寻求帮助和关注自己的心理健康不是软弱的表现，而是对自己负责的智慧选择。
-        </p>
-      </div>
+      <!-- 第四部分：深层原因挖掘 -->
+      ${rootCauseAnalysis}
+
+      <!-- 第五部分：分级干预策略 -->
+      ${interventionStrategies}
+
+      <!-- 第六部分：个性化行动方案 -->
+      ${actionPlan}
+
+      <!-- 第七部分：专业评估与建议 -->
+      ${professionalAssessment}
+
+      <!-- 温馨提示 -->
+      <div class="bg-blue-50 border-l-4 border-blue-300 p-4 rounded-lg mt-6">
+        <h4 class="text-blue-900 font-semibold mb-3">💡 重要提醒</h4>
+        <div class="text-blue-800 text-sm leading-relaxed space-y-2">
+          <p>• 这份报告基于您当前的心理状态绘制，情绪恢复是一个渐进的过程，需要持续的关注和耐心。</p>
+          <p>• 如果疲惫感持续加重，或出现严重的心理困扰，请及时寻求专业的心理咨询师或治疗师的帮助。</p>
+          <p>• 建议您定期（比如每2-3个月）重新测评，跟踪自己的情绪状态变化。</p>
+        </div>
     </div>
   `
 
-  return adviceContent
+  return fullReport
+}
+
+// 疲惫等级标签
+const getFatigueLevelLabel = (level: number): string => {
+  const labels = {
+    0: '0级 · 情绪稳定区（安全状态）',
+    1: '1级 · 轻度情绪疲劳（预警信号）',
+    2: '2级 · 中度情绪耗竭（需要调整）',
+    3: '3级 · 重度情绪透支（急需干预）',
+    4: '4级 · 极度情绪崩溃（危险状态）'
+  }
+  return labels[level] || labels[1]
+}
+
+// 生成深度心理洞察
+function generatePsychologicalInsight(fatigueLevel: number, primaryType: any, sceneScores: any, personalTags: string[]) {
+  const levelLabels = ['情绪稳定', '轻度疲劳', '中度耗竭', '重度透支', '极度崩溃']
+  const currentLevel = levelLabels[fatigueLevel] || levelLabels[1]
+
+  let typeInsight = ''
+  switch(primaryType?.code) {
+    case 'type_emotional_overload':
+      typeInsight = '您是一个高敏感、高共情能力的人，容易吸收他人的负面情绪而承担过重的心理负担。这种"情绪海绵"特质让您在人际交往中过度付出，却缺乏有效的自我保护机制。'
+      break
+    case 'type_responsibility_trap':
+      typeInsight = '您有强烈的责任感和完美主义倾向，习惯性地将他人需求置于自己需求之前，很难拒绝额外的工作和社交活动。这种"老好人"模式正在持续消耗您的心理资源。'
+      break
+    case 'type_comparison_anxiety':
+      typeInsight = '您容易与他人进行比较，对自己有过高的期望和要求，经常处于"不够好"的焦虑状态。这种持续的自我评价和比较正在消耗您宝贵的心理能量。'
+      break
+    case 'type_high_pressure_mode':
+      typeInsight = '您习惯于高强度、快节奏的生活方式和工作模式，很难真正放松下来，即使休息时也保持着"待机"状态。这种持续运转模式已经让您失去了与内心真实需求的连接。'
+      break
+    default:
+      typeInsight = '您正在经历多方面的压力累积，需要在生活中重新平衡各种角色和需求。'
+  }
+
+  return `
+    <div class="insight-section border-l-4 border-purple-500 bg-purple-50 p-6 rounded-xl mb-6">
+      <h3 class="text-xl font-bold text-purple-900 mb-4 flex items-center">
+        <span class="w-2 h-2 bg-purple-200 rounded-full mr-3"></span>
+        深度心理洞察
+      </h3>
+
+      <div class="space-y-4 text-gray-700">
+        <div class="bg-white p-4 rounded-lg border-l-4 border-purple-200">
+          <h4 class="font-semibold text-purple-900 mb-2">🎯 您的核心心理特征</h4>
+          <p class="leading-relaxed">${typeInsight}</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg border-l-4 border-purple-200">
+          <h4 class="font-semibold text-purple-900 mb-2">🧠 当前状态解读</h4>
+          <p class="leading-relaxed">您目前处于<strong>${currentLevel}</strong>状态。这种状态意味着您的情绪调节能力正在下降，心理资源消耗速度已经超过恢复速度。如果不及时干预，可能会进一步恶化为更深层的情绪问题。</p>
+          ${fatigueLevel >= 2 ? `
+          <div class="mt-3 p-3 bg-red-50 rounded-lg border-l-4 border-red-200">
+            <p class="text-red-800"><strong>⚠️ 警示信号：</strong>您的情绪系统已经发出明显的求助信号，日常功能可能开始受到影响。这是您需要认真对待并采取行动的时刻。</p>
+          </div>
+          ` : ''}
+        </div>
+
+        ${personalTags.length > 0 ? `
+        <div class="bg-white p-4 rounded-lg border-l-4 border-purple-200">
+          <h4 class="font-semibold text-purple-900 mb-2">🏷️ 个性化特征标签</h4>
+          <div class="flex flex-wrap gap-2">
+            ${personalTags.map(tag => `<span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">${tag}</span>`).join('')}
+          </div>
+        </div>
+        ` : ''}
+      </div>
+    </div>
+  `
+}
+
+// 生成行为模式深度解读
+function generateBehaviorAnalysis(primaryType: any, sceneScores: any, recoveryLevel: string) {
+  return `
+    <div class="behavior-section border-l-4 border-blue-500 bg-blue-50 p-6 rounded-xl mb-6">
+      <h3 class="text-xl font-bold text-blue-900 mb-4 flex items-center">
+        <span class="w-2 h-2 bg-blue-200 rounded-full mr-3"></span>
+        行为模式深度解读
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-4">
+          <div class="bg-white p-4 rounded-lg border-l-4 border-blue-200">
+            <h4 class="font-semibold text-blue-900 mb-3">🔄 典型行为循环</h4>
+            <div class="space-y-2 text-gray-700">
+              <p><strong>触发阶段：</strong>遇到压力源 → 激活应对模式 → 产生情绪反应 → 承担后果 → 恢复阶段</p>
+              <p><strong>您的模式：</strong>基于您的测评结果，您经常陷入<strong>"过度付出-疲惫积累-继续坚持"</strong>的循环，缺乏有效的暂停和重新评估机制。</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded-lg border-l-4 border-blue-200">
+            <h4 class="font-semibold text-blue-900 mb-3">💭 认知偏差识别</h4>
+            <div class="space-y-2 text-gray-700">
+              <p>• <strong>完美主义倾向：</strong>可能过度追求高标准，难以接受"足够好"的结果</p>
+              <p>• <strong>责任偏差：</strong>过度承担他人的情绪需求和责任</p>
+              <p>• <strong>恢复误区：</strong>认为休息就能解决问题，而忽视了深层的模式调整</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+}
+
+// 生成具体场景分析
+function generateScenarioAnalysis(sceneScores: any, fatigueLevel: number) {
+  const workScore = sceneScores.work || 0
+  const relationshipScore = sceneScores.relationship || 0
+  const selfDemandScore = sceneScores.selfDemand || 0
+
+  return `
+    <div class="scenario-section border-l-4 border-orange-500 bg-orange-50 p-6 rounded-xl mb-6">
+      <h3 class="text-xl font-bold text-orange-900 mb-4 flex items-center">
+        <span class="w-2 h-2 bg-orange-200 rounded-full mr-3"></span>
+        具体场景深度分析
+      </h3>
+
+      <div class="space-y-6">
+        ${workScore >= 3.0 ? `
+        <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-200">
+          <h4 class="font-semibold text-red-900 mb-3">💼 工作场景高压状态</h4>
+          <p class="text-red-800 leading-relaxed">您的工作压力评分为<strong>${workScore.toFixed(1)}</strong>，这表明您的工作环境或工作方式正在严重消耗您的心理资源。</p>
+          <div class="mt-3 space-y-2 text-red-700">
+            <p>• 可能的表现：难以集中注意力、工作效率下降、对工作产生抵触情绪</p>
+            <p>• 深层原因：工作量超负荷、缺乏控制感、人际关系压力、价值感缺失</p>
+            <p>• <strong>立即行动建议：</strong>主动与上级沟通工作负荷、评估工作优先级、建立工作边界</p>
+          </div>
+        ` : ''}
+
+        ${relationshipScore >= 3.0 ? `
+        <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-200">
+          <h4 class="font-semibold text-red-900 mb-3">👥 人际关系高消耗状态</h4>
+          <p class="text-red-800 leading-relaxed">您的人际关系评分为<strong>${relationshipScore.toFixed(1)}</strong>，表明社交互动正在大量消耗您的能量。</p>
+          <div class="mt-3 space-y-2 text-red-700">
+            <p>• 可能的表现：害怕让人失望、难以拒绝他人请求、在关系中过度付出、经常感到被利用</p>
+            <p>• 深层原因：缺乏健康的人际边界、过度共情、讨好型人格特质</p>
+            <p>• <strong>立即行动建议：</strong>练习选择性参与社交、建立关系层次、学会表达自己的需求</p>
+          </div>
+        ` : ''}
+
+        ${selfDemandScore >= 3.0 ? `
+        <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-200">
+          <h4 class="font-semibold text-red-900 mb-3">🎯 自我要求过度苛责</h4>
+          <p class="text-red-800 leading-relaxed">您的自我要求评分为<strong>${selfDemandScore.toFixed(1)}</strong>，表明您对自己的过高标准正在持续消耗心理能量。</p>
+          <div class="mt-3 space-y-2 text-red-700">
+            <p>• 可能的表现：完美主义、自我批评严重、害怕失败、难以放松标准</p>
+            <p>• 深层原因：早期形成的条件式自我价值、社会比较压力、内在的严厉批评声音</p>
+            <p>• <strong>立即行动建议：</strong>重新定义成功标准、练习自我慈悲、设定现实可达成的目标</p>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `
+}
+
+// 生成深层原因挖掘
+function generateRootCauseAnalysis(primaryType: any, sceneScores: any, fatigueLevel: number) {
+  return `
+    <div class="rootcause-section border-l-4 border-green-500 bg-green-50 p-6 rounded-xl mb-6">
+      <h3 class="text-xl font-bold text-green-900 mb-4 flex items-center">
+        <span class="w-2 h-2 bg-green-200 rounded-full mr-3"></span>
+        深层原因挖掘分析
+      </h3>
+
+      <div class="space-y-6">
+        <div class="bg-white p-4 rounded-lg border-l-4 border-green-200">
+          <h4 class="font-semibold text-green-900 mb-3">🌱 早期形成因素</h4>
+          <div class="space-y-3 text-gray-700">
+            <p>• <strong>成长环境：</strong>可能成长过程中形成了特定的行为模式，如过度承担责任、寻求认可等</p>
+            <p>• <strong>教育背景：</strong>可能被教育要完美、要照顾他人、不能表达负面情绪</p>
+            <p>• <strong>家庭模式：</strong>可能在家庭中承担了"情绪照顾者"或"小大人"的角色</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg border-l-4 border-green-200">
+          <h4 class="font-semibold text-green-900 mb-3">⚖️ 维持机制分析</h4>
+          <div class="space-y-3 text-gray-700">
+            <p>• <strong>当前应对方式：</strong>通过更努力工作、加倍付出来解决问题，但这实际上加剧了疲惫</p>
+            <p>• <strong>次级收益：</strong>可能短期内获得了认可或避免了冲突，但长期来看却牺牲了心理健康</p>
+            <p>• <strong>为什么难以改变：</strong>这些模式已经自动化，成为您身份认同的一部分，改变需要意识努力和持续练习</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+}
+
+// 生成分级干预策略
+function generateInterventionStrategies(fatigueLevel: number, primaryType: any, sceneScores: any, recoveryLevel: string) {
+  const workScore = sceneScores.work || 0
+  const relationshipScore = sceneScores.relationship || 0
+  const selfDemandScore = sceneScores.selfDemand || 0
+
+  return `
+    <div class="intervention-section border-l-4 border-yellow-500 bg-yellow-50 p-6 rounded-xl mb-6">
+      <h3 class="text-xl font-bold text-yellow-900 mb-4 flex items-center">
+        <span class="w-2 h-2 bg-yellow-200 rounded-full mr-3"></span>
+        分级干预策略
+      </h3>
+
+      <div class="space-y-6">
+        <!-- 短期应急策略 -->
+        <div class="bg-white p-4 rounded-lg border-l-4 border-yellow-200">
+          <h4 class="font-semibold text-yellow-900 mb-3">🚨 短期应急策略（立即可用）</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+            <div class="space-y-2">
+              <h5 class="font-medium">情绪急救技术</h5>
+              <ul class="space-y-1 text-sm">
+                <li>• <strong>3-3-3呼吸法：</strong>感到压力时立即进行，激活副交感神经的放松反应</li>
+                <li>• <strong>情绪暂停术：</strong>在做出反应前问自己"这真的需要我处理吗？"</li>
+                <li>• <strong>快速脱身：</strong>物理离开压力环境5-10分钟</li>
+              </ul>
+            </div>
+
+            <div class="space-y-2">
+              <h5 class="font-medium">边界建立技巧</h5>
+              <ul class="space-y-1 text-sm">
+                <li>• 练习说"不"，从小事情开始</li>
+                <li>• 延迟回应："我需要考虑一下再答复"</li>
+                <li>• 设定每日拒绝配额</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 中期重建方案 -->
+        <div class="bg-white p-4 rounded-lg border-l-4 border-yellow-200">
+          <h4 class="font-semibold text-yellow-900 mb-3">🔄 中期重建方案（1-3个月）</h4>
+          <div class="space-y-3 text-gray-700">
+            ${workScore >= 3.0 ? `
+            <h5 class="font-medium text-orange-800">工作环境重建</h5>
+            <ul class="space-y-1 text-sm">
+              <li>• 主动与上级沟通工作量合理性</li>
+              <li>• 重新协商工作优先级和时间节点</li>
+              <li>• 建立工作时间的明确边界</li>
+              <li>• 寻求工作调动的可能性</li>
+            </ul>
+            ` : ''}
+
+            ${relationshipScore >= 3.0 ? `
+            <h5 class="font-medium text-red-800">人际关系重建</h5>
+            <ul class="space-y-1 text-sm">
+              <li>• 识别和远离持续消耗您的关系</li>
+              <li>• 建立健康的社交边界和距离</li>
+              <li>• 培养基于相互尊重的关系模式</li>
+              <li>• 学会表达自己的真实感受和需求</li>
+            </ul>
+            ` : ''}
+
+            <h5 class="font-medium">生活方式重建</h5>
+            <ul class="space-y-1 text-sm">
+              <li>• 重新设计日常作息，确保充足高质量睡眠</li>
+              <li>• 每天安排独处时间进行情绪恢复</li>
+              <li>• 重新评估和减少当前的承诺和义务</li>
+              <li>• 建立定期的运动和放松活动</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 长期预防体系 -->
+        <div class="bg-white p-4 rounded-lg border-l-4 border-yellow-200">
+          <h4 class="font-semibold text-yellow-900 mb-3">🛡️ 长期预防体系（3-6个月）</h4>
+          <div class="space-y-3 text-gray-700">
+            <h5 class="font-medium">认知重构核心</h5>
+            <ul class="space-y-1 text-sm">
+              <li>• 重新定义自我价值，摆脱条件式自我认可</li>
+              <li>• 建立基于内在需求的决策框架</li>
+              <li>• 学会接受不完美和不完整</li>
+              <li>• 培养自我慈悲和内在支持声音</li>
+            </ul>
+
+            <h5 class="font-medium">可持续发展模式</h5>
+            <ul class="space-y-1 text-sm">
+              <li>• 建立定期自我检查和情绪评估习惯</li>
+              <li>• 形成支持性的人际关系网络</li>
+              <li>• 持续学习情绪调节和心理韧性技能</li>
+              <li>• 在工作和生活中寻求意义感和价值感</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+}
+
+// 生成个性化行动方案
+function generateActionPlan(fatigueLevel: number, primaryType: any, sceneScores: any, personalTags: string[], recoveryLevel: string) {
+  return `
+    <div class="actionplan-section border-l-4 border-indigo-500 bg-indigo-50 p-6 rounded-xl mb-6">
+      <h3 class="text-xl font-bold text-indigo-900 mb-4 flex items-center">
+        <span class="w-2 h-2 bg-indigo-200 rounded-full mr-3"></span>
+        个性化行动方案
+      </h3>
+
+      <div class="space-y-6">
+        <!-- 30天行动计划 -->
+        <div class="bg-white p-4 rounded-lg border-l-4 border-indigo-200">
+          <h4 class="font-semibold text-indigo-900 mb-3">📅 第一个月：稳定化计划</h4>
+          <div class="space-y-3 text-gray-700">
+            <h5 class="font-medium">每周目标设定</h5>
+            <ul class="space-y-2 text-sm">
+              <li>• <strong>睡眠目标：</strong>每晚7-8小时高质量睡眠，固定睡眠时间</li>
+              <li>• <strong>边界练习：</strong>每周练习拒绝2-3个不合理请求</li>
+              <li>• <strong>独处时间：</strong>每天安排30分钟独处时间</li>
+              <li>• <strong>运动放松：</strong>每周3次轻度运动或放松活动</li>
+            </ul>
+
+            <h5 class="font-medium">每日自我检查</h5>
+            <p class="text-sm">每天晚上记录：今天的情绪状态、触发因素、应对方式、改善空间。这有助于增强自我觉察能力。</p>
+
+            <h5 class="font-medium">紧急预案</h5>
+            <p class="text-sm">识别可能的压力触发情况，提前准备应对策略，避免陷入被动的情绪反应模式。</p>
+          </div>
+        </div>
+
+        <!-- 专业资源推荐 -->
+        <div class="bg-white p-4 rounded-lg border-l-4 border-indigo-200">
+          <h4 class="font-semibold text-indigo-900 mb-3">📚 专业资源推荐</h4>
+          <div class="space-y-3 text-gray-700">
+            <h5 class="font-medium">书籍推荐</h5>
+            <ul class="space-y-1 text-sm">
+              <li>• 《情绪耗竭：如何识别和预防》- Herbert Freudenberger</li>
+              <li>• 《过劳与自我照顾》- Christina Maslach</li>
+              <li>• 《不完美的礼物》- Brené Brown</li>
+            </ul>
+
+            <h5 class="font-medium">实用工具和练习</h5>
+            <ul class="space-y-1 text-sm">
+              <li>• <strong>情绪日记：</strong>记录情绪触发和反应模式</li>
+              <li>• <strong>正念冥想：</strong>每天10分钟，培养觉察和接纳</li>
+              <li>• <strong>身体扫描：</strong>定期检查身体紧张部位，主动放松</li>
+              <li>• <strong>支持小组：</strong>寻找有相似经历的人分享经验</li>
+            </ul>
+
+            <h5 class="font-medium">何时寻求专业帮助</h5>
+            <div class="bg-orange-50 p-3 rounded border-l-4 border-orange-200 mt-3">
+              <p class="text-orange-800 text-sm"><strong>立即寻求帮助：</strong>出现以下任一情况时</p>
+              <ul class="space-y-1 text-orange-700 text-sm mt-2">
+                <li>• 持续的情绪低落超过2周</li>
+                <li>• 严重的睡眠问题或身体症状</li>
+                <li>• 工作或人际关系严重受损</li>
+                <li>• 出现自我伤害的想法或冲动</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+}
+
+// 生成专业评估与建议
+function generateProfessionalAssessment(fatigueLevel: number, recoveryLevel: string, sceneScores: any) {
+  const riskLevel = fatigueLevel >= 3 ? '高风险' : fatigueLevel >= 2 ? '中等风险' : '低风险'
+  const recoveryScore = recoveryLevel === 'high' ? 8 : recoveryLevel === 'medium' ? 5 : 2
+  const workScore = sceneScores.work || 0
+  const relationshipScore = sceneScores.relationship || 0
+
+  return `
+    <div class="assessment-section border-l-4 border-red-500 bg-red-50 p-6 rounded-xl mb-6">
+      <h3 class="text-xl font-bold text-red-900 mb-4 flex items-center">
+        <span class="w-2 h-2 bg-red-200 rounded-full mr-3"></span>
+        专业评估与后续建议
+      </h3>
+
+      <div class="space-y-6">
+        <!-- 风险评估 -->
+        <div class="bg-white p-4 rounded-lg border-l-4 border-red-200">
+          <h4 class="font-semibold text-red-900 mb-3">⚠️ 综合风险评估</h4>
+          <div class="space-y-3 text-gray-700">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div class="text-center">
+                <p class="font-medium">心理健康风险</p>
+                <p class="text-2xl font-bold ${riskLevel === '高风险' ? 'text-red-600' : riskLevel === '中等风险' ? 'text-orange-600' : 'text-green-600'}">${riskLevel}</p>
+              </div>
+
+              <div class="text-center">
+                <p class="font-medium">功能影响程度</p>
+                <p class="text-2xl font-bold text-orange-600">${fatigueLevel >= 3 ? '严重' : fatigueLevel >= 2 ? '中等' : '轻度'}</p>
+              </div>
+
+              <div class="text-center">
+                <p class="font-medium">紧急程度</p>
+                <p class="text-2xl font-bold ${fatigueLevel >= 3 ? 'text-red-600' : fatigueLevel >= 2 ? 'text-orange-600' : 'text-yellow-600'}">${fatigueLevel >= 3 ? '高' : fatigueLevel >= 2 ? '中' : '低'}</p>
+              </div>
+            </div>
+
+            ${fatigueLevel >= 2 ? `
+            <div class="mt-4 p-3 bg-red-100 rounded-lg">
+              <p class="text-red-800"><strong>⚡ 重要提醒：</strong>您当前的疲惫状态已经对日常生活产生实质性影响，建议认真考虑寻求专业的心理健康支持。</p>
+            </div>
+            ` : ''}
+          </div>
+        </div>
+
+        <!-- 康复前景分析 -->
+        <div class="bg-white p-4 rounded-lg border-l-4 border-red-200">
+          <h4 class="font-semibold text-red-900 mb-3">📈 康复前景分析</h4>
+          <div class="space-y-3 text-gray-700">
+            <p><strong>恢复力评分：</strong>${recoveryScore}/10 分</p>
+            <p><strong>预计恢复时间：</strong>${recoveryLevel === 'high' ? '3-6个月' : recoveryLevel === 'medium' ? '6-12个月' : '12-18个月'}</p>
+            <p><strong>成功关键因素：</strong>持续的自我觉察、有效的应对策略、支持性的人际环境、专业帮助的及时介入。</p>
+
+            <p><strong>潜在障碍：</strong>${recoveryLevel === 'low' ? '恢复力不足，休息效果有限' : '当前应对策略效果递减，需要新的模式'}</p>
+          </div>
+        </div>
+
+        <!-- 跟踪建议 -->
+        <div class="bg-white p-4 rounded-lg border-l-4 border-red-200">
+          <h4 class="font-semibold text-red-900 mb-3">📊 后续跟踪建议</h4>
+          <div class="space-y-3 text-gray-700">
+            <h5 class="font-medium">每周评估指标</h5>
+            <ul class="space-y-1 text-sm">
+              <li>• 整体情绪状态（1-10分评估）</li>
+              <li>• 睡眠质量和时长</li>
+              <li>• 工作压力感知程度</li>
+              <li>• 社交活动后的能量水平</li>
+              <li>• 身体症状变化</li>
+            </ul>
+
+            <h5 class="font-medium">每月深入回顾</h5>
+            <ul class="space-y-1 text-sm">
+              <li>• 识别情绪模式和触发因素的规律</li>
+              <li>• 评估应对策略的有效性</li>
+              <li>• 调整行动方案和目标</li>
+              <li>• 必要时寻求专业咨询调整方案</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
 }
 
 // 监听题目变化，自动保存
