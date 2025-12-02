@@ -11,12 +11,12 @@ import type {
 import {
   FATIGUE_TYPE_NAMES,
   FATIGUE_LEVEL_LABELS,
-  RECOVERY_LEVEL_LABELS
+  RESILIENCE_LEVEL_LABELS
 } from '@/data/questions';
 
 /**
  * 疲惫度计算引擎
- * 根据用户答案计算疲惫等级、类型、场景分析和恢复力评估
+ * 根据用户答案计算疲惫等级、类型、场景分析和心理韧性评估
  */
 export class FatigueCalculator {
 
@@ -28,7 +28,7 @@ export class FatigueCalculator {
     const fatigueLevel = this.calculateFatigueLevel(answers);
     const sceneScores = this.calculateSceneScores(answers);
     const typeMatches = this.calculateTypeMatches(answers);
-    const recoveryLevel = this.calculateRecoveryLevel(answers);
+    const recoveryLevel = this.calculateResilienceLevel(answers);
 
     // 选择主类型和副类型
     const primaryType = typeMatches[0];
@@ -59,7 +59,7 @@ export class FatigueCalculator {
       primaryType,
       secondaryType,
       recoveryLevel,
-      recoveryLabel: RECOVERY_LEVEL_LABELS[recoveryLevel],
+      recoveryLabel: RESILIENCE_LEVEL_LABELS[recoveryLevel],
       personalTags,
       reportProfile
     };
@@ -127,11 +127,11 @@ export class FatigueCalculator {
   }
 
   /**
-   * 计算恢复力等级（模块D）
+   * 计算心理韧性等级（模块D）
    */
-  private calculateRecoveryLevel(answers: UserAnswers): RecoveryLevel {
-    const recoveryQuestions = ['D1', 'D2', 'D3', 'D4'];
-    const average = this.calculateAverageScore(answers, recoveryQuestions);
+  private calculateResilienceLevel(answers: UserAnswers): RecoveryLevel {
+    const resilienceQuestions = ['D1', 'D2', 'D3', 'D4'];
+    const average = this.calculateAverageScore(answers, resilienceQuestions);
 
     if (average < 2.5) return 'low';
     if (average < 3.8) return 'medium';
@@ -170,13 +170,13 @@ export class FatigueCalculator {
       tags.push("习惯高压运转");
     }
 
-    // 基于恢复力的标签
+    // 基于心理韧性的标签
     if (recoveryLevel === 'low') {
-      tags.push("恢复力不足、休息效果有限");
+      tags.push("心理韧性不足、抗压能力较弱");
     } else if (recoveryLevel === 'medium') {
-      tags.push("恢复力一般，有提升空间");
+      tags.push("心理韧性中等、需要加强调节");
     } else {
-      tags.push("恢复力尚可，有一定自我修复能力");
+      tags.push("心理韧性良好、具备自我修复能力");
     }
 
     return tags;

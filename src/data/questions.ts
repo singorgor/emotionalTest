@@ -250,8 +250,8 @@ export const QUESTION_CONFIG: QuestionConfig = {
   },
 
   D: {
-    title: "恢复资源 / 保护因子",
-    description: "回答我有没有机会好起来、手上还有多少回复血量的筹码",
+    title: "心理韧性 / 抗压能力",
+    description: "评估我面对压力时的心理调节能力和自我修复资源",
     questions: [
       {
         id: "D1",
@@ -331,11 +331,11 @@ export const FATIGUE_LEVEL_LABELS = {
   4: "4级 · 极度疲惫"
 };
 
-// 恢复力等级标签映射
-export const RECOVERY_LEVEL_LABELS = {
-  low: "恢复力偏低 · 休息难以真正回血",
-  medium: "恢复力中等 · 有一些修复资源，但仍需主动经营",
-  high: "恢复力较好 · 懂得为自己充电"
+// 心理韧性等级标签映射
+export const RESILIENCE_LEVEL_LABELS = {
+  low: "心理韧性不足 · 抗压能力较弱",
+  medium: "心理韧性中等 · 具备一定调节能力",
+  high: "心理韧性良好 · 抗压能力强"
 };
 
 // 场景名称映射

@@ -840,11 +840,11 @@ function generateProfessionalAssessment(fatigueLevel: number, recoveryLevel: str
         <div class="bg-white p-4 rounded-lg border-l-4 border-red-200">
           <h4 class="font-semibold text-red-900 mb-3">📈 康复前景分析</h4>
           <div class="space-y-3 text-gray-700">
-            <p><strong>恢复力评分：</strong>${recoveryScore}/10 分</p>
+            <p><strong>心理韧性评分：</strong>${recoveryScore}/10 分</p>
             <p><strong>预计恢复时间：</strong>${recoveryLevel === 'high' ? '3-6个月' : recoveryLevel === 'medium' ? '6-12个月' : '12-18个月'}</p>
             <p><strong>成功关键因素：</strong>持续的自我觉察、有效的应对策略、支持性的人际环境、专业帮助的及时介入。</p>
 
-            <p><strong>潜在障碍：</strong>${recoveryLevel === 'low' ? '恢复力不足，休息效果有限' : '当前应对策略效果递减，需要新的模式'}</p>
+            <p><strong>潜在障碍：</strong>${recoveryLevel === 'low' ? '心理韧性不足，抗压能力较弱' : '当前应对策略效果递减，需要新的模式'}</p>
           </div>
         </div>
 
