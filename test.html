@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .debug {
+            background: #f0f0f0;
+            color: #333;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug">
+        <h1>Vue 应用诊断</h1>
+        <p id="vue-status">正在检查 Vue 应用...</p>
+        <p id="vue-version">Vue 版本: <span id="vue-version-info"></span></p>
+        <p id="pinia-status">Pinia 状态: <span id="pinia-status-info"></span></p>
+        <p id="router-status">路由状态: <span id="router-status-info"></span></p>
+
+        <button onclick="testDirectAccess()">直接访问答题页面</button>
+        <button onclick="testAppCreation()">测试 Vue 应用创建</button>
+    </div>
+
+    <script>
+        console.log('诊断脚本开始执行...');
+
+        // 检查 Vue 是否可用
+        if (typeof window.Vue !== 'undefined') {
+            document.getElementById('vue-version').textContent = 'Vue 版本: ' + window.Vue.version;
+            document.getElementById('vue-status').textContent = '✅ Vue 已加载';
+            document.getElementById('vue-status').style.color = 'green';
+        } else {
+            document.getElementById('vue-version').textContent = 'Vue 版本: 未检测到';
+            document.getElementById('vue-status').textContent = '❌ Vue 未加载';
+            document.getElementById('vue-status').style.color = 'red';
+        }
+
+        // 检查 Pinia
+        setTimeout(() => {
+            try {
+                if (typeof window.Pinia !== 'undefined') {
+                    document.getElementById('pinia-status').textContent = '✅ Pinia 已加载';
+                    document.getElementById('pinia-status').style.color = 'green';
+                } else {
+                    document.getElementById('pinia-status').textContent = '❌ Pinia 未加载';
+                    document.getElementById('pinia-status').style.color = 'red';
+                }
+            } catch (error) {
+                document.getElementById('pinia-status').textContent = '❌ Pinia 加载失败: ' + error.message;
+                document.getElementById('pinia-status').style.color = 'red';
+            }
+        }, 100);
+
+        // 检查路由
+        fetch('/questionnaire')
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('router-status').textContent = '✅ 路由正常工作';
+                    document.getElementById('router-status').style.color = 'green';
+                } else {
+                    document.getElementById('router-status').textContent = '❌ 路由可能有问题';
+                    document.getElementById('router-status').style.color = 'red';
+                }
+            })
+            .catch(error => {
+                document.getElementById('router-status').textContent = '❌ 路由检查失败: ' + error.message;
+                document.getElementById('router-status').style.color = 'red';
+            });
+    </script>
+
+    <script>
+        // 检查主应用是否正确加载
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM 完全加载，开始检查...');
+
+            // 检查主应用的 script 标签
+            const scripts = document.querySelectorAll('script');
+            console.log('找到的 script 标签数量:', scripts.length);
+
+            scripts.forEach((script, index) => {
+                if (index > 0) {
+                    console.log(`Script ${index}:`, script.textContent.substring(0, 100));
+                }
+            });
+
+            // 检查 Vue app div
+            const appDiv = document.getElementById('app');
+            if (appDiv) {
+                console.log('✅ 找到 #app 元素');
+                document.getElementById('vue-status').textContent += ' | ✅ 找到挂载点';
+            } else {
+                console.log('❌ 未找到 #app 元素');
+                document.getElementById('vue-status').textContent += ' | ❌ 未找到挂载点';
+            }
+        });
+
+        window.testDirectAccess = function() {
+            console.log('尝试直接访问答题页面...');
+            window.location.href = '/questionnaire';
+        }
+
+        window.testAppCreation = function() {
+            console.log('尝试创建简单的 Vue 应用...');
+
+            try {
+                // 创建一个简单的 Vue 应用
+                const { createApp } = Vue;
+                const app = createApp({
+                    data() {
+                        return {
+                            message: 'Hello Vue!'
+                        }
+                    },
+                    template: `
+                        <div style="padding: 20px;">
+                            <h1>简单 Vue 测试</h1>
+                            <p>{{ message }}</p>
+                            <p>如果你看到这个页面，说明 Vue 工作正常！</p>
+                        </div>
+                    `
+                });
+
+                app.mount('#test-app');
+
+                console.log('✅ 简单 Vue 应用创建成功');
+
+            } catch (error) {
+                console.error('❌ Vue 应用创建失败:', error);
+            }
+        }
+    </script>
+
+    <div id="test-app" style="margin: 20px;"></div>
+</body>
+</html>

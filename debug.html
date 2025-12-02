@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FBI 测试 - 诊断页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f87171; color: #721c24; }
+        .warning { background: #fbbf24; color: #92400e; }
+        .info { background: #dbeafe; color: #1f2937; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .grid-item {
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Vue 应用诊断</h1>
+
+        <div class="grid">
+            <div class="grid-item">
+                <div class="status">
+                    <h3>1. 检查浏览器环境</h3>
+                    <div id="browser-info"></div>
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <div class="status">
+                    <h3>2. 检查关键依赖</h3>
+                    <div id="dependencies-info"></div>
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <div class="status">
+                    <h3>3. 检查 Vue 应用状态</h3>
+                    <div id="vue-status"></div>
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <div class="status">
+                    <h3>4. 检查路由状态</h3>
+                    <div id="router-status"></div>
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <div class="status">
+                    <h3>5. 检查 Pinia 状态</h3>
+                    <div id="pinia-status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('诊断脚本开始执行...');
+
+        // 1. 检查浏览器环境
+        const browserInfo = {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            platform: navigator.platform,
+            cookieEnabled: navigator.cookieEnabled,
+            localStorage: !!window.localStorage,
+            sessionStorage: !!window.sessionStorage
+        };
+
+        document.getElementById('browser-info').innerHTML = `
+            <strong>用户代理:</strong> ${browserInfo.userAgent}<br>
+            <strong>语言:</strong> ${browserInfo.language}<br>
+            <strong>平台:</strong> ${browserInfo.platform}<br>
+            <strong>Cookie:</strong> ${browserInfo.cookieEnabled ? '启用' : '禁用'}<br>
+            <strong>LocalStorage:</strong> ${browserInfo.localStorage ? '可用' : '不可用'}<br>
+            <strong>SessionStorage:</strong> ${browserInfo.sessionStorage ? '可用' : '不可用'}
+        `;
+
+        // 2. 检查关键依赖
+        const dependencies = {
+            vue: typeof window.Vue !== 'undefined',
+            pinia: typeof window.Pinia !== 'undefined',
+            vueRouter: typeof window.VueRouter !== 'undefined',
+            createApp: typeof window.createApp !== 'undefined'
+        };
+
+        const depsStatus = Object.entries(dependencies).map(([key, value]) => {
+            const status = value ? 'success' : 'error';
+            const color = value ? '#155724' : '#dc2626';
+            return `<span style="color: ${color}">${key}: ${status}</span>`;
+        }).join('<br>');
+
+        document.getElementById('dependencies-info').innerHTML = depsStatus.join('<br>');
+
+        // 3. 检查 Vue 应用状态
+        const vueStatus = {
+            loaded: typeof window.Vue !== 'undefined',
+            version: window.Vue ? window.Vue.version || '未知' : '未加载',
+            devtools: window.__VUE_DEVTOOLS_GLOBAL_HOOK__ ? '已安装' : '未安装'
+        };
+
+        const vueStatusHtml = `
+            <strong>Vue 状态:</strong><br>
+            已加载: <span style="color: ${vueStatus.loaded ? '#155724' : '#dc2626'}">${vueStatus.loaded ? '✅' : '❌'}</span><br>
+            版本: <span style="color: #666">${vueStatus.version}</span><br>
+            开发工具: <span style="color: #666">${vueStatus.devtools ? '✅' : '❌'}</span>
+        `;
+
+        document.getElementById('vue-status').innerHTML = vueStatusHtml;
+
+        // 4. 检查路由状态
+        const routerStatus = {
+            available: typeof window.VueRouter !== 'undefined',
+            currentRoute: window.location.pathname,
+            routeCount: window.__VUE_ROUTER_GLOBAL_HOOK__ ? window.__VUE_ROUTER_GLOBAL_HOOK__.routes?.length || '未知' : '未知'
+        };
+
+        const routerStatusHtml = `
+            <strong>路由状态:</strong><br>
+            VueRouter: <span style="color: #666">${routerStatus.available ? '✅' : '❌'}</span><br>
+            当前路径: <span style="color: #666">${routerStatus.currentRoute}</span><br>
+            路由数量: <span style="color: #666">${routerStatus.routeCount}</span>
+        `;
+
+        document.getElementById('router-status').innerHTML = routerStatusHtml;
+
+        // 5. 检查 Pinia 状态
+        const piniaStatus = {
+            available: typeof window.Pinia !== 'undefined',
+            version: window.Pinia ? window.Pinia.version || '未知' : '未加载',
+            stores: typeof window.__VUE_PINIA_GLOBAL_HOOK__ !== 'undefined'
+        };
+
+        const piniaStatusHtml = `
+            <strong>Pinia 状态:</strong><br>
+            已加载: <span style="color: #666">${piniaStatus.available ? '✅' : '❌'}</span><br>
+            版本: <span style="color: #666">${piniaStatus.version}</span><br>
+            状态管理: <span style="color: #666">${piniaStatus.stores ? '✅' : '❌'}</span>
+        `;
+
+        document.getElementById('pinia-status').innerHTML = piniaStatusHtml;
+
+        console.log('诊断完成');
+
+        // 测试直接访问
+        window.testDirectAccess = function() {
+            console.log('尝试直接访问答题页面...');
+            window.location.href = '/questionnaire';
+        };
+
+        // 测试 Vue 应用创建
+        window.testAppCreation = function() {
+            console.log('尝试创建简单的 Vue 应用...');
+            try {
+                const { createApp } = window.Vue;
+                const app = createApp({
+                    data() {
+                        return {
+                            message: 'Hello from Simple Vue App!'
+                        }
+                    },
+                    template: '<div style="padding: 20px;"><h1>{{ message }}</h1></div>'
+                });
+
+                app.mount('#test-app');
+                console.log('✅ 简单 Vue 应用创建成功');
+
+            } catch (error) {
+                console.error('❌ Vue 应用创建失败:', error);
+            }
+        };
+
+        // 页面加载完成后的初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM 加载完成，开始诊断...');
+
+            // 延迟执行，确保所有库都加载完成
+            setTimeout(() => {
+                const browserDiv = document.getElementById('browser-info');
+                const depsDiv = document.getElementById('dependencies-info');
+                const vueDiv = document.getElementById('vue-status');
+                const routerDiv = document.getElementById('router-status');
+                const piniaDiv = document.getElementById('pinia-status');
+
+                if (browserDiv && depsDiv && vueDiv && routerDiv && piniaDiv) {
+                    console.log('所有诊断元素都已找到');
+                } else {
+                    console.error('❌ 某些诊断元素未找到');
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
