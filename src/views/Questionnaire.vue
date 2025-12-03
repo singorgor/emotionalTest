@@ -585,7 +585,28 @@ function generateScenarioAnalysis(sceneScores: any, fatigueLevel: number) {
             <p>• 深层原因：工作量超负荷、缺乏控制感、人际关系压力、价值感缺失</p>
             <p>• <strong>立即行动建议：</strong>主动与上级沟通工作负荷、评估工作优先级、建立工作边界</p>
           </div>
-        ` : ''}
+        </div>
+        ` : workScore >= 2.0 ? `
+        <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-200">
+          <h4 class="font-semibold text-yellow-900 mb-3">💼 工作场景中等压力</h4>
+          <p class="text-yellow-800 leading-relaxed">您的工作压力评分为<strong>${workScore.toFixed(1)}</strong>，处于中等压力水平，需要适度关注。</p>
+          <div class="mt-3 space-y-2 text-yellow-700">
+            <p>• 可能的表现：偶尔感到工作疲惫、对某些任务缺乏动力、工作与生活平衡困难</p>
+            <p>• 深层原因：工作量周期性波动、技能与要求不完全匹配、时间管理挑战</p>
+            <p>• <strong>预防性建议：</strong>定期评估工作负荷、提升时间管理技能、培养工作之外的兴趣爱好</p>
+          </div>
+        </div>
+        ` : `
+        <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-200">
+          <h4 class="font-semibold text-green-900 mb-3">💼 工作场景相对健康</h4>
+          <p class="text-green-800 leading-relaxed">您的工作压力评分为<strong>${workScore.toFixed(1)}</strong>，表明您在工作场景中保持了较好的心理状态。</p>
+          <div class="mt-3 space-y-2 text-green-700">
+            <p>• 积极表现：能够较好地处理工作挑战、保持工作效率、有良好的工作节奏</p>
+            <p>• 保护因素：有效的工作策略、支持性的工作环境、清晰的职业目标</p>
+            <p>• <strong>维护建议：</strong>继续当前的良好做法、定期自我评估、预防性调整工作策略</p>
+          </div>
+        </div>
+        `}
 
         ${relationshipScore >= 3.0 ? `
         <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-200">
@@ -596,7 +617,28 @@ function generateScenarioAnalysis(sceneScores: any, fatigueLevel: number) {
             <p>• 深层原因：缺乏健康的人际边界、过度共情、讨好型人格特质</p>
             <p>• <strong>立即行动建议：</strong>练习选择性参与社交、建立关系层次、学会表达自己的需求</p>
           </div>
-        ` : ''}
+        </div>
+        ` : relationshipScore >= 2.0 ? `
+        <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-200">
+          <h4 class="font-semibold text-yellow-900 mb-3">👥 人际关系中等消耗</h4>
+          <p class="text-yellow-800 leading-relaxed">您的人际关系评分为<strong>${relationshipScore.toFixed(1)}</strong>，处于中等水平，需要注意社交能量的管理。</p>
+          <div class="mt-3 space-y-2 text-yellow-700">
+            <p>• 可能的表现：在特定社交场合感到疲惫、偶尔难以平衡付出与回报、人际关系波动</p>
+            <p>• 深层原因：社交技能需要提升、边界意识不够清晰、关系模式有待优化</p>
+            <p>• <strong>改善建议：</strong>提升社交技巧、练习适度的自我保护、建立更健康的互动模式</p>
+          </div>
+        </div>
+        ` : `
+        <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-200">
+          <h4 class="font-semibold text-green-900 mb-3">👥 人际关系相对平衡</h4>
+          <p class="text-green-800 leading-relaxed">您的人际关系评分为<strong>${relationshipScore.toFixed(1)}</strong>，表明您在社交互动中保持了较好的平衡。</p>
+          <div class="mt-3 space-y-2 text-green-700">
+            <p>• 积极表现：能够健康地处理人际关系、有适当的边界意识、享受有质量的社交</p>
+            <p>• 保护因素：良好的社交技巧、健康的人际边界、支持性的社交网络</p>
+            <p>• <strong>维护建议：</strong>继续保持健康的社交模式、深化有意义的关系、定期评估人际关系质量</p>
+          </div>
+        </div>
+        `}
 
         ${selfDemandScore >= 3.0 ? `
         <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-200">
@@ -607,7 +649,28 @@ function generateScenarioAnalysis(sceneScores: any, fatigueLevel: number) {
             <p>• 深层原因：早期形成的条件式自我价值、社会比较压力、内在的严厉批评声音</p>
             <p>• <strong>立即行动建议：</strong>重新定义成功标准、练习自我慈悲、设定现实可达成的目标</p>
           </div>
-        ` : ''}
+        </div>
+        ` : selfDemandScore >= 2.0 ? `
+        <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-200">
+          <h4 class="font-semibold text-yellow-900 mb-3">🎯 自我要求中等水平</h4>
+          <p class="text-yellow-800 leading-relaxed">您的自我要求评分为<strong>${selfDemandScore.toFixed(1)}</strong>，表明您的自我期待适中，但有时可能过度自我批评。</p>
+          <div class="mt-3 space-y-2 text-yellow-700">
+            <p>• 可能的表现：偶尔追求完美、在重要任务上压力较大、对自己有较高期待</p>
+            <p>• 深层原因：成长过程中形成的价值观、对成功的理解、社会环境影响</p>
+            <p>• <strong>平衡建议：</strong>学会区分高标准与完美主义、练习自我接纳、建立弹性思维</p>
+          </div>
+        </div>
+        ` : `
+        <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-200">
+          <h4 class="font-semibold text-green-900 mb-3">🎯 自我要求相对健康</h4>
+          <p class="text-green-800 leading-relaxed">您的自我要求评分为<strong>${selfDemandScore.toFixed(1)}</strong>，表明您对自己的期望是健康和现实的。</p>
+          <div class="mt-3 space-y-2 text-green-700">
+            <p>• 积极表现：能够设定现实的目标、从错误中学习、保持积极的自我对话</p>
+            <p>• 保护因素：健康的自尊水平、良好的自我认知、弹性的思维模式</p>
+            <p>• <strong>维护建议：</strong>继续保持健康的自我期待、支持性的自我对话、平衡目标与放松</p>
+          </div>
+        </div>
+        `}
       </div>
     </div>
   `

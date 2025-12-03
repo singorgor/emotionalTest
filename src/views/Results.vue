@@ -299,7 +299,11 @@
               <!-- 报告内容 -->
               <div class="report-content-enhanced">
                 <div class="content-inner">
-                  <div v-html="fatigueTestStore.detailedReport" class="report-text-enhanced"></div>
+                  <div
+                    ref="reportContentRef"
+                    v-html="processReportContent(fatigueTestStore.detailedReport)"
+                    class="report-text-enhanced"
+                  ></div>
                 </div>
               </div>
 
@@ -658,6 +662,158 @@ const getResilienceLevelInfo = (level: RecoveryLevel) => {
 const restartTest = () => {
   fatigueTestStore.restart()
   router.push('/')
+}
+
+// 处理报告内容，优化行为模式分析的布局
+const processReportContent = (htmlContent: string): string => {
+  if (!htmlContent) return ''
+
+  try {
+    // 查找"行为模式深度解读"相关内容并创建平行布局
+    let processedHtml = htmlContent
+
+    // 使用更可靠的正则表达式来找到"行为模式深度解读"部分
+    const behaviorPatternSection = htmlContent.match(/(<h[^>]*>.*?行为模式深度解读.*?<\/h[^>]*>[\s\S]*?)(?=<h[^>]*>|$)/i)
+
+    if (behaviorPatternSection) {
+      console.log('找到行为模式深度解读部分')
+      let sectionContent = behaviorPatternSection[1]
+
+      // 查找该部分中的所有列表
+      const lists = sectionContent.match(/<ul[\s\S]*?<\/ul>/gi)
+
+      if (lists && lists.length >= 2) {
+        console.log('找到列表数量:', lists.length)
+
+        // 创建平行布局的HTML，包含响应式样式
+        const parallelListsHtml = `
+          <div class="behavior-pattern-grid" style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+            width: 100%;
+          " class="responsive-grid">
+            <style>
+              @media (max-width: 768px) {
+                .responsive-grid {
+                  grid-template-columns: 1fr !important;
+                  gap: 1.5rem !important;
+                  margin: 1.5rem 0 !important;
+                }
+                .responsive-grid .behavior-cycle-card,
+                .responsive-grid .cognitive-bias-card {
+                  padding: 1.25rem !important;
+                }
+                .responsive-grid h4 {
+                  font-size: 1rem !important;
+                }
+              }
+            </style>
+            <div class="behavior-cycle-card" style="
+              background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.95) 0%,
+                rgba(248, 250, 252, 0.9) 100%
+              );
+              border: 2px solid transparent;
+              border-image: linear-gradient(135deg, #3b82f6, #8b5cf6) 1;
+              border-radius: 16px;
+              padding: 1.75rem;
+              box-shadow:
+                0 8px 32px rgba(59, 130, 246, 0.15),
+                0 4px 16px rgba(139, 92, 246, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+              position: relative;
+              overflow: hidden;
+            ">
+              <div style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+                opacity: 0.8;
+              "></div>
+              <h4 style="
+                color: #1e40af;
+                font-size: 1.25rem;
+                font-weight: 700;
+                margin: 0 0 1.5rem 0;
+                padding: 0.5rem 0;
+                text-align: center;
+                background: linear-gradient(135deg, #1e40af, #3b82f6);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                position: relative;
+              ">
+                🔄 典型行为循环
+              </h4>
+              ${lists[0].replace(/<ul[^>]*>/g, '<ul style="margin: 0; padding: 0; list-style: none;">')}
+            </div>
+            <div class="cognitive-bias-card" style="
+              background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.95) 0%,
+                rgba(248, 250, 252, 0.9) 100%
+              );
+              border: 2px solid transparent;
+              border-image: linear-gradient(135deg, #ec4899, #f43f5e) 1;
+              border-radius: 16px;
+              padding: 1.75rem;
+              box-shadow:
+                0 8px 32px rgba(236, 72, 153, 0.15),
+                0 4px 16px rgba(244, 63, 94, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+              position: relative;
+              overflow: hidden;
+            ">
+              <div style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, #ec4899, #f43f5e, #ec4899);
+                opacity: 0.8;
+              "></div>
+              <h4 style="
+                color: #be185d;
+                font-size: 1.25rem;
+                font-weight: 700;
+                margin: 0 0 1.5rem 0;
+                padding: 0.5rem 0;
+                text-align: center;
+                background: linear-gradient(135deg, #be185d, #ec4899);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                position: relative;
+              ">
+                🧠 认知偏差识别
+              </h4>
+              ${lists[1].replace(/<ul[^>]*>/g, '<ul style="margin: 0; padding: 0; list-style: none;">')}
+            </div>
+          </div>
+        `
+
+        // 替换原有的列表部分
+        const sectionStart = behaviorPatternSection.index || 0
+        const sectionEnd = sectionStart + behaviorPatternSection[0].length
+
+        const originalSection = htmlContent.substring(sectionStart, sectionEnd)
+        const newSection = originalSection.replace(/<h[^>]*>.*?行为模式深度解读.*?<\/h[^>]*>[\s\S]*?(?=<h[^>]*>|$)/i,
+          `$1${parallelListsHtml}`)
+
+        processedHtml = htmlContent.substring(0, sectionStart) + newSection + htmlContent.substring(sectionEnd)
+      }
+    }
+
+    return processedHtml
+  } catch (error) {
+    console.error('处理报告内容时出错:', error)
+    return htmlContent
+  }
 }
 
 // 跳转到测试页面
@@ -1497,6 +1653,159 @@ const goToTest = () => {
   text-decoration: none !important;
 }
 
+/* 行为模式分析区域的平行布局优化 - JavaScript生成结构 */
+.report-text-enhanced :deep(.behavior-pattern-grid) {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 2rem !important;
+  margin: 2rem 0 !important;
+  align-items: start !important;
+}
+
+.report-text-enhanced :deep(.behavior-cycle-card),
+.report-text-enhanced :deep(.cognitive-bias-card) {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(248, 250, 252, 0.8) 100%
+  ) !important;
+  border: 1px solid rgba(59, 130, 246, 0.1) !important;
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.report-text-enhanced :deep(.cognitive-bias-card) {
+  border-color: rgba(139, 92, 246, 0.1) !important;
+}
+
+.report-text-enhanced :deep(.behavior-cycle-card h4),
+.report-text-enhanced :deep(.cognitive-bias-card h4) {
+  color: #1e293b !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  margin: 0 0 1rem 0 !important;
+  padding: 0 0 0.5rem 0 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+.report-text-enhanced :deep(.behavior-cycle-card ul),
+.report-text-enhanced :deep(.cognitive-bias-card ul) {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.report-text-enhanced :deep(.behavior-cycle-card li),
+.report-text-enhanced :deep(.cognitive-bias-card li) {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-left: 3px solid #3b82f6 !important;
+  border-radius: 0.5rem !important;
+  padding: 1rem !important;
+  margin: 0.75rem 0 !important;
+  transition: all 0.2s ease !important;
+  list-style: none !important;
+  color: #374151 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.6 !important;
+}
+
+.report-text-enhanced :deep(.cognitive-bias-card li) {
+  border-left-color: #8b5cf6 !important;
+}
+
+.report-text-enhanced :deep(.behavior-cycle-card li:hover),
+.report-text-enhanced :deep(.cognitive-bias-card li:hover) {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-left-color: #1d4ed8 !important;
+  transform: translateX(2px) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.report-text-enhanced :deep(.cognitive-bias-card li:hover) {
+  border-left-color: #7c3aed !important;
+}
+
+.report-text-enhanced :deep(.behavior-cycle-card li strong),
+.report-text-enhanced :deep(.cognitive-bias-card li strong) {
+  color: #1e293b !important;
+  font-weight: 600 !important;
+  background: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  display: block !important;
+  margin-bottom: 0.25rem !important;
+  font-size: 0.95rem !important;
+}
+
+.report-text-enhanced :deep(.behavior-cycle-card li p),
+.report-text-enhanced :deep(.cognitive-bias-card li p) {
+  color: #64748b !important;
+  font-size: 0.875rem !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+/* 行为模式流程图样式 */
+.report-text-enhanced :deep(.behavior-flow-diagram) {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 0.5rem !important;
+  padding: 1rem !important;
+  margin: 1rem 0 !important;
+  text-align: center !important;
+}
+
+.report-text-enhanced :deep(.flow-step) {
+  display: inline-block !important;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+  color: white !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 9999px !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  margin: 0.25rem !important;
+}
+
+.report-text-enhanced :deep(.flow-arrow) {
+  display: inline-block !important;
+  color: #94a3b8 !important;
+  font-size: 1.2rem !important;
+  margin: 0 0.5rem !important;
+}
+
+/* 认知偏差分类标签 */
+.report-text-enhanced :deep(.bias-category) {
+  display: inline-block !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 9999px !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  margin-right: 0.5rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.report-text-enhanced :deep(.bias-category.confirmation) {
+  background: linear-gradient(135deg, #fee2e2, #fecaca) !important;
+  color: #991b1b !important;
+}
+
+.report-text-enhanced :deep(.bias-category.negativity) {
+  background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+  color: #92400e !important;
+}
+
+.report-text-enhanced :deep(.bias-category.perfectionism) {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe) !important;
+  color: #1e40af !important;
+}
+
 /* 特殊强调元素 */
 .report-text-enhanced :deep(.highlight),
 .report-text-enhanced :deep(.important) {
@@ -1635,6 +1944,24 @@ const goToTest = () => {
   .left-decoration,
   .right-decoration {
     display: none;
+  }
+
+  /* 移动端行为模式布局优化 */
+  .report-text-enhanced :deep(.behavior-pattern-grid) {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    margin: 1rem 0 !important;
+  }
+
+  .report-text-enhanced :deep(.behavior-cycle-card),
+  .report-text-enhanced :deep(.cognitive-bias-card) {
+    padding: 1.25rem !important;
+  }
+
+  .report-text-enhanced :deep(.cycle-item),
+  .report-text-enhanced :deep(.bias-item) {
+    padding: 0.75rem !important;
+    margin: 0.5rem 0 !important;
   }
 
   .report-content-enhanced {
