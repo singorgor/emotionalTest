@@ -33,24 +33,61 @@
 
           <!-- 关键指标概览 -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- 疲惫类型匹配度 -->
             <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <div class="text-2xl font-bold text-blue-600 mb-1">{{ result.primaryType.matchScore }}%</div>
-              <div class="text-sm text-blue-700">疲惫类型匹配度</div>
-              <div class="font-medium text-blue-900 mt-1">{{ result.primaryType.name }}</div>
-            </div>
-
-            <div class="text-center p-4 bg-orange-50 rounded-lg border border-orange-200">
-              <div class="text-2xl font-bold text-orange-600 mb-1">{{ result.sceneScores.work.toFixed(1) }}</div>
-              <div class="text-sm text-orange-700">工作压力指数</div>
-              <div class="font-medium text-orange-900 mt-1">{{ getPressureLevel(result.sceneScores.work) }}</div>
-            </div>
-
-            <div class="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-              <div class="text-2xl font-bold border-0" :class="getRecoveryLevelClass(result.recoveryLevel).split(' ')[1]">
-                {{ getRecoveryScoreText(result.recoveryLevel) }}
+              <div class="mb-3">
+                <div class="text-lg font-semibold text-blue-800 mb-1">{{ getMatchLevel(result.primaryType.matchScore).level }}</div>
+                <div class="text-xs text-blue-600">{{ result.primaryType.matchScore }}% 匹配度</div>
               </div>
-              <div class="text-sm text-green-700">心理韧性水平</div>
-              <div class="font-medium text-green-900 mt-1">{{ result.recoveryLabel }}</div>
+
+              <!-- 进度条 -->
+              <div class="metric-progress-bar mb-3">
+                <div
+                  class="metric-progress-fill"
+                  :class="getMatchLevel(result.primaryType.matchScore).barColor"
+                  :style="{ width: result.primaryType.matchScore + '%' }"
+                ></div>
+              </div>
+
+              <div class="font-medium text-blue-900">{{ result.primaryType.name }}</div>
+            </div>
+
+            <!-- 工作压力指数 -->
+            <div class="text-center p-4 bg-orange-50 rounded-lg border border-orange-200">
+              <div class="mb-3">
+                <div class="text-lg font-semibold text-orange-800 mb-1">{{ getWorkPressureLevel(result.sceneScores.work).level }}</div>
+                <div class="text-xs text-orange-600">{{ result.sceneScores.work.toFixed(1) }}/5.0 压力指数</div>
+              </div>
+
+              <!-- 进度条 -->
+              <div class="metric-progress-bar mb-3">
+                <div
+                  class="metric-progress-fill"
+                  :class="getWorkPressureLevel(result.sceneScores.work).barColor"
+                  :style="{ width: getWorkPressureLevel(result.sceneScores.work).percentage + '%' }"
+                ></div>
+              </div>
+
+              <div class="font-medium text-orange-900">{{ getPressureLevel(result.sceneScores.work) }}</div>
+            </div>
+
+            <!-- 心理韧性水平 -->
+            <div class="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+              <div class="mb-3">
+                <div class="text-lg font-semibold text-green-800 mb-1">{{ getResilienceLevelInfo(result.recoveryLevel).level }}</div>
+                <div class="text-xs text-green-600">{{ getRecoveryScoreText(result.recoveryLevel) }} 韧性评分</div>
+              </div>
+
+              <!-- 进度条 -->
+              <div class="metric-progress-bar mb-3">
+                <div
+                  class="metric-progress-fill"
+                  :class="getResilienceLevelInfo(result.recoveryLevel).barColor"
+                  :style="{ width: getResilienceLevelInfo(result.recoveryLevel).percentage + '%' }"
+                ></div>
+              </div>
+
+              <div class="font-medium text-green-900">{{ result.recoveryLabel }}</div>
             </div>
           </div>
 
@@ -536,6 +573,36 @@ const getResilienceImprovement = (level: RecoveryLevel): string[] => {
   }
 }
 
+// 疲惫匹配度等级转换
+const getMatchLevel = (score: number) => {
+  if (score >= 90) return { level: '高度匹配', color: 'green', textColor: 'text-green-600', barColor: 'bg-green-500' }
+  if (score >= 75) return { level: '较好匹配', color: 'blue', textColor: 'text-blue-600', barColor: 'bg-blue-500' }
+  if (score >= 60) return { level: '一般匹配', color: 'yellow', textColor: 'text-yellow-600', barColor: 'bg-yellow-500' }
+  return { level: '匹配度低', color: 'gray', textColor: 'text-gray-600', barColor: 'bg-gray-500' }
+}
+
+// 工作压力等级转换 (基于5分制)
+const getWorkPressureLevel = (score: number) => {
+  if (score >= 4.0) return { level: '高压状态', color: 'red', textColor: 'text-red-600', barColor: 'bg-red-500', percentage: (score / 5) * 100 }
+  if (score >= 3.0) return { level: '中等偏高', color: 'orange', textColor: 'text-orange-600', barColor: 'bg-orange-500', percentage: (score / 5) * 100 }
+  if (score >= 2.0) return { level: '中等水平', color: 'yellow', textColor: 'text-yellow-600', barColor: 'bg-yellow-500', percentage: (score / 5) * 100 }
+  return { level: '压力较低', color: 'green', textColor: 'text-green-600', barColor: 'bg-green-500', percentage: (score / 5) * 100 }
+}
+
+// 心理韧性等级转换 (基于10分制)
+const getResilienceLevelInfo = (level: RecoveryLevel) => {
+  switch (level) {
+    case 'high':
+      return { level: '韧性较强', textColor: 'text-green-600', barColor: 'bg-green-500', percentage: 85 }
+    case 'medium':
+      return { level: '韧性中等', textColor: 'text-yellow-600', barColor: 'bg-yellow-500', percentage: 65 }
+    case 'low':
+      return { level: '韧性较弱', textColor: 'text-red-600', barColor: 'bg-red-500', percentage: 25 }
+    default:
+      return { level: '韧性一般', textColor: 'text-gray-600', barColor: 'bg-gray-500', percentage: 50 }
+  }
+}
+
 // 重新测试
 const restartTest = () => {
   fatigueTestStore.restart()
@@ -564,6 +631,66 @@ const goToTest = () => {
 .animate-fade-in {
   animation: fadeIn 0.6s ease-out forwards;
   opacity: 0;
+}
+
+/* 进度条增强样式 */
+.metric-progress-bar {
+  @apply w-full bg-gray-200 rounded-full h-3 overflow-hidden;
+  position: relative;
+}
+
+.metric-progress-fill {
+  @apply h-full rounded-full transition-all duration-700 ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 进度条颜色增强 */
+.bg-green-500 {
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+.bg-blue-500 {
+  background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.bg-orange-500 {
+  background: linear-gradient(90deg, #f97316 0%, #ea580c 100%);
+}
+
+.bg-yellow-500 {
+  background: linear-gradient(90deg, #eab308 0%, #ca8a04 100%);
+}
+
+.bg-red-500 {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.bg-gray-500 {
+  background: linear-gradient(90deg, #6b7280 0%, #4b5563 100%);
 }
 
 /* 原有的按钮样式 */
