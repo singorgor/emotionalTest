@@ -143,7 +143,7 @@
                      :style="{ width: `${(score / 5) * 100}%` }"></div>
               </div>
               <div class="scene-advice">
-                {{ getPressureAdvice(score) }}
+                {{ getPressureAdvice(score, scene) }}
               </div>
             </div>
           </div>
@@ -321,11 +321,63 @@ const getPressureDescription = (score: number): string => {
   return '压力较低，保持当下的节奏与自我照顾'
 }
 
-const getPressureAdvice = (score: number): string => {
-  if (score >= 4.0) return '立即安排短暂停顿，拆解任务，保证睡眠；必要时寻求同事或专业支持'
-  if (score >= 3.2) return '为关键任务预留缓冲，明确优先级，多与同伴沟通协作'
-  if (score >= 2.4) return '持续保持番茄钟或分段工作节奏，确保基础休息'
-  return '维持良好习惯，准备轻量运动或放松作为日常保养'
+const getPressureAdvice = (score: number, scene: string): string => {
+  // 获取场景名称用于判断
+  const sceneName = getSceneName(scene).toLowerCase()
+
+  // 工作场景建议
+  if (sceneName.includes('工作')) {
+    if (score >= 4.0) return '立即暂停手头任务，拆解复杂工作，确保充足睡眠；必要时向领导反映工作量或寻求同事协助'
+    if (score >= 3.2) return '合理安排工作优先级，为重要任务预留缓冲时间，主动与团队沟通协作分工'
+    if (score >= 2.4) return '采用番茄工作法，定时休息，保持工作节奏，确保基本休息和放松'
+    return '保持当前良好习惯，适当安排工作间隙的轻度运动或冥想放松'
+  }
+
+  // 家庭场景建议
+  if (sceneName.includes('家庭')) {
+    if (score >= 4.0) return '立即与家人沟通当前状态，合理分配家庭责任，必要时寻求亲友帮助或专业家庭咨询'
+    if (score >= 3.2) return '明确家庭角色边界，学会适当说"不"，建立家庭责任分担机制'
+    if (score >= 2.4) return '定期与家人沟通交流，共同制定家庭计划，合理安排家庭和个人时间'
+    return '维持和谐的家庭关系，保持良好的家庭沟通习惯'
+  }
+
+  // 社交场景建议
+  if (sceneName.includes('社交')) {
+    if (score >= 4.0) return '减少不必要的社交活动，专注于核心社交关系，必要时寻求心理咨询师帮助'
+    if (score >= 3.2) return '选择性参加社交活动，学会拒绝过度社交邀约，注重社交质量而非数量'
+    if (score >= 2.4) return '平衡独处和社交时间，选择让自己舒适的社交场合，设定社交边界'
+    return '保持积极的社交状态，继续维护健康的社交关系'
+  }
+
+  // 健康场景建议
+  if (sceneName.includes('健康') || sceneName.includes('身体')) {
+    if (score >= 4.0) return '立即就医检查身体状态，暂停高强度运动，保证充足睡眠和营养摄入'
+    if (score >= 3.2) return '定期体检，合理安排运动强度和时间，保证规律作息和健康饮食'
+    if (score >= 2.4) return '坚持适度运动，注意身体信号，保持健康的生活习惯'
+    return '继续保持健康生活方式，关注身体状况变化'
+  }
+
+  // 财务场景建议
+  if (sceneName.includes('财务') || sceneName.includes('经济')) {
+    if (score >= 4.0) return '寻求专业理财师帮助，重新规划财务目标，暂时避免重大财务决策'
+    if (score >= 3.2) return '制定详细预算计划，增加收入渠道，控制不必要开支'
+    if (score >= 2.4) return '定期检视财务状况，合理规划支出，建立应急储蓄'
+    return '保持良好理财习惯，持续关注财务健康'
+  }
+
+  // 学习场景建议
+  if (sceneName.includes('学习') || sceneName.includes('成长')) {
+    if (score >= 4.0) return '调整学习目标和计划，避免过度学习焦虑，寻求导师或同学的帮助指导'
+    if (score >= 3.2) return '制定合理学习计划，采用高效学习方法，寻求学习伙伴支持'
+    if (score >= 2.4) return '保持规律的学习节奏，注重劳逸结合，定期复习巩固'
+    return '保持学习动力，持续提升专业技能'
+  }
+
+  // 默认建议（如果场景不匹配）
+  if (score >= 4.0) return '立即安排短暂停顿，分析压力来源，拆解问题；必要时寻求专业支持和帮助'
+  if (score >= 3.2) return '预留充足时间缓冲，明确优先级，主动寻求他人协助和建议'
+  if (score >= 2.4) return '保持良好的节奏和习惯，定期进行自我检查和调整'
+  return '维持当前良好状态，注重日常保养和预防'
 }
 
 // 获取心理韧性等级样式
