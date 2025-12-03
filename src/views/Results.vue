@@ -35,14 +35,14 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="text-center p-4 bg-gray-50 rounded-lg">
               <div class="text-2xl font-bold text-primary-600 mb-1">{{ result.primaryType.matchScore }}%</div>
-              <div class="text-sm text-gray-600">主要类型匹配度</div>
+              <div class="text-sm text-gray-600">疲惫类型匹配度</div>
               <div class="font-medium text-gray-900 mt-1">{{ result.primaryType.name }}</div>
             </div>
 
             <div class="text-center p-4 bg-gray-50 rounded-lg">
-              <div class="text-2xl font-bold text-orange-600 mb-1">{{ Math.round((result.sceneScores.work || 0) * 10) / 10 }}</div>
+              <div class="text-2xl font-bold text-orange-600 mb-1">{{ result.sceneScores.work.toFixed(1) }}</div>
               <div class="text-sm text-gray-600">工作压力指数</div>
-              <div class="font-medium text-gray-900 mt-1">工作场景</div>
+              <div class="font-medium text-gray-900 mt-1">{{ getPressureLevel(result.sceneScores.work) }}</div>
             </div>
 
             <div class="text-center p-4 bg-gray-50 rounded-lg">
@@ -73,107 +73,78 @@
         </div>
       </div>
 
-      <!-- 详细分析区域 -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <!-- 左侧：疲惫来源分析 -->
-        <div class="space-y-6">
-          <!-- 主要疲惫类型 -->
-          <div class="result-card animate-fade-in" style="animation-delay: 0.1s">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-semibold text-gray-900">主要疲惫类型</h3>
-              <div class="flex items-center gap-2">
-                <div class="w-2 h-2 bg-primary-500 rounded-full"></div>
-                <span class="text-primary-600 font-bold">{{ result.primaryType.matchScore }}%</span>
+      <!-- 三大核心分析 - 水平等宽布局 -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- 疲惫类型分析 -->
+        <div class="analysis-card animate-fade-in" style="animation-delay: 0.1s">
+          <div class="card-header">
+            <span class="header-dot bg-blue-500"></span>
+            <h3 class="card-title">疲惫类型分析</h3>
+          </div>
+          <div class="card-content">
+            <!-- 主要疲惫类型 -->
+            <div class="type-item primary">
+              <div class="type-header">
+                <h4 class="type-name">{{ result.primaryType.name }}</h4>
+                <span class="type-badge primary">主要 {{ result.primaryType.matchScore }}%</span>
               </div>
+              <p class="type-description">{{ getTypeDescription(result.primaryType.code) }}</p>
             </div>
-            <div class="p-4 bg-primary-50 rounded-lg border-l-4 border-primary-200">
-              <h4 class="font-semibold text-primary-900 mb-2">{{ result.primaryType.name }}</h4>
-              <p class="text-gray-700 text-sm leading-relaxed">
-                {{ getTypeDescription(result.primaryType.code) }}
-              </p>
+
+            <!-- 次要疲惫类型 -->
+            <div v-if="result.secondaryType && result.secondaryType.code !== result.primaryType.code"
+                 class="type-item secondary">
+              <div class="type-header">
+                <h4 class="type-name">{{ result.secondaryType.name }}</h4>
+                <span class="type-badge secondary">次要 {{ result.secondaryType.matchScore }}%</span>
+              </div>
+              <p class="type-description">{{ getTypeDescription(result.secondaryType.code) }}</p>
             </div>
           </div>
+        </div>
 
-          <!-- 次要疲惫类型 -->
-          <div v-if="result.secondaryType && result.secondaryType.code !== result.primaryType.code"
-               class="result-card animate-fade-in" style="animation-delay: 0.2s">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-semibold text-gray-900">次要疲惫类型</h3>
-              <div class="flex items-center gap-2">
-                <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
-                <span class="text-gray-600 font-bold">{{ result.secondaryType.matchScore }}%</span>
-              </div>
-            </div>
-            <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-gray-200">
-              <h4 class="font-semibold text-gray-900 mb-2">{{ result.secondaryType.name }}</h4>
-              <p class="text-gray-700 text-sm leading-relaxed">
-                {{ getTypeDescription(result.secondaryType.code) }}
-              </p>
-            </div>
+        <!-- 场景压力分析 -->
+        <div class="analysis-card animate-fade-in" style="animation-delay: 0.2s">
+          <div class="card-header">
+            <span class="header-dot bg-orange-500"></span>
+            <h3 class="card-title">场景压力分析</h3>
           </div>
-
-          <!-- 场景压力分析 -->
-          <div class="result-card animate-fade-in" style="animation-delay: 0.3s">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
-              场景压力分析
-            </h3>
-            <div class="space-y-4">
-              <div v-for="(score, scene) in result.sceneScores" :key="scene" class="space-y-2">
-                <div class="flex items-center justify-between">
-                  <span class="font-medium text-gray-800">{{ getSceneName(scene) }}</span>
-                  <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium" :class="getScoreColor(score)">
-                      {{ score.toFixed(1) }}
-                    </span>
-                    <div class="w-20 bg-gray-200 rounded-full h-2">
-                      <div class="score-fill" :class="getScoreBarColor(score)"
-                           :style="{ width: `${(score / 5) * 100}%` }"></div>
-                    </div>
-                  </div>
+          <div class="card-content">
+            <div v-for="(score, scene) in result.sceneScores" :key="scene" class="scene-item">
+              <div class="scene-header">
+                <span class="scene-name">{{ getSceneName(scene) }}</span>
+                <div class="scene-score">
+                  <span class="score-text" :class="getScoreColor(score)">{{ score.toFixed(1) }}</span>
+                  <span class="pressure-badge" :class="getPressureLevelClass(score)">{{ getPressureLevel(score) }}</span>
                 </div>
-                <div class="ml-2 w-20 bg-gray-200 rounded-full h-2">
-                  <div class="score-fill" :class="getScoreBarColor(score)"
-                       :style="{ width: `${(score / 5) * 100}%` }"></div>
-                </div>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" :class="getScoreBarColor(score)"
+                     :style="{ width: `${(score / 5) * 100}%` }"></div>
+              </div>
+              <div class="scene-advice">
+                {{ getPressureAdvice(score) }}
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 中间：心理韧性评估 -->
-        <div class="space-y-6">
-          <div class="result-card animate-fade-in" style="animation-delay: 0.4s">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-              心理韧性评估
-            </h3>
-            <div class="text-center py-6">
-              <div class="inline-flex items-center px-6 py-3 rounded-full text-lg font-medium"
-                   :class="getRecoveryLevelClass(result.recoveryLevel)">
+        <!-- 心理韧性评估 -->
+        <div class="analysis-card animate-fade-in" style="animation-delay: 0.3s">
+          <div class="card-header">
+            <span class="header-dot bg-green-500"></span>
+            <h3 class="card-title">心理韧性评估</h3>
+          </div>
+          <div class="card-content">
+            <div class="recovery-result">
+              <div class="recovery-badge" :class="getRecoveryLevelClass(result.recoveryLevel)">
                 {{ result.recoveryLabel }}
               </div>
-              <div class="mt-4 space-y-3 text-gray-700">
-                <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-200">
-                  <h4 class="font-semibold text-green-900 mb-2">🧠 心理调节能力</h4>
-                  <p class="text-sm">您在面对压力时的自我调节和恢复能力</p>
-                </div>
-                <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-200">
-                  <h4 class="font-semibold text-blue-900 mb-2">💪 抗压承受力</h4>
-                  <p class="text-sm">您对持续压力的承受和处理能力</p>
-                </div>
-                <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-200">
-                  <h4 class="font-semibold text-purple-900 mb-2">🔄 恢复速度</h4>
-                  <p class="text-sm">您从疲惫状态中恢复的时间和效率</p>
-                </div>
+              <div class="recovery-description">
+                {{ getRecoveryDescription(result.recoveryLevel) }}
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- 右侧：留空或移除其他内容 -->
-        <div class="space-y-6">
-          <!-- 右侧可以添加其他分析内容 -->
         </div>
       </div>
 
@@ -251,6 +222,35 @@ const getScoreBarColor = (score: number): string => {
   return 'bg-green-500'
 }
 
+// 压力相关的展示方法
+const getPressureLevel = (score: number): string => {
+  if (score >= 4.0) return '高压'
+  if (score >= 3.2) return '偏高'
+  if (score >= 2.4) return '中等'
+  return '较低'
+}
+
+const getPressureLevelClass = (score: number): string => {
+  if (score >= 4.0) return 'bg-red-100 text-red-800 border border-red-200'
+  if (score >= 3.2) return 'bg-orange-100 text-orange-800 border border-orange-200'
+  if (score >= 2.4) return 'bg-yellow-100 text-yellow-800 border border-yellow-200'
+  return 'bg-green-100 text-green-800 border border-green-200'
+}
+
+const getPressureDescription = (score: number): string => {
+  if (score >= 4.0) return '当前处于高压状态，需要主动放缓节奏并寻找支撑'
+  if (score >= 3.2) return '压力偏高，注意安排缓冲、沟通和情绪调节'
+  if (score >= 2.4) return '压力处在可控范围，适度关注节奏和休息'
+  return '压力较低，保持当下的节奏与自我照顾'
+}
+
+const getPressureAdvice = (score: number): string => {
+  if (score >= 4.0) return '立即安排短暂停顿，拆解任务，保证睡眠；必要时寻求同事或专业支持'
+  if (score >= 3.2) return '为关键任务预留缓冲，明确优先级，多与同伴沟通协作'
+  if (score >= 2.4) return '持续保持番茄钟或分段工作节奏，确保基础休息'
+  return '维持良好习惯，准备轻量运动或放松作为日常保养'
+}
+
 // 获取心理韧性等级样式
 const getRecoveryLevelClass = (level: RecoveryLevel): string => {
   switch (level) {
@@ -290,6 +290,20 @@ const getTypeDescription = (typeCode: string): string => {
   return descriptions[typeCode] || '综合压力型'
 }
 
+// 获取心理韧性描述
+const getRecoveryDescription = (level: RecoveryLevel): string => {
+  switch (level) {
+    case 'low':
+      return '您的心理韧性较低，在面对压力时容易感到疲惫，建议积极学习压力管理技巧，必要时寻求专业支持来提升应对能力。'
+    case 'medium':
+      return '您的心理韧性处于中等水平，有一定的抗压能力，但在持续压力下仍可能出现疲惫。建议加强自我调节训练，建立更好的压力应对机制。'
+    case 'high':
+      return '您的心理韧性较强，能够在面对压力时保持相对稳定的情绪状态，并具备良好的自我调节能力。建议继续保持现有的压力管理习惯。'
+    default:
+      return '您的心理韧性水平正常，建议关注自身压力状态，适时进行调整和恢复。'
+  }
+}
+
 // 重新测试
 const restartTest = () => {
   fatigueTestStore.restart()
@@ -303,6 +317,7 @@ const goToTest = () => {
 </script>
 
 <style scoped>
+/* 基础动画 */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -319,19 +334,7 @@ const goToTest = () => {
   opacity: 0;
 }
 
-.score-bar {
-  position: relative;
-  background-color: #e5e7eb;
-  border-radius: 9999px;
-  height: 8px;
-}
-
-.score-fill {
-  height: 100%;
-  border-radius: 9999px;
-  transition: width 0.3s ease;
-}
-
+/* 原有的按钮样式 */
 .btn {
   padding: 8px 16px;
   border-radius: 6px;
@@ -361,5 +364,159 @@ const goToTest = () => {
   background: #f9fafb;
   border-color: #3b82f6;
   transform: translateY(-1px);
+}
+
+/* 疲惫等级样式 */
+.fatigue-low {
+  @apply bg-green-100 text-green-800 border border-green-200;
+}
+
+.fatigue-medium {
+  @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+}
+
+.fatigue-high {
+  @apply bg-orange-100 text-orange-800 border border-orange-200;
+}
+
+.fatigue-severe {
+  @apply bg-red-100 text-red-800 border border-red-200;
+}
+
+/* 分析卡片样式 */
+.analysis-card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  @apply px-6 py-4 border-b border-gray-100 flex items-center gap-3;
+}
+
+.header-dot {
+  @apply w-2 h-2 rounded-full;
+}
+
+.card-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.card-content {
+  @apply p-6 flex-1 space-y-4;
+}
+
+/* 疲惫类型分析样式 */
+.type-item {
+  @apply p-4 rounded-lg border-l-4;
+}
+
+.type-item.primary {
+  @apply bg-blue-50 border-blue-200;
+}
+
+.type-item.secondary {
+  @apply bg-gray-50 border-gray-200;
+}
+
+.type-header {
+  @apply flex items-center justify-between mb-2;
+}
+
+.type-name {
+  @apply font-semibold text-gray-900;
+}
+
+.type-badge {
+  @apply px-2 py-1 text-xs font-medium rounded-full;
+}
+
+.type-badge.primary {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.type-badge.secondary {
+  @apply bg-gray-100 text-gray-800;
+}
+
+.type-description {
+  @apply text-sm text-gray-700 leading-relaxed;
+}
+
+/* 场景压力分析样式 */
+.scene-item {
+  @apply space-y-3 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0;
+}
+
+.scene-header {
+  @apply flex items-center justify-between;
+}
+
+.scene-name {
+  @apply font-medium text-gray-800 text-sm;
+}
+
+.scene-score {
+  @apply flex items-center gap-2;
+}
+
+.score-text {
+  @apply text-sm font-medium;
+}
+
+.pressure-badge {
+  @apply px-2 py-1 text-xs font-medium rounded-full;
+}
+
+.progress-bar {
+  @apply w-full bg-gray-200 rounded-full h-2;
+}
+
+.progress-fill {
+  @apply h-full rounded-full transition-all duration-300 ease-out;
+}
+
+.scene-advice {
+  @apply text-xs text-gray-600 leading-relaxed;
+}
+
+/* 心理韧性评估样式 */
+.recovery-result {
+  @apply text-center space-y-4;
+}
+
+.recovery-badge {
+  @apply inline-flex items-center px-4 py-2 rounded-full text-base font-medium;
+}
+
+.recovery-description {
+  @apply text-sm text-gray-700 leading-relaxed text-left;
+}
+
+/* 专业建议部分样式 */
+.professional-advice {
+  @apply bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden;
+}
+
+/* 响应式优化 */
+@media (max-width: 1024px) {
+  .analysis-card {
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-header {
+    @apply px-4 py-3;
+  }
+
+  .card-content {
+    @apply p-4 space-y-3;
+  }
+
+  .analysis-card {
+    min-height: 200px;
+  }
 }
 </style>
