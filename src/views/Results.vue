@@ -264,13 +264,64 @@
 
       <!-- 专业建议部分（自动显示） -->
       <div v-if="fatigueTestStore.detailedReport" class="max-w-6xl mx-auto px-4 py-8 animate-fade-in">
-        <div class="professional-advice">
-          <div class="text-center mb-6">
-            <h3 class="text-2xl font-bold text-gray-900 mb-2">📊 深度个性化分析报告</h3>
-            <p class="text-gray-600">基于您的测试结果，为您生成的专业心理评估和改善建议</p>
+        <div class="professional-advice-enhanced">
+          <!-- 装饰性标题区域 -->
+          <div class="report-header-decoration">
+            <div class="header-pattern"></div>
+            <div class="header-content">
+              <div class="header-icon">
+                <div class="icon-ring"></div>
+                <span class="icon-emoji">🧠</span>
+              </div>
+              <div class="header-text">
+                <h3 class="report-title">深度个性化分析报告</h3>
+                <p class="report-subtitle">基于您的测试结果，为您生成的专业心理评估和改善建议</p>
+                <div class="header-badges">
+                  <span class="badge professional">专业评估</span>
+                  <span class="badge personalized">个性化定制</span>
+                  <span class="badge comprehensive">全面分析</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="report-content prose prose-gray max-w-none">
-            <div v-html="fatigueTestStore.detailedReport" class="report-text"></div>
+
+          <!-- 主要内容区域 -->
+          <div class="report-main-content">
+            <div class="content-wrapper">
+              <!-- 左侧装饰条 -->
+              <div class="left-decoration">
+                <div class="decoration-dot dot-1"></div>
+                <div class="decoration-dot dot-2"></div>
+                <div class="decoration-dot dot-3"></div>
+                <div class="decoration-line"></div>
+              </div>
+
+              <!-- 报告内容 -->
+              <div class="report-content-enhanced">
+                <div class="content-inner">
+                  <div v-html="fatigueTestStore.detailedReport" class="report-text-enhanced"></div>
+                </div>
+              </div>
+
+              <!-- 右侧装饰条 -->
+              <div class="right-decoration">
+                <div class="decoration-shape shape-1"></div>
+                <div class="decoration-shape shape-2"></div>
+                <div class="decoration-shape shape-3"></div>
+              </div>
+            </div>
+
+            <!-- 底部装饰区域 -->
+            <div class="report-footer-decoration">
+              <div class="footer-pattern"></div>
+              <div class="footer-content">
+                <div class="footer-divider"></div>
+                <p class="footer-text">
+                  <span class="footer-icon">💡</span>
+                  本报告基于FBI情绪疲惫度评估体系生成，建议结合专业心理咨询师指导进行解读
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -949,93 +1000,574 @@ const goToTest = () => {
   @apply absolute left-0 text-green-500;
 }
 
-/* 专业建议部分样式 - 强制覆盖确保背景样式生效 */
-.professional-advice {
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 25%, #ffffff 50%, #f3e8ff 75%, #faf5ff 100%) !important;
-  border: 1px solid #0ea5e9 !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-  border-radius: 0.875rem !important;
-  overflow: hidden;
+/* 增强版专业建议部分样式 */
+.professional-advice-enhanced {
+  background: linear-gradient(145deg,
+    #f0f9ff 0%,
+    #e0f2fe 15%,
+    #f8fafc 30%,
+    #ffffff 50%,
+    #faf5ff 70%,
+    #f3e8ff 85%,
+    #fef7ff 100%
+  ) !important;
+  border: 2px solid transparent !important;
+  background-clip: padding-box !important;
+  position: relative !important;
+  border-radius: 1.25rem !important;
+  overflow: hidden !important;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
 }
 
-.report-content {
-  @apply p-8;
+.professional-advice-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg,
+    rgba(59, 130, 246, 0.05) 0%,
+    rgba(147, 51, 234, 0.05) 50%,
+    rgba(59, 130, 246, 0.05) 100%
+  );
+  z-index: -1;
+}
+
+/* 装饰性标题区域 */
+.report-header-decoration {
+  position: relative;
+  padding: 2.5rem 2rem 1.5rem;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(248, 250, 252, 0.8) 100%
+  );
+  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.header-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg,
+    #3b82f6 0%,
+    #8b5cf6 25%,
+    #ec4899 50%,
+    #8b5cf6 75%,
+    #3b82f6 100%
+  );
+  opacity: 0.8;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 40rem;
+  margin: 0 auto;
+  text-align: center;
+  flex-direction: column;
+}
+
+.header-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+}
+
+.icon-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6) border-box;
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: rotate 8s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.icon-emoji {
+  font-size: 2rem;
+  z-index: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.header-text {
+  flex: 1;
+}
+
+.report-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.report-subtitle {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.header-badges {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.badge.professional {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.badge.personalized {
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  color: #7c3aed;
+  border: 1px solid #c4b5fd;
+}
+
+.badge.comprehensive {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+/* 主要内容区域 */
+.report-main-content {
+  padding: 0;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 1rem;
+  padding: 2rem;
+  position: relative;
+}
+
+/* 左侧装饰条 */
+.left-decoration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
+}
+
+.decoration-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.decoration-dot.dot-1 {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+}
+
+.decoration-dot.dot-2 {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+}
+
+.decoration-dot.dot-3 {
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
+}
+
+.decoration-line {
+  width: 2px;
+  flex: 1;
+  background: linear-gradient(180deg,
+    rgba(59, 130, 246, 0.3) 0%,
+    rgba(139, 92, 246, 0.3) 50%,
+    rgba(236, 72, 153, 0.3) 100%
+  );
+  border-radius: 1px;
+  min-height: 60px;
+}
+
+/* 增强的报告内容 */
+.report-content-enhanced {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.report-content-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 1rem;
+  pointer-events: none;
+}
+
+.content-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.report-text-enhanced {
+  line-height: 1.7;
+  color: #374151;
+}
+
+/* 右侧装饰条 */
+.right-decoration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.decoration-shape {
+  transition: all 0.3s;
+}
+
+.decoration-shape.shape-1 {
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 3px;
+  transform: rotate(45deg);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+}
+
+.decoration-shape.shape-2 {
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, #34d399, #10b981);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
+}
+
+.decoration-shape.shape-3 {
+  width: 10px;
+  height: 20px;
+  background: linear-gradient(135deg, #f87171, #ef4444);
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.3);
+}
+
+/* 底部装饰区域 */
+.report-footer-decoration {
+  background: linear-gradient(135deg,
+    rgba(248, 250, 252, 0.9) 0%,
+    rgba(241, 245, 249, 0.8) 100%
+  );
+  border-top: 1px solid rgba(59, 130, 246, 0.1);
+  padding: 1.5rem 2rem;
+  text-align: center;
+}
+
+.footer-pattern {
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(59, 130, 246, 0.2) 20%,
+    rgba(139, 92, 246, 0.2) 50%,
+    rgba(59, 130, 246, 0.2) 80%,
+    transparent 100%
+  );
+  margin-bottom: 1rem;
+}
+
+.footer-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(100, 116, 139, 0.5) 50%,
+    transparent 100%
+  );
+  margin: 0 auto 1rem;
+}
+
+.footer-text {
+  color: #64748b;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.footer-icon {
+  font-size: 1rem;
+  opacity: 0.8;
 }
 
 /* 优化报告内容的文字样式 - 使用更强的选择器确保v-html内容样式生效 */
-.report-content :deep(h1),
-.report-content :deep(h2),
-.report-content :deep(h3),
-.report-content :deep(h4),
-.report-content :deep(h5),
-.report-content :deep(h6) {
-  @apply text-gray-900 font-bold mb-4;
+.report-text-enhanced :deep(h1),
+.report-text-enhanced :deep(h2),
+.report-text-enhanced :deep(h3),
+.report-text-enhanced :deep(h4),
+.report-text-enhanced :deep(h5),
+.report-text-enhanced :deep(h6) {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+  margin-bottom: 1.25rem !important;
+  line-height: 1.3 !important;
 }
 
-.report-content :deep(h1) {
-  @apply text-2xl;
+.report-text-enhanced :deep(h1) {
+  font-size: 1.75rem !important;
+  color: #0f172a !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+  padding-bottom: 0.5rem !important;
 }
 
-.report-content :deep(h2) {
-  @apply text-xl;
+.report-text-enhanced :deep(h2) {
+  font-size: 1.5rem !important;
+  color: #1e293b !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding-bottom: 0.25rem !important;
 }
 
-.report-content :deep(h3) {
-  @apply text-lg;
+.report-text-enhanced :deep(h3) {
+  font-size: 1.25rem !important;
+  color: #334155 !important;
 }
 
-.report-content :deep(p) {
-  @apply text-gray-700 leading-relaxed mb-4;
+.report-text-enhanced :deep(h4) {
+  font-size: 1.1rem !important;
+  color: #475569 !important;
 }
 
-.report-content :deep(ul),
-.report-content :deep(ol) {
-  @apply mb-4 pl-6;
+.report-text-enhanced :deep(h5) {
+  font-size: 1rem !important;
+  color: #64748b !important;
 }
 
-.report-content :deep(li) {
-  @apply text-gray-700 leading-relaxed mb-2;
+.report-text-enhanced :deep(h6) {
+  font-size: 0.9rem !important;
+  color: #64748b !important;
 }
 
-.report-content :deep(strong) {
-  @apply text-gray-900 font-semibold;
+.report-text-enhanced :deep(p) {
+  color: #374151 !important;
+  line-height: 1.7 !important;
+  margin-bottom: 1.25rem !important;
+  text-align: justify !important;
 }
 
-.report-content :deep(blockquote) {
-  @apply border-l-4 border-blue-300 pl-4 py-2 mb-4 bg-blue-50 rounded-r-lg text-gray-700 italic;
+.report-text-enhanced :deep(ul),
+.report-text-enhanced :deep(ol) {
+  margin-bottom: 1.25rem !important;
+  padding-left: 1.5rem !important;
 }
 
-.report-content :deep(code) {
-  @apply bg-gray-100 px-2 py-1 rounded text-sm text-gray-800;
+.report-text-enhanced :deep(li) {
+  color: #374151 !important;
+  line-height: 1.7 !important;
+  margin-bottom: 0.5rem !important;
 }
 
-.report-content :deep(hr) {
-  @apply border-gray-200 my-6;
+.report-text-enhanced :deep(strong),
+.report-text-enhanced :deep(b) {
+  color: #1e293b !important;
+  font-weight: 600 !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)) !important;
+  padding: 0.125rem 0.25rem !important;
+  border-radius: 0.25rem !important;
 }
 
-/* 确保所有文本颜色适配新背景 */
-.report-content :deep(*) {
-  @apply text-gray-700;
+.report-text-enhanced :deep(blockquote) {
+  border-left: 4px solid #3b82f6 !important;
+  padding: 1rem 1.5rem !important;
+  margin: 1.5rem 0 !important;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
+  border-radius: 0.5rem !important;
+  color: #475569 !important;
+  font-style: italic !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
 }
 
-.report-content :deep(h1),
-.report-content :deep(h2),
-.report-content :deep(h3),
-.report-content :deep(h4),
-.report-content :deep(h5),
-.report-content :deep(h6) {
-  @apply text-gray-900;
+.report-text-enhanced :deep(code) {
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0) !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.875rem !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+  font-family: 'Courier New', monospace !important;
 }
 
-.report-content :deep(strong),
-.report-content :deep(b) {
-  @apply text-gray-900;
+.report-text-enhanced :deep(pre) {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  padding: 1rem !important;
+  border-radius: 0.5rem !important;
+  overflow-x: auto !important;
+  margin: 1rem 0 !important;
 }
 
-/* 响应式优化 */
+.report-text-enhanced :deep(pre code) {
+  background: none !important;
+  border: none !important;
+  color: inherit !important;
+  padding: 0 !important;
+}
+
+.report-text-enhanced :deep(hr) {
+  border: none !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, #e2e8f0, transparent) !important;
+  margin: 2rem 0 !important;
+}
+
+.report-text-enhanced :deep(table) {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 1rem 0 !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.report-text-enhanced :deep(th),
+.report-text-enhanced :deep(td) {
+  padding: 0.75rem 1rem !important;
+  text-align: left !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.report-text-enhanced :deep(th) {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+}
+
+.report-text-enhanced :deep(a) {
+  color: #3b82f6 !important;
+  text-decoration: underline !important;
+  transition: color 0.2s !important;
+}
+
+.report-text-enhanced :deep(a:hover) {
+  color: #1d4ed8 !important;
+  text-decoration: none !important;
+}
+
+/* 特殊强调元素 */
+.report-text-enhanced :deep(.highlight),
+.report-text-enhanced :deep(.important) {
+  background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 0.25rem !important;
+  border-left: 3px solid #f59e0b !important;
+  color: #92400e !important;
+  font-weight: 500 !important;
+}
+
+.report-text-enhanced :deep(.warning) {
+  background: linear-gradient(135deg, #fee2e2, #fecaca) !important;
+  padding: 0.75rem !important;
+  border-radius: 0.5rem !important;
+  border-left: 4px solid #ef4444 !important;
+  color: #991b1b !important;
+  margin: 1rem 0 !important;
+}
+
+.report-text-enhanced :deep(.success) {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0) !important;
+  padding: 0.75rem !important;
+  border-radius: 0.5rem !important;
+  border-left: 4px solid #22c55e !important;
+  color: #166534 !important;
+  margin: 1rem 0 !important;
+}
+
+.report-text-enhanced :deep(.info) {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe) !important;
+  padding: 0.75rem !important;
+  border-radius: 0.5rem !important;
+  border-left: 4px solid #3b82f6 !important;
+  color: #1e40af !important;
+  margin: 1rem 0 !important;
+}
+
+/* 增强版专业建议部分的响应式支持 */
 @media (max-width: 1024px) {
   .analysis-card {
     min-height: 240px;
+  }
+
+  .report-header-decoration {
+    padding: 2rem 1.5rem 1rem;
+  }
+
+  .header-content {
+    gap: 1rem;
+  }
+
+  .header-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .icon-emoji {
+    font-size: 1.75rem;
+  }
+
+  .report-title {
+    font-size: 1.5rem;
+  }
+
+  .content-wrapper {
+    padding: 1.5rem;
+  }
+
+  .report-content-enhanced {
+    padding: 1.5rem;
   }
 }
 
@@ -1052,24 +1584,162 @@ const goToTest = () => {
     min-height: 200px;
   }
 
-  .report-content {
-    @apply p-4;
+  /* 移动端专业建议样式 */
+  .professional-advice-enhanced {
+    border-radius: 1rem !important;
+    margin: 0 0.5rem !important;
   }
 
-  .report-content :deep(h1) {
-    @apply text-xl;
+  .report-header-decoration {
+    padding: 1.5rem 1rem 1rem;
   }
 
-  .report-content :deep(h2) {
-    @apply text-lg;
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
   }
 
-  .report-content :deep(h3) {
-    @apply text-base;
+  .header-icon {
+    width: 3rem;
+    height: 3rem;
   }
 
-  .professional-advice {
-    @apply mx-2;
+  .icon-emoji {
+    font-size: 1.5rem;
+  }
+
+  .report-title {
+    font-size: 1.375rem;
+  }
+
+  .report-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .header-badges {
+    justify-content: center;
+  }
+
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .left-decoration,
+  .right-decoration {
+    display: none;
+  }
+
+  .report-content-enhanced {
+    padding: 1.25rem;
+  }
+
+  .report-text-enhanced :deep(h1) {
+    font-size: 1.5rem !important;
+  }
+
+  .report-text-enhanced :deep(h2) {
+    font-size: 1.25rem !important;
+  }
+
+  .report-text-enhanced :deep(h3) {
+    font-size: 1.125rem !important;
+  }
+
+  .report-text-enhanced :deep(p) {
+    font-size: 0.9rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .report-text-enhanced :deep(ul),
+  .report-text-enhanced :deep(ol) {
+    padding-left: 1.25rem !important;
+  }
+
+  .report-text-enhanced :deep(li) {
+    font-size: 0.9rem !important;
+  }
+
+  .report-footer-decoration {
+    padding: 1rem 1rem;
+  }
+
+  .footer-text {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .professional-advice-enhanced {
+    margin: 0 0.25rem !important;
+    border-radius: 0.75rem !important;
+  }
+
+  .report-header-decoration {
+    padding: 1rem 0.75rem 0.75rem;
+  }
+
+  .header-content {
+    gap: 0.5rem;
+  }
+
+  .header-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .icon-emoji {
+    font-size: 1.25rem;
+  }
+
+  .report-title {
+    font-size: 1.25rem;
+  }
+
+  .report-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .content-wrapper {
+    padding: 0.75rem;
+  }
+
+  .report-content-enhanced {
+    padding: 1rem;
+  }
+
+  .report-text-enhanced :deep(h1) {
+    font-size: 1.375rem !important;
+  }
+
+  .report-text-enhanced :deep(h2) {
+    font-size: 1.125rem !important;
+  }
+
+  .report-text-enhanced :deep(h3) {
+    font-size: 1rem !important;
+  }
+
+  .report-text-enhanced :deep(p),
+  .report-text-enhanced :deep(li) {
+    font-size: 0.875rem !important;
+  }
+
+  .report-footer-decoration {
+    padding: 0.75rem 0.75rem;
+  }
+
+  .footer-text {
+    font-size: 0.75rem;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 }
 </style>
