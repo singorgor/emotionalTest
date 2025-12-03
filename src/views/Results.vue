@@ -725,6 +725,8 @@ const processReportContent = (htmlContent: string): string => {
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
               position: relative;
               overflow: hidden;
+              width: 100%;
+              box-sizing: border-box;
             ">
               <div style="
                 position: absolute;
@@ -750,7 +752,7 @@ const processReportContent = (htmlContent: string): string => {
               ">
                 🔄 典型行为循环
               </h4>
-              ${lists[0].replace(/<ul[^>]*>/g, '<ul style="margin: 0; padding: 0; list-style: none;">')}
+              ${lists[0].replace(/<ul[^>]*>/g, '<ul style="margin: 0; padding: 0; list-style: none; width: 100%;">').replace(/<li>/g, '<li style="background: rgba(59, 130, 246, 0.05); border-left: 3px solid #3b82f6; border-radius: 8px; padding: 0.75rem 1rem; margin: 0.5rem 0; font-size: 0.875rem; line-height: 1.5; word-wrap: break-word; overflow-wrap: break-word;">')}
             </div>
             <div class="cognitive-bias-card" style="
               background: linear-gradient(135deg,
@@ -767,6 +769,8 @@ const processReportContent = (htmlContent: string): string => {
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
               position: relative;
               overflow: hidden;
+              width: 100%;
+              box-sizing: border-box;
             ">
               <div style="
                 position: absolute;
@@ -792,7 +796,7 @@ const processReportContent = (htmlContent: string): string => {
               ">
                 🧠 认知偏差识别
               </h4>
-              ${lists[1].replace(/<ul[^>]*>/g, '<ul style="margin: 0; padding: 0; list-style: none;">')}
+              ${lists[1].replace(/<ul[^>]*>/g, '<ul style="margin: 0; padding: 0; list-style: none; width: 100%;">').replace(/<li>/g, '<li style="background: rgba(236, 72, 153, 0.05); border-left: 3px solid #ec4899; border-radius: 8px; padding: 0.75rem 1rem; margin: 0.5rem 0; font-size: 0.875rem; line-height: 1.5; word-wrap: break-word; overflow-wrap: break-word;">')}
             </div>
           </div>
         `
