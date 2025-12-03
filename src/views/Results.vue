@@ -175,6 +175,7 @@
         <div class="space-y-6">
           <!-- 右侧可以添加其他分析内容 -->
         </div>
+      </div>
 
       <!-- 专业建议部分（自动显示） -->
       <div v-if="fatigueTestStore.detailedReport" class="max-w-6xl mx-auto px-4 py-8 animate-fade-in">
@@ -195,7 +196,7 @@
       <div class="result-card">
         <div class="text-gray-500">
           <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 01-2-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.707-.293H17" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 01-2 -2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.707-.293H17" />
           </svg>
           <h3 class="text-xl font-semibold mb-2">未找到测试结果</h3>
           <p class="mb-6">请先完成测试再来查看结果</p>
