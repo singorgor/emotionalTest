@@ -33,24 +33,24 @@
 
           <!-- 关键指标概览 -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="text-center p-4 bg-gray-50 rounded-lg">
-              <div class="text-2xl font-bold text-primary-600 mb-1">{{ result.primaryType.matchScore }}%</div>
-              <div class="text-sm text-gray-600">疲惫类型匹配度</div>
-              <div class="font-medium text-gray-900 mt-1">{{ result.primaryType.name }}</div>
+            <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <div class="text-2xl font-bold text-blue-600 mb-1">{{ result.primaryType.matchScore }}%</div>
+              <div class="text-sm text-blue-700">疲惫类型匹配度</div>
+              <div class="font-medium text-blue-900 mt-1">{{ result.primaryType.name }}</div>
             </div>
 
-            <div class="text-center p-4 bg-gray-50 rounded-lg">
+            <div class="text-center p-4 bg-orange-50 rounded-lg border border-orange-200">
               <div class="text-2xl font-bold text-orange-600 mb-1">{{ result.sceneScores.work.toFixed(1) }}</div>
-              <div class="text-sm text-gray-600">工作压力指数</div>
-              <div class="font-medium text-gray-900 mt-1">{{ getPressureLevel(result.sceneScores.work) }}</div>
+              <div class="text-sm text-orange-700">工作压力指数</div>
+              <div class="font-medium text-orange-900 mt-1">{{ getPressureLevel(result.sceneScores.work) }}</div>
             </div>
 
-            <div class="text-center p-4 bg-gray-50 rounded-lg">
-              <div class="text-2xl font-bold" :class="getRecoveryLevelClass(result.recoveryLevel).split(' ')[2]">
+            <div class="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+              <div class="text-2xl font-bold border-0" :class="getRecoveryLevelClass(result.recoveryLevel).split(' ')[1]">
                 {{ getRecoveryScoreText(result.recoveryLevel) }}
               </div>
-              <div class="text-sm text-gray-600">心理韧性水平</div>
-              <div class="font-medium text-gray-900 mt-1">{{ result.recoveryLabel }}</div>
+              <div class="text-sm text-green-700">心理韧性水平</div>
+              <div class="font-medium text-green-900 mt-1">{{ result.recoveryLabel }}</div>
             </div>
           </div>
 
@@ -623,8 +623,22 @@ const goToTest = () => {
   flex-direction: column;
 }
 
+/* 不同分析卡片的特殊背景 */
+.analysis-card:nth-child(1) {
+  @apply bg-gradient-to-br from-blue-50 via-white to-indigo-50 border-blue-200;
+}
+
+.analysis-card:nth-child(2) {
+  @apply bg-gradient-to-br from-orange-50 via-white to-amber-50 border-orange-200;
+}
+
+.analysis-card:nth-child(3) {
+  @apply bg-gradient-to-br from-green-50 via-white to-emerald-50 border-green-200;
+}
+
 .card-header {
-  @apply px-6 py-4 border-b border-gray-100 flex items-center gap-3;
+  @apply px-6 py-4 border-b flex items-center gap-3;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .header-dot {
@@ -810,10 +824,10 @@ const goToTest = () => {
 
 /* 专业建议部分样式 - 强制覆盖确保背景样式生效 */
 .professional-advice {
-  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #faf5ff 100%) !important;
-  border: 1px solid #dbeafe !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
-  border-radius: 0.75rem !important;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 25%, #ffffff 50%, #f3e8ff 75%, #faf5ff 100%) !important;
+  border: 1px solid #0ea5e9 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 0.875rem !important;
   overflow: hidden;
 }
 
