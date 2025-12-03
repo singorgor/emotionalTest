@@ -89,6 +89,26 @@
                 <span class="type-badge primary">主要 {{ result.primaryType.matchScore }}%</span>
               </div>
               <p class="type-description">{{ getTypeDescription(result.primaryType.code) }}</p>
+
+              <!-- 典型表现 -->
+              <div class="type-section">
+                <h5 class="section-title">🎯 典型表现</h5>
+                <ul class="feature-list">
+                  <li v-for="manifestation in getTypeManifestations(result.primaryType.code)" :key="manifestation">
+                    {{ manifestation }}
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 改善方向 -->
+              <div class="type-section">
+                <h5 class="section-title">💡 改善方向</h5>
+                <ul class="advice-list">
+                  <li v-for="advice in getTypeImprovementAdvice(result.primaryType.code)" :key="advice">
+                    {{ advice }}
+                  </li>
+                </ul>
+              </div>
             </div>
 
             <!-- 次要疲惫类型 -->
@@ -143,6 +163,63 @@
               <div class="recovery-description">
                 {{ getRecoveryDescription(result.recoveryLevel) }}
               </div>
+            </div>
+
+            <!-- 韧性指标分析 -->
+            <div class="metrics-section">
+              <h5 class="section-title">📊 韧性指标分析</h5>
+              <div class="metrics-grid">
+                <div class="metric-item">
+                  <div class="metric-label">情绪调节</div>
+                  <div class="metric-stars">
+                    <span v-for="i in 5" :key="i"
+                          class="star"
+                          :class="i <= getResilienceMetrics(result.recoveryLevel).emotional ? 'filled' : ''">
+                      ★
+                    </span>
+                  </div>
+                </div>
+                <div class="metric-item">
+                  <div class="metric-label">恢复速度</div>
+                  <div class="metric-stars">
+                    <span v-for="i in 5" :key="i"
+                          class="star"
+                          :class="i <= getResilienceMetrics(result.recoveryLevel).recovery ? 'filled' : ''">
+                      ★
+                    </span>
+                  </div>
+                </div>
+                <div class="metric-item">
+                  <div class="metric-label">问题解决</div>
+                  <div class="metric-stars">
+                    <span v-for="i in 5" :key="i"
+                          class="star"
+                          :class="i <= getResilienceMetrics(result.recoveryLevel).problem_solving ? 'filled' : ''">
+                      ★
+                    </span>
+                  </div>
+                </div>
+                <div class="metric-item">
+                  <div class="metric-label">社会支持</div>
+                  <div class="metric-stars">
+                    <span v-for="i in 5" :key="i"
+                          class="star"
+                          :class="i <= getResilienceMetrics(result.recoveryLevel).social_support ? 'filled' : ''">
+                      ★
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 提升建议 -->
+            <div class="improvement-section">
+              <h5 class="section-title">🚀 提升建议</h5>
+              <ul class="improvement-list">
+                <li v-for="suggestion in getResilienceImprovement(result.recoveryLevel)" :key="suggestion">
+                  {{ suggestion }}
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -304,6 +381,109 @@ const getRecoveryDescription = (level: RecoveryLevel): string => {
   }
 }
 
+// 获取疲惫类型的典型表现
+const getTypeManifestations = (typeCode: string): string[] => {
+  const manifestations: Record<string, string[]> = {
+    'type_emotional_overload': [
+      '容易被他人情绪影响，感到情绪负担重',
+      '在团队中经常承担"情绪垃圾桶"角色',
+      '下班后仍难以从工作压力中抽离',
+      '过度共情导致个人边界模糊'
+    ],
+    'type_responsibility_trap': [
+      '习惯性承担超出职责范围的工作',
+      '难以拒绝他人的请求，害怕让他人失望',
+      '凡事亲力亲为，不善于 delegating',
+      '责任感过强，自我要求过高'
+    ],
+    'type_comparison_anxiety': [
+      '频繁与他人比较，产生自我怀疑',
+      '过度关注他人的成就和评价',
+      '社交媒体使用后感到焦虑和不足',
+      '对自己要求过高，追求完美主义'
+    ],
+    'type_high_pressure_mode': [
+      '习惯高强度快节奏的工作生活方式',
+      '难以放松，总觉得有事情需要处理',
+      '长期处于"战斗或逃跑"的应激状态',
+      '忽略了身体和心理的恢复需求'
+    ]
+  }
+  return manifestations[typeCode] || ['表现出综合性的压力症状', '工作和生活平衡失调', '需要全面提升自我管理能力']
+}
+
+// 获取疲惫类型的改善建议
+const getTypeImprovementAdvice = (typeCode: string): string[] => {
+  const advice: Record<string, string[]> = {
+    'type_emotional_overload': [
+      '建立情绪边界，学会适度共情',
+      '定期进行情绪释放活动（运动、冥想）',
+      '培养理性思考习惯，减少情绪内耗'
+    ],
+    'type_responsibility_trap': [
+      '学会合理拒绝，明确个人边界',
+      '培养团队协作意识，合理分配任务',
+      '调整完美主义倾向，接受"足够好"的标准'
+    ],
+    'type_comparison_anxiety': [
+      '专注于个人成长，而非外在比较',
+      '减少社交媒体使用时间，培养现实社交',
+      '建立自我价值感，基于内在标准而非外界评价'
+    ],
+    'type_high_pressure_mode': [
+      '刻意练习放慢节奏，培养耐心',
+      '建立规律的作息和运动习惯',
+      '学会识别和尊重身体的疲劳信号'
+    ]
+  }
+  return advice[typeCode] || ['建立健康的生活节奏', '学习压力管理技巧', '培养自我关怀的习惯']
+}
+
+// 获取心理韧性指标数据
+const getResilienceMetrics = (level: RecoveryLevel) => {
+  const baseMetrics = {
+    emotional: level === 'high' ? 4 : level === 'medium' ? 3 : 2,
+    recovery: level === 'high' ? 4 : level === 'medium' ? 2 : 1,
+    problem_solving: level === 'high' ? 4 : level === 'medium' ? 3 : 2,
+    social_support: level === 'high' ? 3 : level === 'medium' ? 3 : 2
+  }
+
+  return baseMetrics
+}
+
+// 获取心理韧性提升建议
+const getResilienceImprovement = (level: RecoveryLevel): string[] => {
+  switch (level) {
+    case 'low':
+      return [
+        '加强正念冥想训练，提升情绪觉察',
+        '建立完善的社会支持网络',
+        '学习专业的压力管理技巧',
+        '培养健康的生活习惯'
+      ]
+    case 'medium':
+      return [
+        '深化情绪调节技能训练',
+        '扩大社交支持系统',
+        '定期进行自我反思和成长',
+        '建立更有效的应对机制'
+      ]
+    case 'high':
+      return [
+        '继续保持现有的良好习惯',
+        '学习更高级的压力管理技巧',
+        '帮助他人建立心理韧性',
+        '追求更高层次的心理健康'
+      ]
+    default:
+      return [
+        '关注自身心理状态变化',
+        '建立基础的压力管理习惯',
+        '培养积极的思维模式'
+      ]
+  }
+}
+
 // 重新测试
 const restartTest = () => {
   fatigueTestStore.restart()
@@ -444,6 +624,41 @@ const goToTest = () => {
   @apply text-sm text-gray-700 leading-relaxed;
 }
 
+/* 疲惫类型分析新增样式 */
+.type-section {
+  @apply mt-4 pt-3 border-t border-gray-100;
+}
+
+.section-title {
+  @apply text-sm font-semibold text-gray-800 mb-2;
+}
+
+.feature-list {
+  @apply space-y-1;
+}
+
+.feature-list li {
+  @apply text-xs text-gray-600 pl-4 relative;
+}
+
+.feature-list li::before {
+  content: '•';
+  @apply absolute left-0 text-gray-400;
+}
+
+.advice-list {
+  @apply space-y-1;
+}
+
+.advice-list li {
+  @apply text-xs text-gray-600 pl-4 relative;
+}
+
+.advice-list li::before {
+  content: '→';
+  @apply absolute left-0 text-gray-400;
+}
+
 /* 场景压力分析样式 */
 .scene-item {
   @apply space-y-3 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0;
@@ -492,6 +707,53 @@ const goToTest = () => {
 
 .recovery-description {
   @apply text-sm text-gray-700 leading-relaxed text-left;
+}
+
+/* 韧性指标样式 */
+.metrics-section {
+  @apply mt-4 pt-3 border-t border-gray-100;
+}
+
+.metrics-grid {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.metric-item {
+  @apply flex items-center justify-between p-2 bg-gray-50 rounded-lg;
+}
+
+.metric-label {
+  @apply text-xs font-medium text-gray-700;
+}
+
+.metric-stars {
+  @apply flex gap-0.5;
+}
+
+.star {
+  @apply text-xs text-gray-300;
+}
+
+.star.filled {
+  @apply text-yellow-500;
+}
+
+/* 提升建议样式 */
+.improvement-section {
+  @apply mt-4 pt-3 border-t border-gray-100;
+}
+
+.improvement-list {
+  @apply space-y-1;
+}
+
+.improvement-list li {
+  @apply text-xs text-gray-600 pl-4 relative;
+}
+
+.improvement-list li::before {
+  content: '✓';
+  @apply absolute left-0 text-green-500;
 }
 
 /* 专业建议部分样式 */
