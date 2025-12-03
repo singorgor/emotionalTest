@@ -54,14 +54,27 @@
             </div>
           </div>
 
-          <h2 class="text-2xl font-semibold text-gray-900 mb-6 text-center">
-            您的个性化情绪疲惫分析报告
-          </h2>
+          <!-- 个人特征标签 -->
+          <div class="result-card animate-fade-in" style="animation-delay: 0.5s">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center justify-center gap-2">
+              <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+              个人特征标签
+            </h3>
+            <div class="flex flex-wrap gap-2 justify-center">
+              <span
+                v-for="tag in result.personalTags"
+                :key="tag"
+                class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium"
+              >
+                {{ tag }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- 详细分析区域 -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <!-- 左侧：疲惫来源分析 -->
         <div class="space-y-6">
           <!-- 主要疲惫类型 -->
@@ -158,25 +171,10 @@
           </div>
         </div>
 
-        <!-- 右侧：个人特征标签 -->
+        <!-- 右侧：留空或移除其他内容 -->
         <div class="space-y-6">
-          <div class="result-card animate-fade-in" style="animation-delay: 0.5s">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
-              个人特征标签
-            </h3>
-            <div class="flex flex-wrap gap-2 justify-center">
-              <span
-                v-for="tag in result.personalTags"
-                :key="tag"
-                class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium"
-              >
-                {{ tag }}
-              </span>
-            </div>
-          </div>
+          <!-- 右侧可以添加其他分析内容 -->
         </div>
-      </div>
 
       <!-- 专业建议部分（自动显示） -->
       <div v-if="fatigueTestStore.detailedReport" class="max-w-6xl mx-auto px-4 py-8 animate-fade-in">
