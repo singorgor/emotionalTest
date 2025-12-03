@@ -232,8 +232,8 @@
             <h3 class="text-2xl font-bold text-gray-900 mb-2">📊 深度个性化分析报告</h3>
             <p class="text-gray-600">基于您的测试结果，为您生成的专业心理评估和改善建议</p>
           </div>
-          <div class="prose prose-gray max-w-none bg-white p-6 rounded-lg border-l-4 border-blue-200">
-            <div v-html="fatigueTestStore.detailedReport"></div>
+          <div class="report-content prose prose-gray max-w-none">
+            <div v-html="fatigueTestStore.detailedReport" class="report-text"></div>
           </div>
         </div>
       </div>
@@ -808,9 +808,87 @@ const goToTest = () => {
   @apply absolute left-0 text-green-500;
 }
 
-/* 专业建议部分样式 */
+/* 专业建议部分样式 - 强制覆盖确保背景样式生效 */
 .professional-advice {
-  @apply bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #faf5ff 100%) !important;
+  border: 1px solid #dbeafe !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  border-radius: 0.75rem !important;
+  overflow: hidden;
+}
+
+.report-content {
+  @apply p-8;
+}
+
+/* 优化报告内容的文字样式 - 使用更强的选择器确保v-html内容样式生效 */
+.report-content :deep(h1),
+.report-content :deep(h2),
+.report-content :deep(h3),
+.report-content :deep(h4),
+.report-content :deep(h5),
+.report-content :deep(h6) {
+  @apply text-gray-900 font-bold mb-4;
+}
+
+.report-content :deep(h1) {
+  @apply text-2xl;
+}
+
+.report-content :deep(h2) {
+  @apply text-xl;
+}
+
+.report-content :deep(h3) {
+  @apply text-lg;
+}
+
+.report-content :deep(p) {
+  @apply text-gray-700 leading-relaxed mb-4;
+}
+
+.report-content :deep(ul),
+.report-content :deep(ol) {
+  @apply mb-4 pl-6;
+}
+
+.report-content :deep(li) {
+  @apply text-gray-700 leading-relaxed mb-2;
+}
+
+.report-content :deep(strong) {
+  @apply text-gray-900 font-semibold;
+}
+
+.report-content :deep(blockquote) {
+  @apply border-l-4 border-blue-300 pl-4 py-2 mb-4 bg-blue-50 rounded-r-lg text-gray-700 italic;
+}
+
+.report-content :deep(code) {
+  @apply bg-gray-100 px-2 py-1 rounded text-sm text-gray-800;
+}
+
+.report-content :deep(hr) {
+  @apply border-gray-200 my-6;
+}
+
+/* 确保所有文本颜色适配新背景 */
+.report-content :deep(*) {
+  @apply text-gray-700;
+}
+
+.report-content :deep(h1),
+.report-content :deep(h2),
+.report-content :deep(h3),
+.report-content :deep(h4),
+.report-content :deep(h5),
+.report-content :deep(h6) {
+  @apply text-gray-900;
+}
+
+.report-content :deep(strong),
+.report-content :deep(b) {
+  @apply text-gray-900;
 }
 
 /* 响应式优化 */
@@ -831,6 +909,26 @@ const goToTest = () => {
 
   .analysis-card {
     min-height: 200px;
+  }
+
+  .report-content {
+    @apply p-4;
+  }
+
+  .report-content :deep(h1) {
+    @apply text-xl;
+  }
+
+  .report-content :deep(h2) {
+    @apply text-lg;
+  }
+
+  .report-content :deep(h3) {
+    @apply text-base;
+  }
+
+  .professional-advice {
+    @apply mx-2;
   }
 }
 </style>

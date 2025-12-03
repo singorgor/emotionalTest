@@ -86,7 +86,7 @@
 
   /* 评分按钮样式 */
   .scale-btn {
-    @apply relative inline-flex items-center justify-center w-12 h-12 rounded-lg border-2 font-medium transition-all duration-200;
+    @apply relative inline-flex items-center justify-center w-14 h-14 rounded-xl border-2 text-lg font-semibold transition-all duration-200;
   }
 
   .scale-btn:not(.selected) {
@@ -107,7 +107,7 @@
 
   /* 题目卡片样式 */
   .question-card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6 transition-all duration-300;
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-8 mb-6 transition-all duration-300;
   }
 
   .question-card:hover {

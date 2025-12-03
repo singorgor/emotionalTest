@@ -14,18 +14,18 @@
     </div>
 
     <!-- 题目内容 -->
-    <div class="mb-6">
-      <h3 class="text-lg font-medium text-gray-900 leading-relaxed">
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-900 leading-relaxed">
         {{ question.text }}
       </h3>
     </div>
 
     <!-- 评分选项 -->
-    <div class="space-y-3">
+    <div class="space-y-4">
       <div
         v-for="option in scaleOptions"
         :key="option.value"
-        class="flex items-center gap-4"
+        class="flex items-center gap-6"
       >
         <!-- 评分按钮 -->
         <button
@@ -51,10 +51,10 @@
           @click="selectScore(option.value)"
         >
           <div class="flex items-center">
-            <span class="font-medium text-gray-900 mr-2">
+            <span class="font-semibold text-gray-900 mr-3 text-lg">
               {{ option.label }}
             </span>
-            <span class="text-gray-600 text-sm">
+            <span class="text-gray-600 text-base">
               {{ option.description }}
             </span>
           </div>
@@ -76,9 +76,9 @@
     <!-- 题目说明（可选） -->
     <div
       v-if="showHelper && selectedScore"
-      class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg"
+      class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg"
     >
-      <p class="text-sm text-blue-800">
+      <p class="text-base text-blue-800">
         💡 您选择了"{{ scaleOptions.find(opt => opt.value === selectedScore)?.label }}"
       </p>
     </div>
@@ -105,6 +105,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   'update:modelValue': [value: number]
   'answer-selected': [questionId: string, score: number]
+  'auto-next': []
 }>()
 
 const selectedScore = computed({
@@ -128,6 +129,11 @@ const selectScore = (score: number) => {
   if (navigator.vibrate) {
     navigator.vibrate(50) // 50ms的震动
   }
+
+  // 触发自动跳转到下一题的事件
+  setTimeout(() => {
+    emit('auto-next')
+  }, 300) // 300ms延迟，让用户看到选中效果
 }
 </script>
 

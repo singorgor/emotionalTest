@@ -39,21 +39,25 @@
       </div>
 
       <!-- 当前题目 -->
-      <div class="max-w-2xl mx-auto">
-        <QuestionItem
-          v-if="currentQuestion"
-          :question="currentQuestion"
-          :question-number="fatigueTestStore.currentQuestionIndex + 1"
-          :category-label="getCategoryLabel(currentQuestion)"
-          :model-value="fatigueTestStore.answers[currentQuestion.id]"
-          @update:model-value="saveAnswer"
-          @answer-selected="onAnswerSelected"
-        />
+      <div class="max-w-4xl mx-auto">
+        <transition name="question-slide" mode="out-in">
+          <QuestionItem
+            v-if="currentQuestion"
+            :key="currentQuestion.id"
+            :question="currentQuestion"
+            :question-number="fatigueTestStore.currentQuestionIndex + 1"
+            :category-label="getCategoryLabel(currentQuestion)"
+            :model-value="fatigueTestStore.answers[currentQuestion.id]"
+            @update:model-value="saveAnswer"
+            @answer-selected="onAnswerSelected"
+            @auto-next="handleAutoNext"
+          />
 
-        <!-- 未找到题目时的提示 -->
-        <div v-else class="card p-8 text-center">
-          <div class="text-gray-500">题目加载中...</div>
-        </div>
+          <!-- 未找到题目时的提示 -->
+          <div v-else class="card p-12 text-center">
+            <div class="text-gray-500 text-lg">题目加载中...</div>
+          </div>
+        </transition>
       </div>
     </div>
 
@@ -279,6 +283,19 @@ const saveAnswer = (score: number) => {
 const onAnswerSelected = (questionId: string, score: number) => {
   // 可以在这里添加其他逻辑，比如自动跳转等
   console.log(`Question ${questionId} answered with score ${score}`)
+}
+
+// 处理自动跳转到下一题
+const handleAutoNext = () => {
+  // 检查是否还有下一题
+  if (fatigueTestStore.currentQuestionIndex < allQuestions.value.length - 1) {
+    // 自动跳转到下一题
+    fatigueTestStore.nextQuestion()
+  } else {
+    // 如果是最后一题，可以自动触发提交提示
+    // 这里选择不自动提交，让用户自己决定
+    console.log('已是最后一题，等待用户提交')
+  }
 }
 
 // 导航方法
@@ -912,6 +929,28 @@ onMounted(() => {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* 题目切换过渡动画 */
+.question-slide-enter-active,
+.question-slide-leave-active {
+  transition: all 0.4s ease-out;
+}
+
+.question-slide-enter-from {
+  opacity: 0;
+  transform: translateX(50px);
+}
+
+.question-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.question-slide-enter-to,
+.question-slide-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* 为固定导航留出空间 */
