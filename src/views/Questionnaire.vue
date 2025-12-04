@@ -5,7 +5,7 @@
       <div class="max-w-4xl mx-auto px-4 py-6">
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-2xl font-bold text-gray-900">FBI 情绪疲惫度测试</h1>
+            <h1 class="text-2xl font-bold text-gray-900">情绪疲惫度测试</h1>
             <p class="text-sm text-gray-600 mt-1">请根据您最近的真实感受回答</p>
           </div>
           <div class="text-right">
@@ -21,6 +21,13 @@
             :total-questions="fatigueTestStore.totalQuestions"
             :show-eta="true"
           />
+        </div>
+
+        <!-- 量表说明 -->
+        <div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+          <p class="text-amber-700 text-sm leading-relaxed">
+            <strong>量表说明：</strong>本量表参考情绪耗竭（Emotional Exhaustion）、职业倦怠（Burnout）及主观疲劳相关研究思路编制，用于日常自我觉察，不作为医疗或心理诊断依据。
+          </p>
         </div>
       </div>
     </div>

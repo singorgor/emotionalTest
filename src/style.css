@@ -86,7 +86,7 @@
 
   /* 评分按钮样式 */
   .scale-btn {
-    @apply relative inline-flex items-center justify-center w-14 h-14 rounded-xl border-2 text-lg font-semibold transition-all duration-200;
+    @apply relative inline-flex items-center justify-center w-16 h-16 rounded-xl border-2 text-xl font-bold transition-all duration-200;
   }
 
   .scale-btn:not(.selected) {

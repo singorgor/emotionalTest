@@ -10,7 +10,7 @@ const routes = [
     name: 'Introduction',
     component: Introduction,
     meta: {
-      title: 'FBI 情绪疲惫度测试'
+      title: '情绪疲惫度测试'
     }
   },
   {
@@ -18,7 +18,7 @@ const routes = [
     name: 'Questionnaire',
     component: Questionnaire,
     meta: {
-      title: '答题 - FBI 情绪疲惫度测试'
+      title: '答题 - 情绪疲惫度测试'
     }
   },
   {
@@ -26,7 +26,7 @@ const routes = [
     name: 'Results',
     component: Results,
     meta: {
-      title: '测试结果 - FBI 情绪疲惫度测试'
+      title: '测试结果 - 情绪疲惫度测试'
     }
   },
   {

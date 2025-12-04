@@ -7,7 +7,7 @@
       </span>
       <span
         v-if="categoryLabel"
-        class="type-badge secondary text-xs"
+        class="type-badge secondary text-sm"
       >
         {{ categoryLabel }}
       </span>
@@ -51,10 +51,10 @@
           @click="selectScore(option.value)"
         >
           <div class="flex items-center">
-            <span class="font-semibold text-gray-900 mr-3 text-lg">
+            <span class="font-semibold text-gray-900 mr-3 text-xl">
               {{ option.label }}
             </span>
-            <span class="text-gray-600 text-base">
+            <span class="text-gray-600 text-lg">
               {{ option.description }}
             </span>
           </div>

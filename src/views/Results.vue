@@ -5,7 +5,7 @@
       <div class="max-w-6xl mx-auto px-4 py-6">
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">FBI 情绪疲惫度测试结果</h1>
+            <h1 class="text-3xl font-bold text-gray-900">情绪疲惫度测试结果</h1>
             <p class="text-gray-600 mt-1">
               测试时间: {{ formatDuration(fatigueTestStore.duration) }} ·
               {{ new Date().toLocaleDateString() }}
@@ -322,7 +322,7 @@
                 <div class="footer-divider"></div>
                 <p class="footer-text">
                   <span class="footer-icon">💡</span>
-                  本报告基于FBI情绪疲惫度评估体系生成，建议结合专业心理咨询师指导进行解读
+                  本报告基于情绪疲惫度评估体系生成，建议结合专业心理咨询师指导进行解读
                 </p>
               </div>
             </div>
@@ -1034,7 +1034,7 @@ const goToTest = () => {
 }
 
 .type-description {
-  @apply text-sm text-gray-700 leading-relaxed;
+  @apply text-base text-gray-700 leading-relaxed;
 }
 
 /* 疲惫类型分析新增样式 */
@@ -1043,7 +1043,7 @@ const goToTest = () => {
 }
 
 .section-title {
-  @apply text-sm font-semibold text-gray-800 mb-2;
+  @apply text-base font-semibold text-gray-800 mb-2;
 }
 
 .feature-list {
@@ -1051,7 +1051,7 @@ const goToTest = () => {
 }
 
 .feature-list li {
-  @apply text-xs text-gray-600 pl-4 relative;
+  @apply text-sm text-gray-600 pl-4 relative;
 }
 
 .feature-list li::before {
@@ -1064,7 +1064,7 @@ const goToTest = () => {
 }
 
 .advice-list li {
-  @apply text-xs text-gray-600 pl-4 relative;
+  @apply text-sm text-gray-600 pl-4 relative;
 }
 
 .advice-list li::before {
@@ -1082,7 +1082,7 @@ const goToTest = () => {
 }
 
 .scene-name {
-  @apply font-medium text-gray-800 text-sm;
+  @apply font-medium text-gray-800 text-base;
 }
 
 .scene-score {
@@ -1090,7 +1090,7 @@ const goToTest = () => {
 }
 
 .score-text {
-  @apply text-sm font-medium;
+  @apply text-base font-medium;
 }
 
 .pressure-badge {
@@ -1106,7 +1106,7 @@ const goToTest = () => {
 }
 
 .scene-advice {
-  @apply text-xs text-gray-600 leading-relaxed;
+  @apply text-sm text-gray-600 leading-relaxed;
 }
 
 /* 心理韧性评估样式 */
@@ -1119,7 +1119,7 @@ const goToTest = () => {
 }
 
 .recovery-description {
-  @apply text-sm text-gray-700 leading-relaxed text-left;
+  @apply text-base text-gray-700 leading-relaxed text-left;
 }
 
 /* 韧性指标样式 */
@@ -1136,7 +1136,7 @@ const goToTest = () => {
 }
 
 .metric-label {
-  @apply text-xs font-medium text-gray-700;
+  @apply text-sm font-medium text-gray-700;
 }
 
 .metric-stars {
@@ -1161,7 +1161,7 @@ const goToTest = () => {
 }
 
 .improvement-list li {
-  @apply text-xs text-gray-600 pl-4 relative;
+  @apply text-sm text-gray-600 pl-4 relative;
 }
 
 .improvement-list li::before {
@@ -1583,6 +1583,7 @@ const goToTest = () => {
   line-height: 1.7 !important;
   margin-bottom: 1.25rem !important;
   text-align: justify !important;
+  font-size: 1rem !important;
 }
 
 .report-text-enhanced :deep(ul),
@@ -1595,6 +1596,7 @@ const goToTest = () => {
   color: #374151 !important;
   line-height: 1.7 !important;
   margin-bottom: 0.5rem !important;
+  font-size: 1rem !important;
 }
 
 .report-text-enhanced :deep(strong),
@@ -2032,7 +2034,7 @@ const goToTest = () => {
   }
 
   .report-text-enhanced :deep(p) {
-    font-size: 0.9rem !important;
+    font-size: 1rem !important;
     line-height: 1.6 !important;
   }
 
@@ -2042,7 +2044,7 @@ const goToTest = () => {
   }
 
   .report-text-enhanced :deep(li) {
-    font-size: 0.9rem !important;
+    font-size: 1rem !important;
   }
 
   .report-footer-decoration {
@@ -2107,7 +2109,7 @@ const goToTest = () => {
 
   .report-text-enhanced :deep(p),
   .report-text-enhanced :deep(li) {
-    font-size: 0.875rem !important;
+    font-size: 1rem !important;
   }
 
   .report-footer-decoration {

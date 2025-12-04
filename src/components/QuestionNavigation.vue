@@ -15,7 +15,7 @@
       </button>
 
       <!-- 题目编号指示器 -->
-      <div class="hidden sm:flex items-center gap-2 text-sm text-gray-600">
+      <div class="hidden sm:flex items-center gap-2 text-base text-gray-600">
         <span>{{ currentIndex + 1 }}</span>
         <span class="text-gray-400">/</span>
         <span>{{ totalQuestions }}</span>
@@ -29,7 +29,7 @@
         :key="q.id"
         @click="goToQuestion(index)"
         :class="[
-          'w-3 h-3 rounded-full flex-shrink-0 transition-all duration-200',
+          'w-4 h-4 rounded-full flex-shrink-0 transition-all duration-200',
           index === currentIndex ? 'bg-primary-600 scale-125' :
           answers[q.id] !== undefined ? 'bg-green-500' :
           'bg-gray-300 hover:bg-gray-400'
@@ -42,7 +42,7 @@
     <!-- 右侧：下一题/提交按钮 -->
     <div class="flex items-center gap-4">
       <!-- 模块进度提示 -->
-      <div v-if="currentModuleProgress" class="hidden lg:block text-sm text-gray-600">
+      <div v-if="currentModuleProgress" class="hidden lg:block text-base text-gray-600">
         <span>{{ currentModuleProgress.name }}: </span>
         <span class="font-medium">{{ currentModuleProgress.completed }}/{{ currentModuleProgress.total }}</span>
       </div>
@@ -78,10 +78,10 @@
   <!-- 移动端下拉式题目导航 -->
   <div class="sm:hidden border-t border-gray-200 p-4">
     <div class="flex items-center justify-between mb-3">
-      <span class="text-sm text-gray-600">快速跳转</span>
+      <span class="text-base text-gray-600">快速跳转</span>
       <button
         @click="showMobileNav = !showMobileNav"
-        class="text-primary-600 text-sm flex items-center gap-1"
+        class="text-primary-600 text-base flex items-center gap-1"
       >
         {{ currentIndex + 1 }} / {{ totalQuestions }}
         <svg class="w-4 h-4" :class="{ 'rotate-180': showMobileNav }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,7 +100,7 @@
         :key="q.id"
         @click="goToQuestionMobile(index)"
         :class="[
-          'w-8 h-8 rounded-full text-xs font-medium flex items-center justify-center',
+          'w-10 h-10 rounded-full text-sm font-medium flex items-center justify-center',
           index === currentIndex ? 'bg-primary-600 text-white' :
           answers[q.id] !== undefined ? 'bg-green-500 text-white' :
           'bg-white border border-gray-300 text-gray-600'
