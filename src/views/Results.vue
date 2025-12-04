@@ -363,7 +363,7 @@ const result = computed(() => fatigueTestStore.result)
 
 // 格式化测试时间
 const formatDuration = (seconds: number | null): string => {
-  if (!seconds) return '未知'
+  if (seconds === null) return '未知'
   const minutes = Math.floor(seconds / 60)
   const remainingSeconds = seconds % 60
   return remainingSeconds > 0 ? `${minutes}分${remainingSeconds}秒` : `${minutes}分钟`
@@ -692,7 +692,12 @@ const processReportContent = (htmlContent: string): string => {
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
             margin: 2rem 0;
-            width: 100%;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 100% !important;
+            flex: 1 1 0%;
+            box-sizing: border-box;
+            position: relative;
           " class="responsive-grid">
             <style>
               @media (max-width: 768px) {
@@ -727,6 +732,8 @@ const processReportContent = (htmlContent: string): string => {
               overflow: hidden;
               width: 100%;
               box-sizing: border-box;
+              min-width: 0;
+              flex: 1;
             ">
               <div style="
                 position: absolute;
@@ -771,6 +778,8 @@ const processReportContent = (htmlContent: string): string => {
               overflow: hidden;
               width: 100%;
               box-sizing: border-box;
+              min-width: 0;
+              flex: 1;
             ">
               <div style="
                 position: absolute;
@@ -1327,21 +1336,27 @@ const goToTest = () => {
 }
 
 .content-wrapper {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: start;
-  gap: 1rem;
+  display: block;
   padding: 2rem;
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* 左侧装饰条 */
 .left-decoration {
+  position: absolute;
+  left: -2rem;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .decoration-dot {
@@ -1390,6 +1405,12 @@ const goToTest = () => {
     0 4px 6px -2px rgba(0, 0, 0, 0.05),
     inset 0 0 0 1px rgba(255, 255, 255, 0.2);
   position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 0%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .report-content-enhanced::before {
@@ -1419,11 +1440,17 @@ const goToTest = () => {
 
 /* 右侧装饰条 */
 .right-decoration {
+  position: absolute;
+  right: -2rem;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   padding: 1rem 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .decoration-shape {
@@ -1664,6 +1691,12 @@ const goToTest = () => {
   gap: 2rem !important;
   margin: 2rem 0 !important;
   align-items: start !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  container-type: inline-size !important;
 }
 
 .report-text-enhanced :deep(.behavior-cycle-card),
@@ -1680,6 +1713,10 @@ const goToTest = () => {
     0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
   position: relative !important;
   overflow: hidden !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 !important;
+  box-sizing: border-box !important;
 }
 
 .report-text-enhanced :deep(.cognitive-bias-card) {
@@ -1955,11 +1992,19 @@ const goToTest = () => {
     grid-template-columns: 1fr !important;
     gap: 1.5rem !important;
     margin: 1rem 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 !important;
   }
 
   .report-text-enhanced :deep(.behavior-cycle-card),
   .report-text-enhanced :deep(.cognitive-bias-card) {
     padding: 1.25rem !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+    box-sizing: border-box !important;
   }
 
   .report-text-enhanced :deep(.cycle-item),
@@ -1970,6 +2015,8 @@ const goToTest = () => {
 
   .report-content-enhanced {
     padding: 1.25rem;
+    margin: 0;
+    width: 100%;
   }
 
   .report-text-enhanced :deep(h1) {

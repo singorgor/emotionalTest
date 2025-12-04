@@ -172,7 +172,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useFatigueTestStore } from '@/stores/fatigueTest'
-import { QUESTION_CONFIG } from '@/data/questions'
+import { QUESTION_CONFIG, FATIGUE_LEVEL_LABELS } from '@/data/questions'
 import ProgressBar from '@/components/ProgressBar.vue'
 import QuestionItem from '@/components/QuestionItem.vue'
 import QuestionNavigation from '@/components/QuestionNavigation.vue'
@@ -366,7 +366,10 @@ const generateDetailedReport = async () => {
     console.log('测试结果存在，开始生成报告内容')
 
     // 使用报告模板生成内容
-    const reportContent = generateReportContent(fatigueTestStore.result)
+    const reportContent = generateReportContent(
+      fatigueTestStore.result,
+      fatigueTestStore.duration
+    )
 
     console.log('报告内容生成完成，长度:', reportContent.length)
 
@@ -380,13 +383,15 @@ const generateDetailedReport = async () => {
 }
 
 // 根据测试结果生成深度个性化报告内容
-const generateReportContent = (testResult: any) => {
-  const fatigueLevel = testResult.fatigueLevel || 1
+const generateReportContent = (testResult: any, durationSeconds?: number | null) => {
+  const fatigueLevel = testResult.fatigueLevel ?? 1
+  const fatigueLabel = testResult.fatigueLabel ?? FATIGUE_LEVEL_LABELS[fatigueLevel]
   const primaryType = testResult.primaryType
   const secondaryType = testResult.secondaryType
   const sceneScores = testResult.sceneScores || {}
   const recoveryLevel = testResult.recoveryLevel || 'medium'
   const personalTags = testResult.personalTags || []
+  const reportDuration = durationSeconds ?? testResult.duration ?? null
 
   // ========== 1. 深度心理洞察 ==========
   const psychologicalInsight = generatePsychologicalInsight(fatigueLevel, primaryType, sceneScores, personalTags)
@@ -416,8 +421,8 @@ const generateReportContent = (testResult: any) => {
       <div class="report-header border-l-4 border-indigo-600 bg-indigo-50 mb-8 p-6 rounded-xl">
         <h2 class="text-2xl font-bold text-indigo-900 mb-4">🧠 深度情绪疲惫度分析报告</h2>
         <div class="text-indigo-700">
-          <p class="mb-3"><strong>测评时间：</strong>${new Date().toLocaleDateString()} | 用时：${testResult.duration ? Math.round(testResult.duration / 60) + '分钟' : '未知'}</p>
-          <p class="text-lg"><strong>核心诊断：</strong>${getFatigueLevelLabel(fatigueLevel)}</p>
+          <p class="mb-3"><strong>测评时间：</strong>${new Date().toLocaleDateString()} | 用时：${reportDuration !== null ? formatDuration(reportDuration) : '未知'}</p>
+          <p class="text-lg"><strong>核心诊断：</strong>${fatigueLabel}</p>
           <p class="text-sm">主要疲惫类型：${primaryType?.name || '综合压力型'}（匹配度：${primaryType?.matchScore || 0}%）</p>
           ${secondaryType && secondaryType.code !== primaryType.code ? `<p class="text-sm">次要类型：${secondaryType.name}（匹配度：${secondaryType.matchScore}%）</p>` : ''}
         </div>
@@ -458,16 +463,12 @@ const generateReportContent = (testResult: any) => {
   return fullReport
 }
 
-// 疲惫等级标签
-const getFatigueLevelLabel = (level: number): string => {
-  const labels = {
-    0: '0级 · 情绪稳定区（安全状态）',
-    1: '1级 · 轻度情绪疲劳（预警信号）',
-    2: '2级 · 中度情绪耗竭（需要调整）',
-    3: '3级 · 重度情绪透支（急需干预）',
-    4: '4级 · 极度情绪崩溃（危险状态）'
-  }
-  return labels[level] || labels[1]
+// 格式化测试时间
+const formatDuration = (seconds: number | null): string => {
+  if (seconds === null) return '未知'
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+  return remainingSeconds > 0 ? `${minutes}分${remainingSeconds}秒` : `${minutes}分钟`
 }
 
 // 生成深度心理洞察
@@ -538,9 +539,8 @@ function generateBehaviorAnalysis(primaryType: any, sceneScores: any, recoveryLe
         行为模式深度解读
       </h3>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="space-y-4">
-          <div class="bg-white p-4 rounded-lg border-l-4 border-blue-200">
+      <div class="space-y-4">
+        <div class="bg-white p-4 rounded-lg border-l-4 border-blue-200">
             <h4 class="font-semibold text-blue-900 mb-3">🔄 典型行为循环</h4>
             <div class="space-y-2 text-gray-700">
               <p><strong>触发阶段：</strong>遇到压力源 → 激活应对模式 → 产生情绪反应 → 承担后果 → 恢复阶段</p>
@@ -548,7 +548,7 @@ function generateBehaviorAnalysis(primaryType: any, sceneScores: any, recoveryLe
             </div>
           </div>
 
-          <div class="bg-white p-4 rounded-lg border-l-4 border-blue-200">
+        <div class="bg-white p-4 rounded-lg border-l-4 border-blue-200">
             <h4 class="font-semibold text-blue-900 mb-3">💭 认知偏差识别</h4>
             <div class="space-y-2 text-gray-700">
               <p>• <strong>完美主义倾向：</strong>可能过度追求高标准，难以接受"足够好"的结果</p>
@@ -556,7 +556,6 @@ function generateBehaviorAnalysis(primaryType: any, sceneScores: any, recoveryLe
               <p>• <strong>恢复误区：</strong>认为休息就能解决问题，而忽视了深层的模式调整</p>
             </div>
           </div>
-        </div>
       </div>
     </div>
   `
