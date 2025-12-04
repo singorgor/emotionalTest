@@ -116,7 +116,7 @@
 
   /* 结果卡片样式 */
   .result-card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-4;
   }
 
   .result-card.featured {
@@ -132,6 +132,7 @@
       #ddd6fe 100%    /* purple-300 */
     );
     border: 2px solid #818cf8; /* indigo-400 */
+    padding: 1rem;
   }
 
   /* 类型标签样式 */

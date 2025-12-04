@@ -32,9 +32,9 @@
           </div>
 
           <!-- 关键指标概览 -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 w-full">
             <!-- 疲惫类型匹配度 -->
-            <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <div class="text-center p-6 bg-blue-50 rounded-lg border border-blue-200 h-full flex flex-col justify-between">
               <div class="mb-3">
                 <div class="text-lg font-semibold text-blue-800 mb-1">{{ getMatchLevel(result.primaryType.matchScore).level }}</div>
                 <div class="text-xs text-blue-600">{{ result.primaryType.matchScore }}% 匹配度</div>
@@ -53,7 +53,7 @@
             </div>
 
             <!-- 工作压力指数 -->
-            <div class="text-center p-4 bg-orange-50 rounded-lg border border-orange-200">
+            <div class="text-center p-6 bg-orange-50 rounded-lg border border-orange-200 h-full flex flex-col justify-between">
               <div class="mb-3">
                 <div class="text-lg font-semibold text-orange-800 mb-1">{{ getWorkPressureLevel(result.sceneScores.work).level }}</div>
                 <div class="text-xs text-orange-600">{{ result.sceneScores.work.toFixed(1) }}/5.0 压力指数</div>
@@ -72,7 +72,7 @@
             </div>
 
             <!-- 心理韧性水平 -->
-            <div class="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+            <div class="text-center p-6 bg-green-50 rounded-lg border border-green-200 h-full flex flex-col justify-between">
               <div class="mb-3">
                 <div class="text-lg font-semibold text-green-800 mb-1">{{ getResilienceLevelInfo(result.recoveryLevel).level }}</div>
                 <div class="text-xs text-green-600">{{ getRecoveryScoreText(result.recoveryLevel) }} 韧性评分</div>
@@ -111,7 +111,7 @@
       </div>
 
       <!-- 三大核心分析 - 水平等宽布局 -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 mb-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8 w-full">
         <!-- 疲惫类型分析 -->
         <div class="analysis-card animate-fade-in" style="animation-delay: 0.1s">
           <div class="card-header">
@@ -959,9 +959,10 @@ const goToTest = () => {
 /* 分析卡片样式 */
 .analysis-card {
   @apply bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden;
-  min-height: 280px;
+  min-height: 320px;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 /* 不同分析卡片的特殊背景 */
@@ -991,12 +992,12 @@ const goToTest = () => {
 }
 
 .card-content {
-  @apply p-6 flex-1 space-y-4;
+  @apply p-5 flex-1 space-y-3;
 }
 
 /* 疲惫类型分析样式 */
 .type-item {
-  @apply p-4 rounded-lg border-l-4;
+  @apply p-3 rounded-lg border-l-4;
 }
 
 .type-item.primary {
@@ -1068,7 +1069,7 @@ const goToTest = () => {
 
 /* 场景压力分析样式 */
 .scene-item {
-  @apply space-y-3 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0;
+  @apply space-y-2 pb-3 border-b border-gray-100 last:border-b-0 last:pb-0;
 }
 
 .scene-header {
@@ -1105,7 +1106,7 @@ const goToTest = () => {
 
 /* 心理韧性评估样式 */
 .recovery-result {
-  @apply text-center space-y-4;
+  @apply text-center space-y-3;
 }
 
 .recovery-badge {
@@ -1118,7 +1119,7 @@ const goToTest = () => {
 
 /* 韧性指标样式 */
 .metrics-section {
-  @apply mt-4 pt-3 border-t border-gray-100;
+  @apply mt-3 pt-2 border-t border-gray-100;
 }
 
 .metrics-grid {
