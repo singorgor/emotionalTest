@@ -137,7 +137,7 @@ export const QUESTION_CONFIG: QuestionConfig = {
 
   C: {
     title: "疲惫来源类型",
-    description: "回答我为什么会这么累——主类型 + 副标签就从这里算出来。",
+    description: "了解你疲惫的主要来源和类型特征",
     subtypes: {
       emotional_overload: {
         title: "情绪过载型",

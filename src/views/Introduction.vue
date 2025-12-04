@@ -20,7 +20,7 @@
             <h2 class="text-xl font-semibold text-blue-900 mb-4">
               🎯 测试说明
             </h2>
-            <ul class="space-y-3 text-lg text-blue-800">
+            <ul class="space-y-3 text-xl text-blue-800">
               <li class="flex items-start">
                 <span class="text-blue-500 mr-3 text-lg">•</span>
                 <span>这是一个<strong>自我觉察工具</strong>，帮助您了解当前的情绪状态</span>
@@ -48,33 +48,33 @@
             <h2 class="text-xl font-semibold text-green-900 mb-4">
               ✨ 您将获得
             </h2>
-            <div class="grid md:grid-cols-2 gap-6 text-lg text-green-800">
+            <div class="grid md:grid-cols-2 gap-6 text-xl text-green-800">
               <div class="flex items-start">
                 <span class="text-green-500 mr-3 text-2xl">📊</span>
                 <div>
-                  <strong class="text-base">疲惫等级评估</strong>
-                  <p class="text-base mt-2">了解您的情绪疲惫程度（0-4级）</p>
+                  <strong class="text-lg">疲惫等级评估</strong>
+                  <p class="text-lg mt-2">了解您的情绪疲惫程度（0-4级）</p>
                 </div>
               </div>
               <div class="flex items-start">
                 <span class="text-green-500 mr-3 text-2xl">🎯</span>
                 <div>
-                  <strong class="text-base">疲惫来源分析</strong>
-                  <p class="text-base mt-2">识别主要的疲惫类型和原因</p>
+                  <strong class="text-lg">疲惫来源分析</strong>
+                  <p class="text-lg mt-2">识别主要的疲惫类型和原因</p>
                 </div>
               </div>
               <div class="flex items-start">
                 <span class="text-green-500 mr-3 text-2xl">🗺️</span>
                 <div>
-                  <strong class="text-base">场景掉血地图</strong>
-                  <p class="text-base mt-2">发现哪些场景最消耗您</p>
+                  <strong class="text-lg">场景掉血地图</strong>
+                  <p class="text-lg mt-2">发现哪些场景最消耗您</p>
                 </div>
               </div>
               <div class="flex items-start">
                 <span class="text-green-500 mr-3 text-2xl">🔋</span>
                 <div>
-                  <strong class="text-base">恢复力评估</strong>
-                  <p class="text-base mt-2">评估您的自我修复能力</p>
+                  <strong class="text-lg">心理韧性评估</strong>
+                  <p class="text-lg mt-2">评估您的心理调节能力和抗压能力</p>
                 </div>
               </div>
             </div>
@@ -84,9 +84,9 @@
             <h2 class="text-xl font-semibold text-orange-900 mb-4">
               📝 个性化报告
             </h2>
-            <p class="text-lg text-orange-800 leading-relaxed">
+            <p class="text-xl text-orange-800 leading-relaxed">
               完成测试后，您将获得一份<strong>高度个性化</strong>的分析报告，
-              包含详细的类型解读、场景分析、恢复力评估，以及<strong>针对性的行动建议</strong>。
+              包含详细的类型解读、场景分析、心理韧性评估，以及<strong>针对性的行动建议</strong>。
             </p>
           </div>
         </div>
@@ -122,17 +122,19 @@
       </div>
 
       <!-- 底部信息 -->
-      <div class="text-center mt-12 text-gray-500 text-base">
-        <p class="text-lg">
+      <div class="text-center mt-12">
+        <p class="text-lg text-gray-500">
           适用于：长期处于压力环境的职场人、自由职业者、学生等
         </p>
-        <p class="mt-3 text-lg">
+        <p class="mt-3 text-lg text-gray-500">
           特别适合：自我评价为"很累、心累、提不起劲"的人群
         </p>
-        <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg max-w-2xl mx-auto">
-          <p class="text-amber-700 text-sm leading-relaxed">
-            <strong>重要声明：</strong>本量表用于日常自我觉察，不作为医疗或心理诊断依据。如需专业帮助，请咨询合格的心理健康专业人士。
-          </p>
+        <div class="mt-6 max-w-5xl mx-auto">
+          <div class="card p-6 bg-amber-50 border-amber-200">
+            <p class="text-amber-700 text-base leading-relaxed">
+              <strong>重要声明：</strong>本量表用于日常自我觉察，不作为医疗或心理诊断依据。如需专业帮助，请咨询合格的心理健康专业人士。
+            </p>
+          </div>
         </div>
       </div>
     </div>

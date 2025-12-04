@@ -273,7 +273,7 @@ const getCategoryLabel = (question: Question): string => {
     if (['C9', 'C10', 'C11', 'C12'].includes(questionId)) return '对比焦虑型'
     if (['C13', 'C14', 'C15', 'C16'].includes(questionId)) return '高压稳定型'
   } else if (questionId.startsWith('D')) {
-    return '恢复资源'
+    return '心理韧性'
   }
 
   return ''
