@@ -959,7 +959,7 @@ const goToTest = () => {
 /* 分析卡片样式 */
 .analysis-card {
   @apply bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden;
-  min-height: 320px;
+  min-height: 280px;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -1119,11 +1119,11 @@ const goToTest = () => {
 
 /* 韧性指标样式 */
 .metrics-section {
-  @apply mt-3 pt-2 border-t border-gray-100;
+  @apply mt-2 pt-1 border-t border-gray-100;
 }
 
 .metrics-grid {
-  @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3;
+  @apply grid grid-cols-1 gap-2;
 }
 
 .metric-item {
@@ -1143,7 +1143,7 @@ const goToTest = () => {
 }
 
 .star.filled {
-  @apply text-yellow-500;
+  @apply text-yellow-400;
 }
 
 /* 提升建议样式 */
