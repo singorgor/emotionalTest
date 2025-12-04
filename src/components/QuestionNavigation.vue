@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-between p-4 bg-white border-t border-gray-200">
+  <div class="flex items-center justify-between p-3 bg-white border-t border-gray-200">
     <!-- 左侧：上一题按钮 -->
     <div class="flex items-center gap-4">
       <button
@@ -15,7 +15,7 @@
       </button>
 
       <!-- 题目编号指示器 -->
-      <div class="hidden sm:flex items-center gap-2 text-base text-gray-600">
+      <div class="hidden sm:flex items-center gap-2 text-sm text-gray-600">
         <span>{{ currentIndex + 1 }}</span>
         <span class="text-gray-400">/</span>
         <span>{{ totalQuestions }}</span>

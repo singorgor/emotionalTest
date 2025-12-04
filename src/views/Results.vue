@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
     <!-- 顶部标题 -->
     <div class="bg-white shadow-sm border-b border-gray-200">
-      <div class="max-w-6xl mx-auto px-4 py-6">
+      <div class="max-w-5xl mx-auto px-4 py-6">
         <div class="flex items-center justify-between">
           <div>
             <h1 class="text-3xl font-bold text-gray-900">情绪疲惫度测试结果</h1>
@@ -22,7 +22,7 @@
     </div>
 
     <!-- 主要内容区域 -->
-    <div v-if="result" class="max-w-6xl mx-auto px-4 py-8">
+    <div v-if="result" class="max-w-5xl mx-auto px-4 py-8">
       <!-- 核心诊断概览 -->
       <div class="result-card featured mb-8 animate-fade-in">
         <div class="text-center">
@@ -32,7 +32,7 @@
           </div>
 
           <!-- 关键指标概览 -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             <!-- 疲惫类型匹配度 -->
             <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
               <div class="mb-3">
@@ -97,7 +97,7 @@
               <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
               个人特征标签
             </h3>
-            <div class="flex flex-wrap gap-2 justify-center">
+            <div class="flex flex-wrap gap-2 justify-center md:gap-3 lg:gap-4">
               <span
                 v-for="tag in result.personalTags"
                 :key="tag"
@@ -111,7 +111,7 @@
       </div>
 
       <!-- 三大核心分析 - 水平等宽布局 -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 mb-8">
         <!-- 疲惫类型分析 -->
         <div class="analysis-card animate-fade-in" style="animation-delay: 0.1s">
           <div class="card-header">
@@ -1122,7 +1122,7 @@ const goToTest = () => {
 }
 
 .metrics-grid {
-  @apply grid grid-cols-2 gap-3;
+  @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3;
 }
 
 .metric-item {

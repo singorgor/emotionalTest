@@ -1,15 +1,15 @@
 <template>
   <div class="min-h-screen flex items-center justify-center px-4 py-12">
-    <div class="max-w-5xl w-full">
+    <div class="max-w-3xl w-full">
       <!-- 主卡片 -->
       <div class="card p-8 md:p-12 animate-fade-in">
         <!-- 标题部分 -->
         <div class="text-center mb-8">
-          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
             情绪疲惫度测试
           </h1>
-          <div class="w-20 h-1 bg-primary-500 mx-auto rounded-full mb-8"></div>
-          <p class="text-2xl text-gray-600 text-balance leading-relaxed">
+          <div class="w-16 h-1 bg-primary-500 mx-auto rounded-full mb-4"></div>
+          <p class="text-lg text-gray-600 text-balance leading-relaxed">
             用 3–5 分钟，看看你现在到底有多"累"
           </p>
         </div>
@@ -17,74 +17,74 @@
         <!-- 介绍内容 -->
         <div class="space-y-6 mb-8">
           <div class="bg-blue-50 border border-blue-200 rounded-lg p-8">
-            <h2 class="text-xl font-semibold text-blue-900 mb-4">
+            <h2 class="text-lg font-semibold text-blue-900 mb-3">
               🎯 测试说明
             </h2>
-            <ul class="space-y-3 text-xl text-blue-800">
+            <ul class="space-y-2 text-base text-blue-800">
               <li class="flex items-start">
-                <span class="text-blue-500 mr-3 text-lg">•</span>
+                <span class="text-blue-500 mr-3">•</span>
                 <span>这是一个<strong>自我觉察工具</strong>，帮助您了解当前的情绪状态</span>
               </li>
               <li class="flex items-start">
-                <span class="text-blue-500 mr-3 text-lg">•</span>
+                <span class="text-blue-500 mr-3">•</span>
                 <span>测试包含<strong>40道题目</strong>，预计用时3-5分钟</span>
               </li>
               <li class="flex items-start">
-                <span class="text-blue-500 mr-3 text-lg">•</span>
+                <span class="text-blue-500 mr-3">•</span>
                 <span><strong>非医疗诊断</strong>，仅为个人参考和自我探索</span>
               </li>
               <li class="flex items-start">
-                <span class="text-blue-500 mr-3 text-lg">•</span>
+                <span class="text-blue-500 mr-3">•</span>
                 <span>请根据<strong>最近一段时间</strong>的真实感受回答</span>
               </li>
               <li class="flex items-start">
-                <span class="text-blue-500 mr-3 text-lg">•</span>
+                <span class="text-blue-500 mr-3">•</span>
                 <span>本量表参考情绪耗竭（Emotional Exhaustion）、职业倦怠（Burnout）及主观疲劳相关研究思路编制</span>
               </li>
             </ul>
           </div>
 
           <div class="bg-green-50 border border-green-200 rounded-lg p-8">
-            <h2 class="text-xl font-semibold text-green-900 mb-4">
+            <h2 class="text-lg font-semibold text-green-900 mb-3">
               ✨ 您将获得
             </h2>
-            <div class="grid md:grid-cols-2 gap-6 text-xl text-green-800">
+            <div class="grid md:grid-cols-2 gap-4 text-base text-green-800">
               <div class="flex items-start">
-                <span class="text-green-500 mr-3 text-2xl">📊</span>
+                <span class="text-green-500 mr-3 text-xl">📊</span>
                 <div>
-                  <strong class="text-lg">疲惫等级评估</strong>
-                  <p class="text-lg mt-2">了解您的情绪疲惫程度（0-4级）</p>
+                  <strong class="font-semibold">疲惫等级评估</strong>
+                  <p class="text-sm mt-1">了解您的情绪疲惫程度（0-4级）</p>
                 </div>
               </div>
               <div class="flex items-start">
-                <span class="text-green-500 mr-3 text-2xl">🎯</span>
+                <span class="text-green-500 mr-3 text-xl">🎯</span>
                 <div>
-                  <strong class="text-lg">疲惫来源分析</strong>
-                  <p class="text-lg mt-2">识别主要的疲惫类型和原因</p>
+                  <strong class="font-semibold">疲惫来源分析</strong>
+                  <p class="text-sm mt-1">识别主要的疲惫类型和原因</p>
                 </div>
               </div>
               <div class="flex items-start">
-                <span class="text-green-500 mr-3 text-2xl">🗺️</span>
+                <span class="text-green-500 mr-3 text-xl">🗺️</span>
                 <div>
-                  <strong class="text-lg">场景掉血地图</strong>
-                  <p class="text-lg mt-2">发现哪些场景最消耗您</p>
+                  <strong class="font-semibold">场景掉血地图</strong>
+                  <p class="text-sm mt-1">发现哪些场景最消耗您</p>
                 </div>
               </div>
               <div class="flex items-start">
-                <span class="text-green-500 mr-3 text-2xl">🔋</span>
+                <span class="text-green-500 mr-3 text-xl">🔋</span>
                 <div>
-                  <strong class="text-lg">心理韧性评估</strong>
-                  <p class="text-lg mt-2">评估您的心理调节能力和抗压能力</p>
+                  <strong class="font-semibold">心理韧性评估</strong>
+                  <p class="text-sm mt-1">评估您的心理调节能力和抗压能力</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div class="bg-orange-50 border border-orange-200 rounded-lg p-8">
-            <h2 class="text-xl font-semibold text-orange-900 mb-4">
+            <h2 class="text-lg font-semibold text-orange-900 mb-3">
               📝 个性化报告
             </h2>
-            <p class="text-xl text-orange-800 leading-relaxed">
+            <p class="text-base text-orange-800 leading-relaxed">
               完成测试后，您将获得一份<strong>高度个性化</strong>的分析报告，
               包含详细的类型解读、场景分析、心理韧性评估，以及<strong>针对性的行动建议</strong>。
             </p>

@@ -1,31 +1,31 @@
 <template>
   <div class="question-card">
     <!-- 题目编号和类型标签 -->
-    <div class="flex items-center justify-between mb-4">
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+    <div class="flex items-center justify-between mb-1">
+      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
         题目 {{ questionNumber }}
       </span>
       <span
         v-if="categoryLabel"
-        class="type-badge secondary text-sm"
+        class="type-badge secondary text-xs"
       >
         {{ categoryLabel }}
       </span>
     </div>
 
     <!-- 题目内容 -->
-    <div class="mb-8">
-      <h3 class="text-xl font-semibold text-gray-900 leading-relaxed">
+    <div class="mb-3">
+      <h3 class="text-base font-semibold text-gray-900 leading-tight">
         {{ question.text }}
       </h3>
     </div>
 
     <!-- 评分选项 -->
-    <div class="space-y-4">
+    <div class="space-y-1">
       <div
         v-for="option in scaleOptions"
         :key="option.value"
-        class="flex items-center gap-6"
+        class="flex items-center gap-3"
       >
         <!-- 评分按钮 -->
         <button
@@ -51,10 +51,10 @@
           @click="selectScore(option.value)"
         >
           <div class="flex items-center">
-            <span class="font-semibold text-gray-900 mr-3 text-xl">
+            <span class="font-semibold text-gray-900 mr-1 text-sm">
               {{ option.label }}
             </span>
-            <span class="text-gray-600 text-lg">
+            <span class="text-gray-600 text-xs">
               {{ option.description }}
             </span>
           </div>
