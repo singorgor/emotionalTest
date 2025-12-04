@@ -392,7 +392,7 @@ const generateDetailedReport = async () => {
 // 根据测试结果生成深度个性化报告内容
 const generateReportContent = (testResult: any, durationSeconds?: number | null) => {
   const fatigueLevel = testResult.fatigueLevel ?? 1
-  const fatigueLabel = testResult.fatigueLabel ?? FATIGUE_LEVEL_LABELS[fatigueLevel]
+  const fatigueLabel = testResult.fatigueLabel ?? FATIGUE_LEVEL_LABELS[fatigueLevel as keyof typeof FATIGUE_LEVEL_LABELS]
   const primaryType = testResult.primaryType
   const secondaryType = testResult.secondaryType
   const sceneScores = testResult.sceneScores || {}
@@ -479,7 +479,7 @@ const formatDuration = (seconds: number | null): string => {
 }
 
 // 生成深度心理洞察
-function generatePsychologicalInsight(fatigueLevel: number, primaryType: any, sceneScores: any, personalTags: string[]) {
+function generatePsychologicalInsight(fatigueLevel: number, primaryType: any, _sceneScores: any, _personalTags: string[]) {
   const levelLabels = ['情绪稳定', '轻度疲劳', '中度耗竭', '重度透支', '极度崩溃']
   const currentLevel = levelLabels[fatigueLevel] || levelLabels[1]
 
@@ -524,11 +524,11 @@ function generatePsychologicalInsight(fatigueLevel: number, primaryType: any, sc
           ` : ''}
         </div>
 
-        ${personalTags.length > 0 ? `
+        ${_personalTags.length > 0 ? `
         <div class="bg-white p-4 rounded-lg border-l-4 border-purple-200">
           <h4 class="font-semibold text-purple-900 mb-2">🏷️ 个性化特征标签</h4>
           <div class="flex flex-wrap gap-2">
-            ${personalTags.map(tag => `<span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">${tag}</span>`).join('')}
+            ${_personalTags.map((tag: any) => `<span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">${tag}</span>`).join('')}
           </div>
         </div>
         ` : ''}
@@ -538,7 +538,7 @@ function generatePsychologicalInsight(fatigueLevel: number, primaryType: any, sc
 }
 
 // 生成行为模式深度解读
-function generateBehaviorAnalysis(primaryType: any, sceneScores: any, recoveryLevel: string) {
+function generateBehaviorAnalysis(_primaryType: any, _sceneScores: any, _recoveryLevel: string) {
   return `
     <div class="behavior-section border-l-4 border-blue-500 bg-blue-50 p-6 rounded-xl mb-6">
       <h3 class="text-xl font-bold text-blue-900 mb-4 flex items-center">
@@ -569,10 +569,10 @@ function generateBehaviorAnalysis(primaryType: any, sceneScores: any, recoveryLe
 }
 
 // 生成具体场景分析
-function generateScenarioAnalysis(sceneScores: any, fatigueLevel: number) {
-  const workScore = sceneScores.work || 0
-  const relationshipScore = sceneScores.relationship || 0
-  const selfDemandScore = sceneScores.selfDemand || 0
+function generateScenarioAnalysis(_sceneScores: any, _fatigueLevel: number) {
+  const workScore = _sceneScores.work || 0
+  const relationshipScore = _sceneScores.relationship || 0
+  const selfDemandScore = _sceneScores.selfDemand || 0
 
   return `
     <div class="scenario-section border-l-4 border-orange-500 bg-orange-50 p-6 rounded-xl mb-6">
@@ -683,7 +683,7 @@ function generateScenarioAnalysis(sceneScores: any, fatigueLevel: number) {
 }
 
 // 生成深层原因挖掘
-function generateRootCauseAnalysis(primaryType: any, sceneScores: any, fatigueLevel: number) {
+function generateRootCauseAnalysis(_primaryType: any, _sceneScores: any, _fatigueLevel: number) {
   return `
     <div class="rootcause-section border-l-4 border-green-500 bg-green-50 p-6 rounded-xl mb-6">
       <h3 class="text-xl font-bold text-green-900 mb-4 flex items-center">
@@ -715,10 +715,9 @@ function generateRootCauseAnalysis(primaryType: any, sceneScores: any, fatigueLe
 }
 
 // 生成分级干预策略
-function generateInterventionStrategies(fatigueLevel: number, primaryType: any, sceneScores: any, recoveryLevel: string) {
-  const workScore = sceneScores.work || 0
-  const relationshipScore = sceneScores.relationship || 0
-  const selfDemandScore = sceneScores.selfDemand || 0
+function generateInterventionStrategies(_fatigueLevel: number, _primaryType: any, _sceneScores: any, _recoveryLevel: string) {
+  const workScore = _sceneScores.work || 0
+  const relationshipScore = _sceneScores.relationship || 0
 
   return `
     <div class="intervention-section border-l-4 border-yellow-500 bg-yellow-50 p-6 rounded-xl mb-6">
@@ -813,7 +812,7 @@ function generateInterventionStrategies(fatigueLevel: number, primaryType: any, 
 }
 
 // 生成个性化行动方案
-function generateActionPlan(fatigueLevel: number, primaryType: any, sceneScores: any, personalTags: string[], recoveryLevel: string) {
+function generateActionPlan(_fatigueLevel: number, _primaryType: any, _sceneScores: any, _personalTags: string[], _recoveryLevel: string) {
   return `
     <div class="actionplan-section border-l-4 border-indigo-500 bg-indigo-50 p-6 rounded-xl mb-6">
       <h3 class="text-xl font-bold text-indigo-900 mb-4 flex items-center">
@@ -879,11 +878,9 @@ function generateActionPlan(fatigueLevel: number, primaryType: any, sceneScores:
 }
 
 // 生成专业评估与建议
-function generateProfessionalAssessment(fatigueLevel: number, recoveryLevel: string, sceneScores: any) {
-  const riskLevel = fatigueLevel >= 3 ? '高风险' : fatigueLevel >= 2 ? '中等风险' : '低风险'
-  const recoveryScore = recoveryLevel === 'high' ? 8 : recoveryLevel === 'medium' ? 5 : 2
-  const workScore = sceneScores.work || 0
-  const relationshipScore = sceneScores.relationship || 0
+function generateProfessionalAssessment(_fatigueLevel: number, _recoveryLevel: string, _sceneScores: any) {
+  const riskLevel = _fatigueLevel >= 3 ? '高风险' : _fatigueLevel >= 2 ? '中等风险' : '低风险'
+  const recoveryScore = _recoveryLevel === 'high' ? 8 : _recoveryLevel === 'medium' ? 5 : 2
 
   return `
     <div class="assessment-section border-l-4 border-red-500 bg-red-50 p-6 rounded-xl mb-6">
@@ -905,16 +902,16 @@ function generateProfessionalAssessment(fatigueLevel: number, recoveryLevel: str
 
               <div class="text-center">
                 <p class="font-medium">功能影响程度</p>
-                <p class="text-2xl font-bold text-orange-600">${fatigueLevel >= 3 ? '严重' : fatigueLevel >= 2 ? '中等' : '轻度'}</p>
+                <p class="text-2xl font-bold text-orange-600">${_fatigueLevel >= 3 ? '严重' : _fatigueLevel >= 2 ? '中等' : '轻度'}</p>
               </div>
 
               <div class="text-center">
                 <p class="font-medium">紧急程度</p>
-                <p class="text-2xl font-bold ${fatigueLevel >= 3 ? 'text-red-600' : fatigueLevel >= 2 ? 'text-orange-600' : 'text-yellow-600'}">${fatigueLevel >= 3 ? '高' : fatigueLevel >= 2 ? '中' : '低'}</p>
+                <p class="text-2xl font-bold ${_fatigueLevel >= 3 ? 'text-red-600' : _fatigueLevel >= 2 ? 'text-orange-600' : 'text-yellow-600'}">${_fatigueLevel >= 3 ? '高' : _fatigueLevel >= 2 ? '中' : '低'}</p>
               </div>
             </div>
 
-            ${fatigueLevel >= 2 ? `
+            ${_fatigueLevel >= 2 ? `
             <div class="mt-4 p-3 bg-red-100 rounded-lg">
               <p class="text-red-800"><strong>⚡ 重要提醒：</strong>您当前的疲惫状态已经对日常生活产生实质性影响，建议认真考虑寻求专业的心理健康支持。</p>
             </div>
@@ -927,10 +924,10 @@ function generateProfessionalAssessment(fatigueLevel: number, recoveryLevel: str
           <h4 class="font-semibold text-red-900 mb-3">📈 康复前景分析</h4>
           <div class="space-y-3 text-gray-700">
             <p><strong>心理韧性评分：</strong>${recoveryScore}/10 分</p>
-            <p><strong>预计恢复时间：</strong>${recoveryLevel === 'high' ? '3-6个月' : recoveryLevel === 'medium' ? '6-12个月' : '12-18个月'}</p>
+            <p><strong>预计恢复时间：</strong>${_recoveryLevel === 'high' ? '3-6个月' : _recoveryLevel === 'medium' ? '6-12个月' : '12-18个月'}</p>
             <p><strong>成功关键因素：</strong>持续的自我觉察、有效的应对策略、支持性的人际环境、专业帮助的及时介入。</p>
 
-            <p><strong>潜在障碍：</strong>${recoveryLevel === 'low' ? '心理韧性不足，抗压能力较弱' : '当前应对策略效果递减，需要新的模式'}</p>
+            <p><strong>潜在障碍：</strong>${_recoveryLevel === 'low' ? '心理韧性不足，抗压能力较弱' : '当前应对策略效果递减，需要新的模式'}</p>
           </div>
         </div>
 

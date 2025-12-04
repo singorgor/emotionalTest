@@ -406,12 +406,6 @@ const getPressureLevelClass = (score: number): string => {
   return 'bg-green-100 text-green-800 border border-green-200'
 }
 
-const getPressureDescription = (score: number): string => {
-  if (score >= 4.0) return '当前处于高压状态，需要主动放缓节奏并寻找支撑'
-  if (score >= 3.2) return '压力偏高，注意安排缓冲、沟通和情绪调节'
-  if (score >= 2.4) return '压力处在可控范围，适度关注节奏和休息'
-  return '压力较低，保持当下的节奏与自我照顾'
-}
 
 const getPressureAdvice = (score: number, scene: string): string => {
   // 获取场景名称用于判断
