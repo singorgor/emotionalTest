@@ -1,5 +1,5 @@
 <template>
-  <div class="question-card">
+  <div class="question-card overflow-x-hidden">
     <!-- 题目编号和类型标签 -->
     <div class="flex items-center justify-between mb-1">
       <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
@@ -21,11 +21,11 @@
     </div>
 
     <!-- 评分选项 -->
-    <div class="space-y-1">
+    <div class="space-y-2 sm:space-y-1">
       <div
         v-for="option in scaleOptions"
         :key="option.value"
-        class="flex items-center gap-3"
+        class="flex items-start gap-2 sm:gap-3 sm:items-center"
       >
         <!-- 评分按钮 -->
         <button
@@ -50,8 +50,26 @@
           class="flex-1 cursor-pointer select-none"
           @click="selectScore(option.value)"
         >
-          <div class="flex items-center">
-            <span class="font-semibold text-gray-900 mr-1 text-sm">
+          <!-- 移动端：显示简化版本 -->
+          <div class="block xs:hidden sm:hidden">
+            <div class="font-semibold text-gray-900 text-sm leading-tight mb-1">
+              {{ option.label }}
+            </div>
+            <div class="text-gray-600 text-xs leading-tight line-clamp-1 max-h-4">
+              {{ option.description }}
+            </div>
+          </div>
+
+        <!-- 超小屏幕：极简版本 -->
+        <div class="hidden xs:block sm:hidden">
+          <div class="font-semibold text-gray-900 text-xs leading-tight">
+            {{ option.label }}
+          </div>
+        </div>
+
+          <!-- 桌面端：显示完整版本 -->
+          <div class="hidden sm:flex items-center">
+            <span class="font-semibold text-gray-900 mr-2 text-sm whitespace-nowrap">
               {{ option.label }}
             </span>
             <span class="text-gray-600 text-xs">

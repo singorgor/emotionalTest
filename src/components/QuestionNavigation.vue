@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-between p-3 bg-white border-t border-gray-200">
+  <div class="flex items-center justify-between p-2 sm:p-3 bg-white border-t border-gray-200">
     <!-- 左侧：上一题按钮 -->
     <div class="flex items-center gap-4">
       <button
@@ -11,7 +11,8 @@
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
-        上一题
+        <span class="hidden sm:inline">上一题</span>
+        <span class="sm:hidden">←</span>
       </button>
 
       <!-- 题目编号指示器 -->
@@ -23,7 +24,7 @@
     </div>
 
     <!-- 中间：题目导航点 -->
-    <div class="flex items-center gap-2 overflow-x-auto py-2 px-4 max-w-md">
+    <div class="flex items-center gap-1 sm:gap-2 overflow-x-auto py-2 px-2 sm:px-4 max-w-md">
       <button
         v-for="(q, index) in questions"
         :key="q.id"
@@ -54,7 +55,8 @@
         class="btn btn-primary flex items-center gap-2"
         :class="{ 'opacity-50 cursor-not-allowed': !canGoNext }"
       >
-        下一题
+        <span class="hidden sm:inline">下一题</span>
+        <span class="sm:hidden">→</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
@@ -67,7 +69,8 @@
         class="btn btn-primary flex items-center gap-2"
         :class="{ 'opacity-50 cursor-not-allowed': !canSubmit }"
       >
-        <span>提交测试</span>
+        <span class="hidden sm:inline">提交测试</span>
+        <span class="sm:hidden">✓</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
         </svg>

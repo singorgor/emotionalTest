@@ -2,11 +2,10 @@
   <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
     <!-- 顶部进度条和标题 -->
     <div class="bg-white shadow-sm border-b border-gray-200">
-      <div class="max-w-2xl mx-auto px-4 py-4">
+      <div class="max-w-2xl mx-auto px-2 sm:px-3 py-1.5 sm:py-2">
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-lg font-bold text-gray-900">情绪疲惫度测试</h1>
-            <p class="text-xs text-gray-600 mt-1">请根据您最近的真实感受回答</p>
+            <h1 class="text-base sm:text-lg font-bold text-gray-900">情绪疲惫度测试</h1>
           </div>
           <div class="text-right">
             <div class="text-lg font-bold text-primary-600">{{ fatigueTestStore.progress }}%</div>
@@ -23,23 +22,17 @@
           />
         </div>
 
-        <!-- 量表说明 -->
-        <div class="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-lg">
-          <p class="text-amber-700 text-xs leading-relaxed">
-            <strong>量表说明：</strong>本量表参考情绪耗竭（Emotional Exhaustion）、职业倦怠（Burnout）及主观疲劳相关研究思路编制，用于日常自我觉察，不作为医疗或心理诊断依据。
-          </p>
         </div>
-      </div>
     </div>
 
     <!-- 题目内容区域 -->
-    <div class="max-w-2xl mx-auto px-4 py-4">
+    <div class="max-w-2xl mx-auto px-2 sm:px-3 py-2 sm:py-3">
       <!-- 模块标题 -->
       <div
         v-if="currentModuleInfo"
-        class="text-center mb-4 animate-fade-in"
+        class="text-center mb-2 sm:mb-4 animate-fade-in"
       >
-        <h2 class="text-base font-semibold text-gray-900 mb-1">
+        <h2 class="text-sm sm:text-base font-semibold text-gray-900 mb-1">
           {{ currentModuleInfo.title }}
         </h2>
         <p class="text-gray-600 text-xs">{{ currentModuleInfo.description }}</p>
@@ -82,7 +75,7 @@
     </div>
 
     <!-- 为底部导航留出空间 -->
-    <div class="h-20"></div>
+    <div class="h-14 sm:h-16 md:h-20"></div>
 
     <!-- 提交确认对话框 -->
     <div
