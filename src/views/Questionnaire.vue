@@ -1053,7 +1053,6 @@ function generateActionPlan(_fatigueLevel: number, _primaryType: any, _sceneScor
 
   // 个性化周目标设定
   const getWeeklyGoals = () => {
-    const planIntensity = getPlanIntensity()
     let goals = []
 
     if (_fatigueLevel >= 3.5) {
@@ -1212,7 +1211,12 @@ function generateActionPlan(_fatigueLevel: number, _primaryType: any, _sceneScor
 
   // 个性化专业资源推荐
   const getPersonalizedResources = () => {
-    let resources = {
+    let resources: {
+      books: string[],
+      tools: string[],
+      apps: string[],
+      professional: string[]
+    } = {
       books: [],
       tools: [],
       apps: [],
@@ -1220,7 +1224,7 @@ function generateActionPlan(_fatigueLevel: number, _primaryType: any, _sceneScor
     }
 
     // 基于主要疲惫类型的书籍推荐
-    const typeBasedBooks = {
+    const typeBasedBooks: { [key: string]: string[] } = {
       '过度付出型': [
         '《不完美的礼物》- Brené Brown',
         '《自我慈悲》- Kristin Neff',
@@ -1243,13 +1247,16 @@ function generateActionPlan(_fatigueLevel: number, _primaryType: any, _sceneScor
       ]
     }
 
+    // 获取当前类型的书籍
+    const currentTypeBooks = typeBasedBooks[_primaryType?.type] || []
+
     // 基于疲劳等级的资源推荐
     if (_fatigueLevel >= 3.5) {
       resources.books = [
         '《情绪耗竭：识别与预防》- Herbert Freudenberger',
         '《身体从未忘记》- Bessel van der Kolk',
         '《创伤与复原》- Judith Herman',
-        ...(typeBasedBooks[_primaryType.type] || [])
+        ...currentTypeBooks
       ]
       resources.tools = [
         '危机干预热线电话保存',
@@ -1268,7 +1275,7 @@ function generateActionPlan(_fatigueLevel: number, _primaryType: any, _sceneScor
         '《过劳与自我照顾》- Christina Maslach',
         '《复原力》- Andrew Shatté',
         '《内在工程》- Sadhguru',
-        ...(typeBasedBooks[_primaryType.type] || [])
+        ...currentTypeBooks
       ]
       resources.tools = [
         '情绪日记模板',
@@ -1287,7 +1294,7 @@ function generateActionPlan(_fatigueLevel: number, _primaryType: any, _sceneScor
         '《习惯的力量》- Charles Duhigg',
         '《原子习惯》- James Clear',
         '《心流》- Mihaly Csikszentmihalyi',
-        ...(typeBasedBooks[_primaryType.type] || [])
+        ...currentTypeBooks
       ]
       resources.tools = [
         '目标设定工作表',
