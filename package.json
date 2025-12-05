@@ -1,7 +1,7 @@
 {
   "name": "fatigue-burnout-index",
   "version": "1.0.0",
-  "description": "情绪疲惫度测试 - 在线心理测评工具",
+  "description": "心理疲惫度测试 - 在线心理测评工具",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -39,6 +39,6 @@
     "fatigue-test",
     "mental-health"
   ],
-  "author": "情绪疲惫度测试团队",
+  "author": "心理疲惫度测试团队",
   "license": "MIT"
 }

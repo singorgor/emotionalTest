@@ -5,7 +5,7 @@
       <div class="max-w-2xl mx-auto px-2 sm:px-3 py-1.5 sm:py-2">
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-base sm:text-lg font-bold text-gray-900">情绪疲惫度测试</h1>
+            <h1 class="text-base sm:text-lg font-bold text-gray-900">心理疲惫度测试</h1>
           </div>
           <div class="text-right">
             <div class="text-lg font-bold text-primary-600">{{ fatigueTestStore.progress }}%</div>
@@ -419,7 +419,7 @@ const generateReportContent = (testResult: any, durationSeconds?: number | null)
     <div class="comprehensive-report">
       <!-- 报告头部 -->
       <div class="report-header border-l-4 border-indigo-600 bg-indigo-50 mb-8 p-6 rounded-xl">
-        <h2 class="text-2xl font-bold text-indigo-900 mb-4">🧠 深度情绪疲惫度分析报告</h2>
+        <h2 class="text-2xl font-bold text-indigo-900 mb-4">🧠 深度心理疲惫度分析报告</h2>
         <div class="text-indigo-700">
           <p class="mb-3"><strong>测评时间：</strong>${new Date().toLocaleDateString()} | 用时：${reportDuration !== null ? formatDuration(reportDuration) : '未知'}</p>
           <p class="text-lg"><strong>核心诊断：</strong>${fatigueLabel}</p>

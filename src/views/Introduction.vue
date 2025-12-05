@@ -6,7 +6,7 @@
         <!-- 标题部分 -->
         <div class="text-center mb-8">
           <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-            情绪疲惫度测试
+            心理疲惫度测试
           </h1>
           <div class="w-16 h-1 bg-primary-500 mx-auto rounded-full mb-4"></div>
           <p class="text-lg text-gray-600 text-balance leading-relaxed">
@@ -53,7 +53,7 @@
                 <span class="text-green-500 mr-3 text-xl">📊</span>
                 <div>
                   <strong class="font-semibold">疲惫等级评估</strong>
-                  <p class="text-sm mt-1">了解您的情绪疲惫程度（0-4级）</p>
+                  <p class="text-sm mt-1">了解您的心理疲惫程度（0-4级）</p>
                 </div>
               </div>
               <div class="flex items-start">

@@ -5,7 +5,7 @@
       <div class="max-w-5xl mx-auto px-4 py-6">
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">情绪疲惫度测试结果</h1>
+            <h1 class="text-3xl font-bold text-gray-900">心理疲惫度测试结果</h1>
             <p class="text-gray-600 mt-1">
               测试时间: {{ formatDuration(fatigueTestStore.duration) }} ·
               {{ new Date().toLocaleDateString() }}
@@ -322,7 +322,7 @@
                 <div class="footer-divider"></div>
                 <p class="footer-text">
                   <span class="footer-icon">💡</span>
-                  本报告基于情绪疲惫度评估体系生成，建议结合专业心理咨询师指导进行解读
+                  本报告基于心理疲惫度评估体系生成，建议结合专业心理咨询师指导进行解读
                 </p>
               </div>
             </div>

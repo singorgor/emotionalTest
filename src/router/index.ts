@@ -10,7 +10,7 @@ const routes = [
     name: 'Introduction',
     component: Introduction,
     meta: {
-      title: '情绪疲惫度测试'
+      title: '心理疲惫度测试'
     }
   },
   {
@@ -18,7 +18,7 @@ const routes = [
     name: 'Questionnaire',
     component: Questionnaire,
     meta: {
-      title: '答题 - 情绪疲惫度测试'
+      title: '答题 - 心理疲惫度测试'
     }
   },
   {
@@ -26,7 +26,7 @@ const routes = [
     name: 'Results',
     component: Results,
     meta: {
-      title: '测试结果 - 情绪疲惫度测试'
+      title: '测试结果 - 心理疲惫度测试'
     }
   },
   {
