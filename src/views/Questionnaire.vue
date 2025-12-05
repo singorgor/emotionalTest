@@ -718,92 +718,297 @@ function generateRootCauseAnalysis(_primaryType: any, _sceneScores: any, _fatigu
 function generateInterventionStrategies(_fatigueLevel: number, _primaryType: any, _sceneScores: any, _recoveryLevel: string) {
   const workScore = _sceneScores.work || 0
   const relationshipScore = _sceneScores.relationship || 0
+  const selfDemandScore = _sceneScores.selfDemand || 0
+
+  // 基于疲劳等级的紧急程度和策略强度
+  const getShortTermStrategies = () => {
+    if (_fatigueLevel >= 3.5) {
+      return `
+        <div class="space-y-2">
+          <h5 class="font-medium text-red-700">🚨 紧急情绪干预</h5>
+          <ul class="space-y-1 text-sm">
+            <li>• <strong>立即暂停：</strong>停止所有非必要活动，优先处理情绪危机</li>
+            <li>• <strong>安全空间：</strong>找到能够让您完全放松的物理空间</li>
+            <li>• <strong>呼吸自救：</strong>4-7-8呼吸法（吸气4秒，屏息7秒，呼气8秒）</li>
+            <li>• <strong>现实检验：</strong>提醒自己"这只是暂时的，我会度过这个时期"</li>
+            <li>• <strong>紧急联系：</strong>立即联系可信赖的朋友或家人</li>
+          </ul>
+        </div>
+      `
+    } else if (_fatigueLevel >= 2.5) {
+      return `
+        <div class="space-y-2">
+          <h5 class="font-medium text-orange-700">⚡ 快速情绪调节</h5>
+          <ul class="space-y-1 text-sm">
+            <li>• <strong>3-3-3呼吸法：</strong>感到压力时立即进行，激活副交感神经的放松反应</li>
+            <li>• <strong>情绪暂停术：</strong>在做出反应前问自己"这真的需要我处理吗？"</li>
+            <li>• <strong>快速脱身：</strong>物理离开压力环境5-10分钟</li>
+            <li>• <strong>感官转移：</strong>专注于身边的5种感官体验</li>
+          </ul>
+        </div>
+      `
+    } else {
+      return `
+        <div class="space-y-2">
+          <h5 class="font-medium text-yellow-700">🌱 预防性情绪管理</h5>
+          <ul class="space-y-1 text-sm">
+            <li>• <strong>深呼吸练习：</strong>每日3次，每次3分钟的深呼吸</li>
+            <li>• <strong>积极暂停：</strong>感觉压力上升时，主动暂停2-3分钟</li>
+            <li>• <strong>情绪标注：</strong>学会识别和命名自己的情绪状态</li>
+            <li>• <strong>微型休息：</strong>每小时进行1-2分钟的伸展和放松</li>
+          </ul>
+        </div>
+      `
+    }
+  }
+
+  const getBoundaryStrategies = () => {
+    const boundaryLevel = _recoveryLevel === 'high' ? '进阶' : _recoveryLevel === 'medium' ? '基础' : '入门'
+
+    if (boundaryLevel === '进阶') {
+      return `
+        <div class="space-y-2">
+          <h5 class="font-medium">🛡️ 进阶边界建立</h5>
+          <ul class="space-y-1 text-sm">
+            <li>• <strong>优雅拒绝：</strong>学会用感谢+替代方案的句式拒绝请求</li>
+            <li>• <strong>时间预算：</strong>为每天的重要事项分配固定时间块</li>
+            <li>• <strong>能量管理：</strong>识别并保护自己的高能量时段</li>
+            <li>• <strong>关系筛选：</strong>主动投入能滋养自己的关系</li>
+          </ul>
+        </div>
+      `
+    } else if (boundaryLevel === '基础') {
+      return `
+        <div class="space-y-2">
+          <h5 class="font-medium">🎯 基础边界建立</h5>
+          <ul class="space-y-1 text-sm">
+            <li>• <strong>渐进拒绝：</strong>从小的、不重要的请求开始练习说"不"</li>
+            <li>• <strong>延迟回应：</strong>"我需要考虑一下再答复"</li>
+            <li>• <strong>每日配额：</strong>设定每日拒绝配额，逐步增加</li>
+            <li>• <strong>物理边界：</strong>设定工作时间和空间的明确界限</li>
+          </ul>
+        </div>
+      `
+    } else {
+      return `
+        <div class="space-y-2">
+          <h5 class="font-medium">🌱 入门边界练习</h5>
+          <ul class="space-y-1 text-sm">
+            <li>• <strong>自我觉察：</strong>识别自己的底线和不可接受的行为</li>
+            <li>• <strong>温和拒绝：</strong>使用"我现在不太方便"等委婉表达</li>
+            <li>• <strong>寻求支持：</strong>请信任的朋友帮助练习设立边界</li>
+            <li>• <strong>小步前进：</strong>每周设定一个小的边界目标</li>
+          </ul>
+        </div>
+      `
+    }
+  }
+
+  const getMediumTermStrategies = () => {
+    let strategies = []
+
+    // 根据场景得分添加针对性策略
+    if (workScore >= 3.5) {
+      strategies.push(`
+        <h5 class="font-medium text-red-800">🔥 工作环境紧急重建</h5>
+        <ul class="space-y-1 text-sm">
+          <li>• <strong>立即减负：</strong>申请减少30-50%的工作量</li>
+          <li>• <strong>职位调整：</strong>考虑内部调动或职位重新定义</li>
+          <li>• <strong>时间重新规划：</strong>严格执行工作时间和休息时间</li>
+          <li>• <strong>寻求上级支持：</strong>坦诚沟通当前的工作压力状况</li>
+          <li>• <strong>专业评估：</strong>考虑职业规划师的专业建议</li>
+        </ul>
+      `)
+    } else if (workScore >= 2.5) {
+      strategies.push(`
+        <h5 class="font-medium text-orange-800">⚖️ 工作环境平衡重建</h5>
+        <ul class="space-y-1 text-sm">
+          <li>• <strong>工作量协商：</strong>主动与上级沟通工作量合理性</li>
+          <li>• <strong>优先级重设：</strong>重新协商工作优先级和时间节点</li>
+          <li>• <strong>边界建立：</strong>设定工作时间的明确边界</li>
+          <li>• <strong>效率提升：</strong>学习并应用时间管理技巧</li>
+        </ul>
+      `)
+    } else if (workScore >= 1.5) {
+      strategies.push(`
+        <h5 class="font-medium text-yellow-800">📈 工作环境优化</h5>
+        <ul class="space-y-1 text-sm">
+          <li>• <strong>流程改进：</strong>优化现有工作流程，提高效率</li>
+          <li>• <strong>沟通优化：</strong>改善与同事和上级的沟通方式</li>
+          <li>• <strong>技能提升：</strong>学习减少工作压力的新技能</li>
+          <li>• <strong>环境改善：</strong>优化工作空间，减少干扰因素</li>
+        </ul>
+      `)
+    }
+
+    if (relationshipScore >= 3.5) {
+      strategies.push(`
+        <h5 class="font-medium text-red-800">💔 人际关系深度重建</h5>
+        <ul class="space-y-1 text-sm">
+          <li>• <strong>关系清理：</strong>暂时远离或减少与消耗性关系的接触</li>
+          <li>• <strong>设立界限：</strong>为所有重要关系设立清晰的边界</li>
+          <li>• <strong>寻求治疗：</strong>考虑家庭治疗或关系治疗</li>
+          <li>• <strong>支持系统：</strong>建立新的、健康的人际支持网络</li>
+          <li>• <strong>自我保护：</strong>学会在关系中保护自己的情绪健康</li>
+        </ul>
+      `)
+    } else if (relationshipScore >= 2.5) {
+      strategies.push(`
+        <h5 class="font-medium text-orange-800">🤝 人际关系重建</h5>
+        <ul class="space-y-1 text-sm">
+          <li>• <strong>识别问题关系：</strong>识别和远离持续消耗您的关系</li>
+          <li>• <strong>健康边界：</strong>建立健康的社交边界和距离</li>
+          <li>• <strong>沟通改进：</strong>培养基于相互尊重的关系模式</li>
+          <li>• <strong>真实表达：</strong>学会表达自己的真实感受和需求</li>
+        </ul>
+      `)
+    } else if (relationshipScore >= 1.5) {
+      strategies.push(`
+        <h5 class="font-medium text-yellow-800">🌱 人际关系滋养</h5>
+        <ul class="space-y-1 text-sm">
+          <li>• <strong>关系投资：</strong>主动维护和加深积极的人际关系</li>
+          <li>• <strong>沟通技巧：</strong>提升倾听和表达的技巧</li>
+          <li>• <strong>社交平衡：</strong>找到社交和独处的健康平衡</li>
+          <li>• <strong>界限意识：</strong>培养在各种关系中的界限意识</li>
+        </ul>
+      `)
+    }
+
+    if (selfDemandScore >= 3.5) {
+      strategies.push(`
+        <h5 class="font-medium text-purple-800">🎯 自我期待重构</h5>
+        <ul class="space-y-1 text-sm">
+          <li>• <strong>完美主义释放：</strong>接受"足够好"而不是追求完美</li>
+          <li>• <strong>自我慈悲：</strong>像对待好朋友一样对待自己</li>
+          <li>• <strong>价值重定义：</strong>将自我价值与成就解绑</li>
+          <li>• <strong>内在认可：</strong>培养来自内部的认可和满足感</li>
+          <li>• <strong>失败重塑：</strong>将失败视为学习和成长的机会</li>
+        </ul>
+      `)
+    } else if (selfDemandScore >= 2.5) {
+      strategies.push(`
+        <h5 class="font-medium text-purple-700">📊 自我期待调整</h5>
+        <ul class="space-y-1 text-sm">
+          <li>• <strong>现实期望：</strong>设定更现实和可达成的目标</li>
+          <li>• <strong>成就庆祝：</strong>学会庆祝小的成就和进步</li>
+          <li>• <strong>比较停止：</strong>减少与他人比较的习惯</li>
+          <li>• <strong>自我肯定：</strong>每天练习积极的自我对话</li>
+        </ul>
+      `)
+    }
+
+    // 根据韧性水平调整生活方式重建策略
+    const lifestyleIntensity = _recoveryLevel === 'high' ? '深度' : _recoveryLevel === 'medium' ? '全面' : '基础'
+    strategies.push(`
+      <h5 class="font-medium text-green-800">🌿 ${lifestyleIntensity}生活方式重建</h5>
+      <ul class="space-y-1 text-sm">
+        ${lifestyleIntensity === '深度' ? `
+        <li>• <strong>作息彻底重构：</strong>重新设计24小时作息，优先保证睡眠质量</li>
+        <li>• <strong>营养全面升级：</strong>咨询营养师，制定情绪支持性饮食计划</li>
+        <li>• <strong>运动系统化：</strong>建立包含有氧、力量、柔韧性的综合运动计划</li>
+        <li>• <strong>社交重新设计：</strong>重新规划社交活动，确保有足够的滋养性互动</li>
+        <li>• <strong>兴趣深度发展：</strong>培养能够带来深度满足感的兴趣爱好</li>
+        ` : lifestyleIntensity === '全面' ? `
+        <li>• <strong>作息重新设计：</strong>确保充足高质量睡眠，建立规律作息</li>
+        <li>• <strong>每天独处时间：</strong>每天安排30-60分钟独处时间进行情绪恢复</li>
+        <li>• <strong>承诺重新评估：</strong>重新评估和减少当前的承诺和义务</li>
+        <li>• <strong>定期运动放松：</strong>建立每周3-4次的运动和放松活动习惯</li>
+        <li>• <strong>营养意识提升：</strong>注意饮食对情绪的影响，做出相应调整</li>
+        ` : `
+        <li>• <strong>睡眠优化：</strong>优先保证7-8小时睡眠，建立睡前放松仪式</li>
+        <li>• <strong>每日独处：</strong>每天安排20-30分钟独处时间</li>
+        <li>• <strong>简单运动：</strong>每周2-3次轻度运动或散步</li>
+        <li>• <strong>承诺减少：</strong>识别并减少不必要的承诺和义务</li>
+        `}
+      </ul>
+    `)
+
+    return strategies.join('')
+  }
+
+  const getLongTermStrategies = () => {
+    const cognitiveDepth = _fatigueLevel >= 3 ? '深度' : _fatigueLevel >= 2 ? '全面' : '基础'
+
+    return `
+      <h5 class="font-medium">🧠 ${cognitiveDepth}认知重构核心</h5>
+      <ul class="space-y-1 text-sm">
+        ${cognitiveDepth === '深度' ? `
+        <li>• <strong>核心信念重塑：</strong>识别并改变导致疲惫的深层核心信念</li>
+        <li>• <strong>内在批评转化：</strong>将内在批评声音转化为支持性声音</li>
+        <li>• <strong>创伤模式疗愈：</strong>处理可能影响当前状态的早期创伤模式</li>
+        <li>• <strong>存在意义探索：</strong>重新思考人生意义和个人价值观</li>
+        <li>• <strong>自我慈悲培养：</strong>深度培养无条件的自我慈悲</li>
+        ` : cognitiveDepth === '全面' ? `
+        <li>• <strong>自我价值重新定义：</strong>摆脱条件式自我认可，建立内在价值感</li>
+        <li>• <strong>决策框架重建：</strong>建立基于内在需求和价值观的决策框架</li>
+        <li>• <strong>不完美接受：</strong>学会接受自己和他人的不完美</li>
+        <li>• <strong>内在支持培养：</strong>培养内在的慈悲和支持声音</li>
+        ` : `
+        <li>• <strong>积极认知培养：</strong>练习识别和调整消极思维模式</li>
+        <li>• <strong>成就重新定义：</strong>扩展对成功和成就的定义</li>
+        <li>• <strong>自我接纳提升：</strong>增加对自己的理解和接纳</li>
+        <li>• <strong>内在动机发现：</strong>探索和培养真正内在的动机</li>
+        `}
+      </ul>
+
+      <h5 class="font-medium">🌱 ${_recoveryLevel === 'high' ? '进阶' : _recoveryLevel === 'medium' ? '标准' : '渐进'}可持续发展模式</h5>
+      <ul class="space-y-1 text-sm">
+        ${_recoveryLevel === 'high' ? `
+        <li>• <strong>情绪智能精通：</strong>深入学习情绪调节和心理韧性技能</li>
+        <li>• <strong>人际关系精通：</strong>建立深度支持性的关系网络</li>
+        <li>• <strong>生活意义创造：</strong>在工作和生活中主动创造意义感和价值感</li>
+        <li>• <strong>持续成长心态：</strong>建立终身学习和成长的心态模式</li>
+        <li>• <strong>贡献服务：</strong>通过服务他人获得更深层的满足感</li>
+        ` : _recoveryLevel === 'medium' ? `
+        <li>• <strong>定期检查系统：</strong>建立定期自我检查和情绪评估习惯</li>
+        <li>• <strong>支持网络构建：</strong>形成支持性的人际关系网络</li>
+        <li>• <strong>技能持续学习：</strong>持续学习情绪调节和心理韧性技能</li>
+        <li>• <strong>意义价值寻求：</strong>在工作和生活中寻求意义感和价值感</li>
+        ` : `
+        <li>• <strong>基础觉察习惯：</strong>建立简单的日常自我检查习惯</li>
+        <li>• <strong>支持关系识别：</strong>识别并维护能支持自己的重要关系</li>
+        <li>• <strong>基础技能学习：</strong>学习基本的情绪管理技巧</li>
+        <li>• <strong>小目标设定：</strong>设定并完成小的、有意义的目标</li>
+        `}
+      </ul>
+    `
+  }
 
   return `
     <div class="intervention-section border-l-4 border-yellow-500 bg-yellow-50 p-6 rounded-xl mb-6">
       <h3 class="text-xl font-bold text-yellow-900 mb-4 flex items-center">
         <span class="w-2 h-2 bg-yellow-200 rounded-full mr-3"></span>
         分级干预策略
+        <span class="ml-auto text-sm font-normal text-yellow-700">
+          疲劳等级：${_fatigueLevel.toFixed(1)} | 韧性水平：${_recoveryLevel === 'high' ? '高' : _recoveryLevel === 'medium' ? '中' : '低'}
+        </span>
       </h3>
 
       <div class="space-y-6">
         <!-- 短期应急策略 -->
         <div class="bg-white p-4 rounded-lg border-l-4 border-yellow-200">
-          <h4 class="font-semibold text-yellow-900 mb-3">🚨 短期应急策略（立即可用）</h4>
+          <h4 class="font-semibold text-yellow-900 mb-3">
+            ${_fatigueLevel >= 3.5 ? '🚨 紧急危机干预' : _fatigueLevel >= 2.5 ? '⚡ 快速缓解策略' : '🌱 预防性策略'}（${_fatigueLevel >= 3.5 ? '立即执行' : _fatigueLevel >= 2.5 ? '立即可用' : '日常维护'}）
+          </h4>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
-            <div class="space-y-2">
-              <h5 class="font-medium">情绪急救技术</h5>
-              <ul class="space-y-1 text-sm">
-                <li>• <strong>3-3-3呼吸法：</strong>感到压力时立即进行，激活副交感神经的放松反应</li>
-                <li>• <strong>情绪暂停术：</strong>在做出反应前问自己"这真的需要我处理吗？"</li>
-                <li>• <strong>快速脱身：</strong>物理离开压力环境5-10分钟</li>
-              </ul>
-            </div>
-
-            <div class="space-y-2">
-              <h5 class="font-medium">边界建立技巧</h5>
-              <ul class="space-y-1 text-sm">
-                <li>• 练习说"不"，从小事情开始</li>
-                <li>• 延迟回应："我需要考虑一下再答复"</li>
-                <li>• 设定每日拒绝配额</li>
-              </ul>
-            </div>
+            ${getShortTermStrategies()}
+            ${getBoundaryStrategies()}
           </div>
         </div>
 
         <!-- 中期重建方案 -->
         <div class="bg-white p-4 rounded-lg border-l-4 border-yellow-200">
-          <h4 class="font-semibold text-yellow-900 mb-3">🔄 中期重建方案（1-3个月）</h4>
+          <h4 class="font-semibold text-yellow-900 mb-3">🔄 中期重建方案（${_fatigueLevel >= 3 ? '3-6个月' : '1-3个月'}）</h4>
           <div class="space-y-3 text-gray-700">
-            ${workScore >= 3.0 ? `
-            <h5 class="font-medium text-orange-800">工作环境重建</h5>
-            <ul class="space-y-1 text-sm">
-              <li>• 主动与上级沟通工作量合理性</li>
-              <li>• 重新协商工作优先级和时间节点</li>
-              <li>• 建立工作时间的明确边界</li>
-              <li>• 寻求工作调动的可能性</li>
-            </ul>
-            ` : ''}
-
-            ${relationshipScore >= 3.0 ? `
-            <h5 class="font-medium text-red-800">人际关系重建</h5>
-            <ul class="space-y-1 text-sm">
-              <li>• 识别和远离持续消耗您的关系</li>
-              <li>• 建立健康的社交边界和距离</li>
-              <li>• 培养基于相互尊重的关系模式</li>
-              <li>• 学会表达自己的真实感受和需求</li>
-            </ul>
-            ` : ''}
-
-            <h5 class="font-medium">生活方式重建</h5>
-            <ul class="space-y-1 text-sm">
-              <li>• 重新设计日常作息，确保充足高质量睡眠</li>
-              <li>• 每天安排独处时间进行情绪恢复</li>
-              <li>• 重新评估和减少当前的承诺和义务</li>
-              <li>• 建立定期的运动和放松活动</li>
-            </ul>
+            ${getMediumTermStrategies()}
           </div>
         </div>
 
         <!-- 长期预防体系 -->
         <div class="bg-white p-4 rounded-lg border-l-4 border-yellow-200">
-          <h4 class="font-semibold text-yellow-900 mb-3">🛡️ 长期预防体系（3-6个月）</h4>
+          <h4 class="font-semibold text-yellow-900 mb-3">🛡️ 长期预防体系（6-12个月）</h4>
           <div class="space-y-3 text-gray-700">
-            <h5 class="font-medium">认知重构核心</h5>
-            <ul class="space-y-1 text-sm">
-              <li>• 重新定义自我价值，摆脱条件式自我认可</li>
-              <li>• 建立基于内在需求的决策框架</li>
-              <li>• 学会接受不完美和不完整</li>
-              <li>• 培养自我慈悲和内在支持声音</li>
-            </ul>
-
-            <h5 class="font-medium">可持续发展模式</h5>
-            <ul class="space-y-1 text-sm">
-              <li>• 建立定期自我检查和情绪评估习惯</li>
-              <li>• 形成支持性的人际关系网络</li>
-              <li>• 持续学习情绪调节和心理韧性技能</li>
-              <li>• 在工作和生活中寻求意义感和价值感</li>
-            </ul>
+            ${getLongTermStrategies()}
           </div>
         </div>
       </div>
@@ -813,63 +1018,468 @@ function generateInterventionStrategies(_fatigueLevel: number, _primaryType: any
 
 // 生成个性化行动方案
 function generateActionPlan(_fatigueLevel: number, _primaryType: any, _sceneScores: any, _personalTags: string[], _recoveryLevel: string) {
+  const workScore = _sceneScores.work || 0
+  const relationshipScore = _sceneScores.relationship || 0
+  const selfDemandScore = _sceneScores.selfDemand || 0
+
+  // 根据疲劳等级确定计划强度和重点
+  const getPlanIntensity = () => {
+    if (_fatigueLevel >= 3.5) {
+      return {
+        title: '紧急恢复计划',
+        subtitle: '前30天：危机干预与基础稳定',
+        weeks: 4,
+        focus: '生存与危机管理',
+        dailyCheck: '每日情绪危机评估（1-10分）'
+      }
+    } else if (_fatigueLevel >= 2.5) {
+      return {
+        title: '强化恢复计划',
+        subtitle: '前30天：深度修复与重建',
+        weeks: 4,
+        focus: '修复与重建',
+        dailyCheck: '每日情绪状态和应对效果评估'
+      }
+    } else {
+      return {
+        title: '预防优化计划',
+        subtitle: '前30天：习惯养成与强化',
+        weeks: 4,
+        focus: '预防与优化',
+        dailyCheck: '每日情绪健康和压力水平记录'
+      }
+    }
+  }
+
+  // 个性化周目标设定
+  const getWeeklyGoals = () => {
+    const planIntensity = getPlanIntensity()
+    let goals = []
+
+    if (_fatigueLevel >= 3.5) {
+      // 危机级别目标
+      goals = [
+        {
+          week: 1,
+          title: '危机干预周',
+          goals: [
+            `睡眠底线：保证${_recoveryLevel === 'low' ? '6-7' : '7-8'}小时基础睡眠`,
+            '情绪安全：建立每日情绪安全检查',
+            '边界保护：暂停所有非必要的承诺和义务',
+            '支持激活：联系至少2个可信赖的支持者'
+          ]
+        },
+        {
+          week: 2,
+          title: '基础稳定周',
+          goals: [
+            '作息规律：建立固定的睡眠和起床时间',
+            '情绪觉察：练习识别和命名情绪状态',
+            '基础运动：每天10-15分钟温和散步',
+            '营养支持：确保每日三餐规律饮食'
+          ]
+        },
+        {
+          week: 3,
+          title: '能量恢复周',
+          goals: [
+            '独处时间：每天安排30-45分钟完全独处',
+            '放松技术：学习2-3种放松技巧',
+            '兴趣恢复：重新接触一个能带来小愉悦的活动',
+            '社交筛选：减少与消耗性关系的接触'
+          ]
+        },
+        {
+          week: 4,
+          title: '功能重建周',
+          goals: [
+            '轻度责任：承担1-2个简单的日常责任',
+            '计划制定：制定简单的下周计划',
+            '成就感体验：完成1个小目标并庆祝',
+            '专业咨询：预约第一次专业咨询（如果需要）'
+          ]
+        }
+      ]
+    } else if (_fatigueLevel >= 2.5) {
+      // 修复级别目标
+      goals = [
+        {
+          week: 1,
+          title: '评估与准备周',
+          goals: [
+            `睡眠目标：每晚${_recoveryLevel === 'low' ? '7-8' : '8-9'}小时高质量睡眠`,
+            '边界练习：每周练习拒绝3-4个不合理请求',
+            '独处时间：每天安排30-45分钟独处恢复时间',
+            '运动习惯：开始每周3次轻度运动或散步'
+          ]
+        },
+        {
+          week: 2,
+          title: '习惯建立周',
+          goals: [
+            '情绪日记：开始记录每日情绪状态和触发因素',
+            '正念练习：每天10分钟正念冥想或呼吸练习',
+            '营养优化：注意饮食对情绪的影响，做出调整',
+            '社交平衡：评估并调整社交活动频率'
+          ]
+        },
+        {
+          week: 3,
+          title: '技能发展周',
+          goals: [
+            '沟通技巧：练习表达自己的感受和需求',
+            '时间管理：学习并应用基本的时间管理技巧',
+            '压力识别：识别主要的压力源和应对策略',
+            '自我慈悲：练习对待自己的慈悲和理解'
+          ]
+        },
+        {
+          week: 4,
+          title: '整合强化周',
+          goals: [
+            '综合应用：整合前几周学到的技能',
+            '预防意识：识别可能的压力触发情况',
+            '支持系统：建立和维护支持性的人际关系',
+            '长期规划：思考并设定未来1-3个月的目标'
+          ]
+        }
+      ]
+    } else {
+      // 预防级别目标
+      goals = [
+        {
+          week: 1,
+          title: '觉察增强周',
+          goals: [
+            `睡眠优化：保持${_recoveryLevel === 'high' ? '7-8' : '8-9'}小时规律睡眠`,
+            '情绪觉察：提高对日常情绪变化的敏感度',
+            '能量管理：识别并保护高能量时段',
+            '预防练习：每周练习预防性放松2-3次'
+          ]
+        },
+        {
+          week: 2,
+          title: '边界强化周',
+          goals: [
+            '边界练习：在各种关系中练习设立健康边界',
+            '主动拒绝：主动识别和拒绝不合理的要求',
+            '时间保护：保护和 prioritizing 重要时间',
+            '关系投资：投入时间和精力于滋养性关系'
+          ]
+        },
+        {
+          week: 3,
+          title: '技能精进周',
+          goals: [
+            '高级放松：学习更高级的放松和冥想技巧',
+            '压力转化：将压力转化为成长动力的技巧',
+            '意义寻找：探索和深化生活的意义和目的',
+            '韧性建设：有意锻炼心理韧性和抗压能力'
+          ]
+        },
+        {
+          week: 4,
+          title: '平衡发展周',
+          goals: [
+            '工作生活平衡：优化工作与生活的平衡',
+            '兴趣发展：培养能带来深层满足感的兴趣',
+            '社会贡献：考虑如何为社会做出有意义的贡献',
+            '持续成长：建立终身学习和成长的 mindset'
+          ]
+        }
+      ]
+    }
+
+    // 根据场景得分添加针对性调整
+    if (workScore >= 3.0) {
+      goals.forEach(week => {
+        week.goals.push(`工作减负：逐步减少工作负担和压力`)
+      })
+    }
+    if (relationshipScore >= 3.0) {
+      goals.forEach(week => {
+        week.goals.push(`关系修复：每周投入时间修复健康关系`)
+      })
+    }
+    if (selfDemandScore >= 3.0) {
+      goals.forEach(week => {
+        week.goals.push(`期望调整：每周练习调整自我期待`)
+      })
+    }
+
+    return goals
+  }
+
+  // 个性化专业资源推荐
+  const getPersonalizedResources = () => {
+    let resources = {
+      books: [],
+      tools: [],
+      apps: [],
+      professional: []
+    }
+
+    // 基于主要疲惫类型的书籍推荐
+    const typeBasedBooks = {
+      '过度付出型': [
+        '《不完美的礼物》- Brené Brown',
+        '《自我慈悲》- Kristin Neff',
+        '《过劳》- Anna Katharina Schaffner'
+      ],
+      '高压消耗型': [
+        '《压力管理》- Hans Selye',
+        '《为什么我们这么累》- Hans-Peter Hagemeyer',
+        '《减压生活》- 哈佛医学院'
+      ],
+      '情感耗竭型': [
+        '《情绪的语言》- Brene Brown',
+        '《情绪急救》- Guy Winch',
+        '《情绪疗愈》- Karla McLaren'
+      ],
+      '意义缺失型': [
+        '《活出生命的意义》- Viktor Frankl',
+        '《第二座山》- David Brooks',
+        '《心流》- Mihaly Csikszentmihalyi'
+      ]
+    }
+
+    // 基于疲劳等级的资源推荐
+    if (_fatigueLevel >= 3.5) {
+      resources.books = [
+        '《情绪耗竭：识别与预防》- Herbert Freudenberger',
+        '《身体从未忘记》- Bessel van der Kolk',
+        '《创伤与复原》- Judith Herman',
+        ...(typeBasedBooks[_primaryType.type] || [])
+      ]
+      resources.tools = [
+        '危机干预热线电话保存',
+        '紧急联系人清单制定',
+        '情绪危机应对卡片',
+        '安全空间创建指南'
+      ]
+      resources.professional = [
+        '心理治疗师一对一咨询',
+        '精神科医生评估',
+        '危机干预热线',
+        '心理健康支持小组'
+      ]
+    } else if (_fatigueLevel >= 2.5) {
+      resources.books = [
+        '《过劳与自我照顾》- Christina Maslach',
+        '《复原力》- Andrew Shatté',
+        '《内在工程》- Sadhguru',
+        ...(typeBasedBooks[_primaryType.type] || [])
+      ]
+      resources.tools = [
+        '情绪日记模板',
+        '正念冥想引导音频',
+        '压力评估量表',
+        '时间管理工具'
+      ]
+      resources.professional = [
+        '心理咨询师会谈',
+        '生活教练指导',
+        '工作坊和培训课程',
+        '同伴支持小组'
+      ]
+    } else {
+      resources.books = [
+        '《习惯的力量》- Charles Duhigg',
+        '《原子习惯》- James Clear',
+        '《心流》- Mihaly Csikszentmihalyi',
+        ...(typeBasedBooks[_primaryType.type] || [])
+      ]
+      resources.tools = [
+        '目标设定工作表',
+        '习惯追踪器',
+        '冥想和正念App',
+        '时间块规划工具'
+      ]
+      resources.professional = [
+        '个人发展教练',
+        '职业规划咨询',
+        '技能培训课程',
+        '兴趣工作坊'
+      ]
+    }
+
+    // 基于韧性水平的App推荐
+    if (_recoveryLevel === 'low') {
+      resources.apps = [
+        'Calm - 深度冥想和睡眠辅助',
+        'Headspace - 正念冥想入门指导',
+        'Insight Timer - 冥想社区和引导',
+        'Talkspace - 在线心理咨询'
+      ]
+    } else if (_recoveryLevel === 'medium') {
+      resources.apps = [
+        'Waking Up - 高级正念练习',
+        'Ten Percent Happier - 实用冥想技巧',
+        'Moodpath - 心理健康追踪',
+        'Daylio - 情绪日记'
+      ]
+    } else {
+      resources.apps = [
+        'Streaks - 习惯追踪',
+        'Forest - 专注时间管理',
+        'Notion - 生活和工作管理',
+        'Audible - 有声书学习平台'
+      ]
+    }
+
+    return resources
+  }
+
+  // 个性化何时寻求专业帮助的标准
+  const getProfessionalHelpCriteria = () => {
+    const baseCriteria = [
+      '持续的情绪低落或焦虑超过2周',
+      '睡眠问题严重影响日常生活',
+      '工作或人际关系明显恶化',
+      '身体症状持续不减'
+    ]
+
+    if (_fatigueLevel >= 3.5) {
+      return [
+        ...baseCriteria,
+        '出现自我伤害或自杀的想法',
+        '无法完成基本日常生活任务',
+        '与现实脱节或出现幻觉',
+        ' substance use to cope with emotions'
+      ]
+    } else if (_fatigueLevel >= 2.5) {
+      return [
+        ...baseCriteria,
+        '感到绝望和无助',
+        '社交隔离和孤独感严重',
+        '身体症状反复出现',
+        '应对策略完全失效'
+      ]
+    } else {
+      return [
+        '情绪波动影响生活质量',
+        '重要关系出现持续问题',
+        '职业发展受到阻碍',
+        '个人成长停滞不前'
+      ]
+    }
+  }
+
+  const planIntensity = getPlanIntensity()
+  const weeklyGoals = getWeeklyGoals()
+  const resources = getPersonalizedResources()
+  const helpCriteria = getProfessionalHelpCriteria()
+
   return `
     <div class="actionplan-section border-l-4 border-indigo-500 bg-indigo-50 p-6 rounded-xl mb-6">
       <h3 class="text-xl font-bold text-indigo-900 mb-4 flex items-center">
         <span class="w-2 h-2 bg-indigo-200 rounded-full mr-3"></span>
         个性化行动方案
+        <span class="ml-auto text-sm font-normal text-indigo-700">
+          ${planIntensity.title} | 疲劳等级：${_fatigueLevel.toFixed(1)}
+        </span>
       </h3>
 
       <div class="space-y-6">
-        <!-- 30天行动计划 -->
+        <!-- ${planIntensity.subtitle} -->
         <div class="bg-white p-4 rounded-lg border-l-4 border-indigo-200">
-          <h4 class="font-semibold text-indigo-900 mb-3">📅 第一个月：稳定化计划</h4>
-          <div class="space-y-3 text-gray-700">
-            <h5 class="font-medium">每周目标设定</h5>
-            <ul class="space-y-2 text-sm">
-              <li>• <strong>睡眠目标：</strong>每晚7-8小时高质量睡眠，固定睡眠时间</li>
-              <li>• <strong>边界练习：</strong>每周练习拒绝2-3个不合理请求</li>
-              <li>• <strong>独处时间：</strong>每天安排30分钟独处时间</li>
-              <li>• <strong>运动放松：</strong>每周3次轻度运动或放松活动</li>
-            </ul>
+          <h4 class="font-semibold text-indigo-900 mb-3">📅 ${planIntensity.subtitle}</h4>
+          <div class="space-y-4 text-gray-700">
+            <div class="bg-indigo-50 p-3 rounded-lg">
+              <p class="text-indigo-800 text-sm font-medium">🎯 核心焦点：${planIntensity.focus}</p>
+            </div>
 
-            <h5 class="font-medium">每日自我检查</h5>
-            <p class="text-sm">每天晚上记录：今天的情绪状态、触发因素、应对方式、改善空间。这有助于增强自我觉察能力。</p>
+            ${weeklyGoals.map(week => `
+            <div class="border-l-4 border-indigo-100 pl-4">
+              <h5 class="font-medium text-indigo-800 mb-2">${week.week}：${week.title}</h5>
+              <ul class="space-y-1 text-sm text-gray-600">
+                ${week.goals.map(goal => `<li>• ${goal}</li>`).join('')}
+              </ul>
+            </div>
+            `).join('')}
 
-            <h5 class="font-medium">紧急预案</h5>
-            <p class="text-sm">识别可能的压力触发情况，提前准备应对策略，避免陷入被动的情绪反应模式。</p>
+            <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+              <h5 class="font-medium mb-2">📝 ${planIntensity.dailyCheck}</h5>
+              <p class="text-sm text-gray-600">
+                每天晚上花5-10分钟记录今天的情绪状态、主要挑战、成功应对的地方，以及明天可以改进的地方。
+                这有助于增强自我觉察能力，及早发现潜在问题。
+              </p>
+            </div>
+
+            ${_fatigueLevel >= 3.0 ? `
+            <div class="mt-4 p-3 bg-red-50 rounded-lg border-l-4 border-red-200">
+              <h5 class="font-medium text-red-800 mb-2">🚨 紧急预案</h5>
+              <ul class="space-y-1 text-sm text-red-700">
+                <li>• 识别可能的情绪触发情况，提前准备应对策略</li>
+                <li>• 建立"安全网"：当情绪危机时联系的人员名单</li>
+                <li>• 准备情绪急救工具包：舒缓音乐、芳香疗法、安抚物品</li>
+                <li>• 设定明确的"求助信号"和寻求帮助的条件</li>
+              </ul>
+            </div>
+            ` : `
+            <div class="mt-4 p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-200">
+              <h5 class="font-medium text-yellow-800 mb-2">⚡ 预防预案</h5>
+              <p class="text-sm text-yellow-700">
+                识别可能的压力触发情况，提前准备应对策略，避免陷入被动的情绪反应模式。
+                建立自我检查机制，定期评估预防措施的有效性。
+              </p>
+            </div>
+            `}
           </div>
         </div>
 
-        <!-- 专业资源推荐 -->
+        <!-- 个性化专业资源推荐 -->
         <div class="bg-white p-4 rounded-lg border-l-4 border-indigo-200">
-          <h4 class="font-semibold text-indigo-900 mb-3">📚 专业资源推荐</h4>
-          <div class="space-y-3 text-gray-700">
-            <h5 class="font-medium">书籍推荐</h5>
-            <ul class="space-y-1 text-sm">
-              <li>• 《情绪耗竭：如何识别和预防》- Herbert Freudenberger</li>
-              <li>• 《过劳与自我照顾》- Christina Maslach</li>
-              <li>• 《不完美的礼物》- Brené Brown</li>
-            </ul>
-
-            <h5 class="font-medium">实用工具和练习</h5>
-            <ul class="space-y-1 text-sm">
-              <li>• <strong>情绪日记：</strong>记录情绪触发和反应模式</li>
-              <li>• <strong>正念冥想：</strong>每天10分钟，培养觉察和接纳</li>
-              <li>• <strong>身体扫描：</strong>定期检查身体紧张部位，主动放松</li>
-              <li>• <strong>支持小组：</strong>寻找有相似经历的人分享经验</li>
-            </ul>
-
-            <h5 class="font-medium">何时寻求专业帮助</h5>
-            <div class="bg-orange-50 p-3 rounded border-l-4 border-orange-200 mt-3">
-              <p class="text-orange-800 text-sm"><strong>立即寻求帮助：</strong>出现以下任一情况时</p>
-              <ul class="space-y-1 text-orange-700 text-sm mt-2">
-                <li>• 持续的情绪低落超过2周</li>
-                <li>• 严重的睡眠问题或身体症状</li>
-                <li>• 工作或人际关系严重受损</li>
-                <li>• 出现自我伤害的想法或冲动</li>
+          <h4 class="font-semibold text-indigo-900 mb-3">📚 为您定制的专业资源</h4>
+          <div class="space-y-4 text-gray-700">
+            <div>
+              <h5 class="font-medium mb-2">📖 针对性书籍推荐</h5>
+              <ul class="space-y-1 text-sm">
+                ${resources.books.map(book => `<li>• ${book}</li>`).join('')}
               </ul>
             </div>
+
+            <div>
+              <h5 class="font-medium mb-2">🛠️ 实用工具和练习</h5>
+              <ul class="space-y-1 text-sm">
+                ${resources.tools.map(tool => `<li>• ${tool}</li>`).join('')}
+              </ul>
+            </div>
+
+            <div>
+              <h5 class="font-medium mb-2">📱 推荐应用程序</h5>
+              <ul class="space-y-1 text-sm">
+                ${resources.apps.map(app => `<li>• ${app}</li>`).join('')}
+              </ul>
+            </div>
+
+            <div>
+              <h5 class="font-medium mb-2">👨‍⚕️ 专业支持资源</h5>
+              <ul class="space-y-1 text-sm">
+                ${resources.professional.map(prof => `<li>• ${prof}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 何时寻求专业帮助 -->
+        <div class="bg-white p-4 rounded-lg border-l-4 border-orange-200">
+          <h4 class="font-semibold text-orange-900 mb-3">⚠️ 何时寻求专业帮助</h4>
+          <div class="space-y-3">
+            <div class="bg-orange-50 p-3 rounded border-l-4 border-orange-200">
+              <p class="text-orange-800 text-sm font-medium">
+                ${_fatigueLevel >= 3.5 ? '🚨 立即寻求帮助：' : _fatigueLevel >= 2.5 ? '⚡ 考虑寻求帮助：' : '💡 建议寻求帮助：'}
+              </p>
+              <p class="text-orange-700 text-sm mt-1">出现以下任一情况时</p>
+            </div>
+            <ul class="space-y-1 text-sm text-orange-700">
+              ${helpCriteria.map(criteria => `<li>• ${criteria}</li>`).join('')}
+            </ul>
+            ${_fatigueLevel >= 3.5 ? `
+            <div class="mt-3 p-2 bg-red-100 rounded text-red-800 text-sm">
+              <strong>紧急联系方式：</strong>如果您处于严重困境中，请立即拨打心理援助热线或前往最近的医院急诊科。
+            </div>
+            ` : ''}
           </div>
         </div>
       </div>
